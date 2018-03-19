@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>nb-mapper test</title>
+  <style type="text/css">
+    :root { 
+      font-size: 130%; 
+      line-height: 1.4em; 
+      --col0: rgba(0, 0, 0, 0.3);
+      --col1: rgba(255, 102, 0, 0.5); 
+      --col2: rgba(0, 102, 255, 0.5);
+    }
+    body { max-width: 40em; padding: 0 2em; margin: 0 auto; }
+    h3 { margin: 2em 0 0.5em; }
+    code { font-size: 120%; }
+
+    p.map :not(.idea) { outline: 1px solid var(--col0); }
+    .idea { border-bottom: 4px solid; }
+    [id^="idea"][id$="1"],
+    [id^="idea"][id$="3"],
+    [id^="idea"][id$="5"],
+    [id^="idea"][id$="7"],
+    [id^="idea"][id$="9"] { border-color: var(--col1); }
+    [id^="idea"][id$="0"],
+    [id^="idea"][id$="2"],
+    [id^="idea"][id$="4"],
+    [id^="idea"][id$="6"],
+    [id^="idea"][id$="8"] { border-color: var(--col2); }
+    .chunk:hover { background: #ffc; }
+    .idea:hover { background: #faa; }
+  </style>
+</head>
+<body>
+  <h1>nb-mapper test</h1>
+  
+  <h2>What is this?</h2>
+  <p>
+    This is an in-browser test of next-book's
+    <a href="https://github.com/next-book/nb-mapper">nb-mapper</a> 
+    — it breaks element's content into „ideas“ and „chunks“ that may be then 
+    used for enhanced display or interactivity within a larger bulk of text.
+  </p>
+  <p>
+    In following examples, only elements with class <code>map</code> are mapped 
+    and there's some <code>border-bottom</code> and <code>:hover</code> CSS apllied 
+    to them to higlight the mapped structure. Both mapped and plain elements 
+    should otherwise look the same.
+  </p>
+  <p>See <a href="./api">API docs</a> for a rough idea of how nb-mapper works. 
+    (Still battling with documentation of ES6 modules that do not use classes internally.)
+  </p>
+
+  <hr>
+
+  <h3>Mapped</h3>
+
+  <p class="map">
+    Integer nec odio.
+    Praesent <strong>libero</strong>.
+    Sed cursus ante dapibus diam.
+    Sed nisi.
+    Lorem ipsum dolor <b>sit amet</b>, consectetur adipiscing elit.
+    Nulla quis sem at nibh elementum imperdiet.
+    Duis <a href="http://lorem-ipsum.dsa">sagittis ipsum</a>.
+    Praesent mauris.
+    Fusce nec tellus sed augue semper porta.
+    <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b>
+    Mauris massa.
+    <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b>
+    Vestibulum lacinia arcu eget nulla.
+    <q>Class aptent taciti sociosqu ad litora.
+    Torquent per conubia nostra, per inceptos himenaeos.</q>
+    <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b>
+    Curabitur sodales ligula in libero.
+  </p>
+
+  <h3>Original</h3>
+  <p>
+    Integer nec odio.
+    Praesent <strong>libero</strong>.
+    Sed cursus ante dapibus diam.
+    Sed nisi.
+    Lorem ipsum dolor <b>sit amet</b>, consectetur adipiscing elit.
+    Nulla quis sem at nibh elementum imperdiet.
+    Duis <a href="http://lorem-ipsum.dsa">sagittis ipsum</a>.
+    Praesent mauris.
+    Fusce nec tellus sed augue semper porta.
+    <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b>
+    Mauris massa.
+    <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b>
+    Vestibulum lacinia arcu eget nulla.
+    <q>Class aptent taciti sociosqu ad litora.
+    Torquent per conubia nostra, per inceptos himenaeos.</q>
+    <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b>
+    Curabitur sodales ligula in libero.
+  </p>
+
+  <hr>
+
+  <h3>Mapped</h3>
+
+  <p class="map">
+    Sed dignissim lacinia nunc.<br>
+    Curabitur tortor.<br>
+    <i>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</i><br>
+    Pellentesque nibh.<br>
+    Aenean quam.<br>
+    In scelerisque sem at dolor.<br>
+    Maecenas mattis.<br>
+    Sed convallis tristique sem.<br>
+    Proin ut ligula vel nunc egestas porttitor.<br>
+    <b>Curabitur tortor</b>.<br>
+    Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa.<br>
+    Fusce ac turpis quis ligula lacinia aliquet.<br>
+    Mauris ipsum.<br>
+    Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh.<br>
+    Quisque volutpat condimentum velit.<br>
+  </p>
+
+  <h3>Original</h3>
+
+  <p>
+    Sed dignissim lacinia nunc.<br>
+    Curabitur tortor.<br>
+    <i>Lorem ipsum dolor sit amet, consectetur adipiscing elit</i>.<br>
+    Pellentesque nibh.<br>
+    Aenean quam.<br>
+    In scelerisque sem at dolor.<br>
+    Maecenas mattis.<br>
+    Sed convallis tristique sem.<br>
+    Proin ut ligula vel nunc egestas porttitor.<br>
+    <b>Curabitur tortor</b>.<br>
+    Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa.<br>
+    Fusce ac turpis quis ligula lacinia aliquet.<br>
+    Mauris ipsum.<br>
+    Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh.<br>
+    Quisque volutpat condimentum velit.<br>
+  </p>
+
+  <hr>
+
+  <p class="map">
+    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+    Nam nec ante.
+    Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis.
+    Nulla facilisi.
+    <b>Proin ut ligula vel nunc egestas porttitor</b>.
+    Ut fringilla.
+    Suspendisse potenti.
+    Nunc feugiat mi a tellus consequat imperdiet.
+    Vestibulum sapien.
+    Proin quam.
+    <b>Sed lacinia, urna non tincidunt mattis. 
+    Tortor neque adipiscing diam, a cursus ipsum ante quis turpis</b>.
+    Etiam ultrices.
+    Suspendisse in justo eu magna luctus suscipit.
+    Sed lectus.
+  </p>
+
+  <p>
+    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+    Nam nec ante.
+    Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis.
+    Nulla facilisi.
+    <b>Proin ut ligula vel nunc egestas porttitor</b>.
+    Ut fringilla.
+    Suspendisse potenti.
+    Nunc feugiat mi a tellus consequat imperdiet.
+    Vestibulum sapien.
+    Proin quam.
+    <b>Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis</b>.
+    Etiam ultrices.
+    Suspendisse in justo eu magna luctus suscipit.
+    Sed lectus.
+  </p>
+
+  <hr>
+
+  <h3>Higlighting CSS</h3>
+
+  <!-- HTML generated using hilite.me --><div style="background: #272822; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em; margin: 1em 0 2em"><pre style="margin: 0; line-height: 125%"><span style="color: #f92672">p</span><span style="color: #a6e22e">.map</span> <span style="color: #a6e22e">:not</span><span style="color: #f92672">(</span><span style="color: #a6e22e">.idea</span><span style="color: #f92672">)</span> <span style="color: #f8f8f2">{</span> <span style="color: #66d9ef">outline</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">1px</span> <span style="color: #66d9ef">solid</span> <span style="color: #f8f8f2">var(</span><span style="color: #f92672">--</span><span style="color: #f8f8f2">col0);</span> <span style="color: #f8f8f2">}</span>
+
+<span style="color: #a6e22e">.idea</span> <span style="color: #f8f8f2">{</span> <span style="color: #66d9ef">border-bottom</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">4px</span> <span style="color: #66d9ef">solid</span><span style="color: #f8f8f2">;</span> <span style="color: #f8f8f2">}</span>
+
+<span style="color: #f92672">[id^=</span><span style="color: #e6db74">&quot;idea&quot;</span><span style="color: #f92672">][id$=</span><span style="color: #e6db74">&quot;1&quot;</span><span style="color: #f92672">],</span>
+<span style="color: #f92672">[id^=</span><span style="color: #e6db74">&quot;idea&quot;</span><span style="color: #f92672">][id$=</span><span style="color: #e6db74">&quot;3&quot;</span><span style="color: #f92672">],</span>
+<span style="color: #f92672">[id^=</span><span style="color: #e6db74">&quot;idea&quot;</span><span style="color: #f92672">][id$=</span><span style="color: #e6db74">&quot;5&quot;</span><span style="color: #f92672">],</span>
+<span style="color: #f92672">[id^=</span><span style="color: #e6db74">&quot;idea&quot;</span><span style="color: #f92672">][id$=</span><span style="color: #e6db74">&quot;7&quot;</span><span style="color: #f92672">],</span>
+<span style="color: #f92672">[id^=</span><span style="color: #e6db74">&quot;idea&quot;</span><span style="color: #f92672">][id$=</span><span style="color: #e6db74">&quot;9&quot;</span><span style="color: #f92672">]</span> <span style="color: #f8f8f2">{</span> <span style="color: #66d9ef">border-color</span><span style="color: #f92672">:</span> <span style="color: #f8f8f2">var(</span><span style="color: #f92672">--</span><span style="color: #f8f8f2">col1);</span> <span style="color: #f8f8f2">}</span>
+
+<span style="color: #f92672">[id^=</span><span style="color: #e6db74">&quot;idea&quot;</span><span style="color: #f92672">][id$=</span><span style="color: #e6db74">&quot;0&quot;</span><span style="color: #f92672">],</span>
+<span style="color: #f92672">[id^=</span><span style="color: #e6db74">&quot;idea&quot;</span><span style="color: #f92672">][id$=</span><span style="color: #e6db74">&quot;2&quot;</span><span style="color: #f92672">],</span>
+<span style="color: #f92672">[id^=</span><span style="color: #e6db74">&quot;idea&quot;</span><span style="color: #f92672">][id$=</span><span style="color: #e6db74">&quot;4&quot;</span><span style="color: #f92672">],</span>
+<span style="color: #f92672">[id^=</span><span style="color: #e6db74">&quot;idea&quot;</span><span style="color: #f92672">][id$=</span><span style="color: #e6db74">&quot;6&quot;</span><span style="color: #f92672">],</span>
+<span style="color: #f92672">[id^=</span><span style="color: #e6db74">&quot;idea&quot;</span><span style="color: #f92672">][id$=</span><span style="color: #e6db74">&quot;8&quot;</span><span style="color: #f92672">]</span> <span style="color: #f8f8f2">{</span> <span style="color: #66d9ef">border-color</span><span style="color: #f92672">:</span> <span style="color: #f8f8f2">var(</span><span style="color: #f92672">--</span><span style="color: #f8f8f2">col2);</span> <span style="color: #f8f8f2">}</span>
+
+<span style="color: #a6e22e">.chunk:hover</span> <span style="color: #f8f8f2">{</span> <span style="color: #66d9ef">background</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">#ffc</span><span style="color: #f8f8f2">;</span> <span style="color: #f8f8f2">}</span>
+
+<span style="color: #a6e22e">.idea:hover</span> <span style="color: #f8f8f2">{</span> <span style="color: #66d9ef">background</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">#faa</span><span style="color: #f8f8f2">;</span> <span style="color: #f8f8f2">}</span>
+</pre></div>
+
+  <hr>
+
+  <p><a href="https://github.com/next-book">next-book</a> / <a href="https://github.com/next-book/nb-mapper">nb-mapper</a></p>
+
+  
+  <script type="text/javascript" src="browser.js"></script>
+  <script type="text/javascript">
+    /* eslint-env browser; */
+    /* eslint no-undef: "off" */
+    /* eslint indent: "off" */
+    window.addEventListener('load', () => {
+      NbMapper.mapHtml({
+        delimiter: '\n',
+        selectors: ['.map'],
+      });
+    });
+  </script>
+</body>
+</html>
+

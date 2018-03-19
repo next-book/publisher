@@ -1,0 +1,40 @@
+# Avoids using children prop as its currently broken.
+
+toc:
+  - name: app
+    description: Mapper for server env, mapping strings or jsdom objects.
+  - map
+  - name: browser
+    description: Mapper for browser env, mapping DOM contents. Accessible at `window.NbMapper`.
+  - mapHtml
+  - name: config
+  - Options
+  - load
+  - name: tagger
+    description: Tagger parses, produces and numbers chunks and ideas.
+  - tagDocument
+  - selectorFn
+  - tokenizerFn
+  - name: parser
+    description: Parser produces instances of {@link ParsedObj} from Element contents.
+  - parse
+  - name: producer
+    description: |
+      Producer assembles ideas back into HTML where ideas are represented with 
+      annotated span elements.
+  - produce
+  - name: gauge
+    description: Gauge counts words and characters in a document and sums those in a publication.
+  - gaugeDocument
+  - gaugePublication
+  - setGaugeMetatags
+  - name: structures
+    description: Data structures used in the other parts.
+  - ParsedObj
+  - name: A note about these docs
+    description: |
+      See [project's README](http://github.com/next-book/nb-mapper/).
+
+      With current versions of JSDoc, ESDoc and documentation.js it is hard to work  
+      with ES6 modules that do not use classes internally. Any tips for tools that do not require
+      hacks are welcome!

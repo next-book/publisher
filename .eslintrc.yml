@@ -1,0 +1,18 @@
+extends: airbnb-base
+plugins:
+  - import
+rules:
+  valid-jsdoc: error
+  no-param-reassign: error
+  no-nested-ternary: off
+  no-use-before-define: off
+  no-console: 
+    - error
+    - allow: 
+      - log
+      - warn
+      - error
+overrides:
+  - files: ["**/*.test.js"]
+    env: 
+      jest: true

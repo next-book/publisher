@@ -1,0 +1,45 @@
+{
+  "name": "nb-mapper",
+  "version": "0.1.0",
+  "description": "Map HTML files for use with next-book tools",
+  "main": "src/app.js",
+  "scripts": {
+    "bundle": "browserify src/browser.js -o dist/browser.js",
+    "transpile": "babel dist/browser.js --out-file dist/browser.js",
+    "updateExample": "cp dist/browser.js docs/browser.js",
+    "updateDocs": "documentation build src/** -f html -o ./docs/api --config documentation.yml --github",
+    "build": "npm run bundle && npm run transpile && npm run updateExample && npm run updateDocs",
+    "build:watch": "onchange 'src/*.js' -v -- npm run build",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/next-book/nb-mapper.git"
+  },
+  "keywords": [
+    "mapper",
+    "html",
+    "next-book",
+    "book",
+    "idea",
+    "chunk"
+  ],
+  "author": "Jan Martinek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/next-book/nb-mapper/issues"
+  },
+  "homepage": "https://github.com/next-book/nb-mapper#readme",
+  "dependencies": {
+    "command-line-args": "^5.0.2",
+    "jsdom": "^11.6.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
+    "browserify": "^16.1.1",
+    "jest": "^22.4.2",
+    "onchange": "^3.3.0"
+  }
+}
