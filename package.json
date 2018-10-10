@@ -1,8 +1,11 @@
 {
   "name": "nb-mapper",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Map HTML files for use with next-book tools",
   "main": "src/app.js",
+  "bin": {
+    "nb-mapper": "./bin/cli.js"
+  },
   "scripts": {
     "bundle": "browserify src/browser.js -o dist/browser.js",
     "transpile": "babel dist/browser.js --out-file dist/browser.js",
@@ -31,13 +34,16 @@
   },
   "homepage": "https://github.com/next-book/nb-mapper#readme",
   "dependencies": {
+    "cli-progress": "^2.1.0",
     "command-line-args": "^5.0.2",
-    "jsdom": "^11.6.2"
+    "jsdom": "^11.6.2",
+    "ncp": "^2.0.0",
+    "pretty": "^2.0.0",
+    "rimraf": "^2.6.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "babel-preset-flow": "^6.23.0",
     "browserify": "^16.1.1",
     "jest": "^22.4.2",
     "onchange": "^3.3.0"
