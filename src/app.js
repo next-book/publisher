@@ -8,34 +8,74 @@ const Jsdom = require('jsdom').JSDOM;
 const tagger = require('./tagger');
 const gauge = require('./gauge');
 const config = require('./config');
+const Progress = require('cli-progress');
+const pretty = require('pretty');
 
 /**
  * Maps HTML for *next-book* use.
  *
- * @param      {string|JSDOM|string[]|JSDOM[]}  data     *jsdom* object, string containing HTML or
- *                                                       array of those.
- * @param      {config~Options}                 options  The options
- * @return     {array}                          Array of mapped documents in specified format
+ * @param      {string[]|JSDOM[]}  content   Array of *jsdom* objects or strings
+ * @param      {array}             filenames Names of files from which content was read
+ * @param      {config~Options}    options   The options
+ * @return     {array}             Array of mapped documents in specified format
  * @public
  */
-function map(data, options) {
+function map(content, filenames, options) {
   const conf = config.load(options);
-  const doms = (Array.isArray(data) ? data : [data]).map(doc => getJsdomObj(doc));
+  console.log(`\nUsing mapper config:\n${dumpArray(conf)}\n`);
+
+  const doms = content.map(doc => getJsdomObj(doc));
   const documents = doms.map(dom => dom.window.document);
 
   // map
+  console.log('Mapping documents:');
+  const bar = new Progress.Bar({}, Progress.Presets.shades_classic);
+  bar.start(documents.length, 0);
+
   documents.forEach((document, index) => {
-    console.log(`Mapping document #${index}`);
     tagger.tagDocument(document, conf);
     gauge.gaugeDocument(document);
+    bar.update(index + 1);
   });
+
+  bar.stop();
 
   // gauge
   if (documents.length > 1) gauge.gaugePublication(documents);
   documents.forEach(document => gauge.setGaugeMetatags(document));
 
-  // export
-  return (doms.length > 1) ? exportDoms(doms, conf.output) : exportDoms(doms, conf.output)[0];
+  const metadata = Object.assign(
+    {},
+    conf.meta,
+    { chapters: documents.map(document => gauge.getData(document)) },
+  );
+
+  // add nav
+  addMetaNavigation(documents, filenames);
+
+  return { metadata, documents: exportDoms(doms, conf.output) };
+}
+
+function addMetaNavigation(documents, filenames) {
+  console.log('\nAdding meta navigation…');
+
+  documents.forEach((document, index) => {
+    const links = [
+      { rel: 'index', href: './index.html' },
+      { rel: 'prev', href: `./${filenames[index - 1]}` },
+      { rel: 'next', href: `./${filenames[index + 1]}` },
+      { rel: 'license', href: './license.html' },
+      { rel: 'import', href: './spine.json', id: 'spine' },
+    ];
+
+    links.filter(link => link.href).forEach((link) => {
+      const el = document.createElement('link');
+      el.setAttribute('rel', link.rel);
+      el.setAttribute('href', link.href);
+      if (link.id) el.setAttribute('id', link.id);
+      document.querySelector('head').appendChild(el);
+    });
+  });
 }
 
 /**
@@ -61,13 +101,19 @@ function getJsdomObj(doc) {
  * @private
  */
 function exportDoms(doms, format) {
+  console.log('\nExporting HTML…');
+
   const routines = {
     jsdom: dom => dom,
-    html: dom => dom.serialize(),
+    html: dom => pretty(dom.serialize(), { ocd: true }),
   };
 
   return doms.map(dom => routines[format](dom));
 }
 
 
-module.exports = { map };
+function dumpArray(arr) {
+  return JSON.stringify(arr, null, 2).split('\n').map(line => '> ' + line).join('\n');
+}
+
+module.exports = { map, addMetaNavigation };
