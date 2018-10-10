@@ -7,7 +7,7 @@ A tool for mapping HTML files for use with next-book tools. See [an example][exa
 
 Install in a book's repository (global installation is discouraged as nb-mapper is in its early development and API changes are expected):
 
-```
+```sh
 npm i nb-mapper
 ```
 
@@ -16,15 +16,28 @@ npm i nb-mapper
 
 Use nb-mapper command, e. g.
 
-```
+```sh
 nb-mapper --src text --out book
 ```
 
-Mapper reads all \*.html files in the source directory (`--src`, by default `./src`), sorts them by filename, maps them and outputs the result into the `output` directory (`--out`, by default `./book`).
+Mapper reads all `\*.html` files in the source directory (`--src`, by default `./src`), sorts them by filename, maps them and outputs the result into the `output` directory (`--out`, by default `./book`).
 
 It also creates a `spine.json` file that collects metadata about the book and adds several structural meta tags into files (prev, next, license, spine) that allow book traversal (with Javascript or native browser affordances).
 
-It's possible to include a `book.json` file in the source directory that adds metadata and mapper configuration. It's possible to specify static folders that will be copied from source to output as they are.
+It's possible to include a `book.json` file in the source directory that adds metadata and mapper configuration. It's possible to specify static folders that will be copied from source to output as they are. 
+
+```json
+{
+  "meta": {
+    "title": "Free Culture",
+    "author": "Lawrence Lessig",
+    "subtitle": "How big media uses technology and the law to lock down culture and control creativity",
+    "published": 2004,
+    "keywords": ["copyright law", "intellectual property", "public domain", "web", "Napster"]
+  },
+  "static": ["style", "scripts", "images"]
+}
+```
 
 
 ## Use in browser
