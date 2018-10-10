@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>nb-mapper 0.1.0 | Documentation</title>
+  <title>nb-mapper 0.2.0 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>nb-mapper</h3>
-          <div class='mb1'><code>0.1.0</code></div>
+          <div class='mb1'><code>0.2.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -243,6 +243,16 @@
                 
                 </li>
               
+                
+                <li><a
+                  href='#getdata'
+                  class="">
+                  getData
+                  
+                </a>
+                
+                </li>
+              
             </ul>
           </div>
           <div class='mt1 h6 quiet'>
@@ -278,7 +288,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/app.js#L21-L39'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/app.js#L23-L57'>
       <span>src/app.js</span>
       </a>
     
@@ -288,7 +298,7 @@
   <p>Maps HTML for <em>next-book</em> use.</p>
 
 
-  <div class='pre p1 fill-light mt0'>map(data: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | JSDOM | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;JSDOM>), options: config~Options): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a></div>
+  <div class='pre p1 fill-light mt0'>map(content: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;JSDOM>), filenames: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>, options: config~Options): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a></div>
   
   
 
@@ -305,10 +315,19 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>data</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | JSDOM | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;JSDOM>))</code>
-	    <em>jsdom</em>
- object, string containing HTML or
-array of those.
+            <span class='code bold'>content</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;JSDOM>))</code>
+	    Array of 
+<em>jsdom</em>
+ objects or strings
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>filenames</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>)</code>
+	    Names of files from which content was read
 
           </div>
           
@@ -377,7 +396,7 @@ array of those.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/browser.js#L18-L22'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/browser.js#L18-L22'>
       <span>src/browser.js</span>
       </a>
     
@@ -465,7 +484,7 @@ array of those.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/config.js#L7-L22'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/config.js#L7-L22'>
       <span>src/config.js</span>
       </a>
     
@@ -562,7 +581,7 @@ that marks chunks.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/config.js#L41-L41'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/config.js#L41-L41'>
       <span>src/config.js</span>
       </a>
     
@@ -650,7 +669,7 @@ that marks chunks.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/tagger.js#L19-L25'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/tagger.js#L19-L25'>
       <span>src/tagger.js</span>
       </a>
     
@@ -732,7 +751,7 @@ that marks chunks.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/tagger.js#L44-L49'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/tagger.js#L44-L49'>
       <span>src/tagger.js</span>
       </a>
     
@@ -810,7 +829,7 @@ that marks chunks.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/tagger.js#L68-L75'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/tagger.js#L68-L75'>
       <span>src/tagger.js</span>
       </a>
     
@@ -913,7 +932,7 @@ construction.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/parser.js#L20-L38'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/parser.js#L20-L38'>
       <span>src/parser.js</span>
       </a>
     
@@ -1014,7 +1033,7 @@ annotated span elements.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/producer.js#L18-L39'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/producer.js#L15-L38'>
       <span>src/producer.js</span>
       </a>
     
@@ -1024,7 +1043,7 @@ annotated span elements.</p>
   <p>Produces ideas from a parsedObj</p>
 
 
-  <div class='pre p1 fill-light mt0'>produce(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, parsedObj: <a href="#parsedobj">ParsedObj</a>, delimiter: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>), restoreDelimiter: (bool | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)): <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">Node</a></div>
+  <div class='pre p1 fill-light mt0'>produce(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, parsedObj: <a href="#parsedobj">ParsedObj</a>): <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">Node</a></div>
   
   
 
@@ -1052,25 +1071,6 @@ annotated span elements.</p>
           <div>
             <span class='code bold'>parsedObj</span> <code class='quiet'>(<a href="#parsedobj">ParsedObj</a>)</code>
 	    A parsed object
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>delimiter</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>))</code>
-	    The idea delimiter
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>restoreDelimiter</span> <code class='quiet'>((bool | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>))</code>
-	    Restore delimiter (string required if delimiter
-is a RegExp).
 
           </div>
           
@@ -1130,7 +1130,7 @@ is a RegExp).
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/gauge.js#L48-L51'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/gauge.js#L48-L51'>
       <span>src/gauge.js</span>
       </a>
     
@@ -1203,7 +1203,7 @@ is a RegExp).
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/gauge.js#L74-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/gauge.js#L74-L79'>
       <span>src/gauge.js</span>
       </a>
     
@@ -1277,7 +1277,7 @@ using <a href="#gaugedocument">gaugeDocument</a>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/gauge.js#L100-L102'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/gauge.js#L100-L102'>
       <span>src/gauge.js</span>
       </a>
     
@@ -1366,7 +1366,7 @@ using <a href="#gaugedocument">gaugeDocument</a>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/e9b4d465bc1fd6a3ab7cc628d1d13964897bc740/src/structures.js#L29-L32'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/structures.js#L30-L34'>
       <span>src/structures.js</span>
       </a>
     
@@ -1378,7 +1378,7 @@ in which every item is an array of strings and HTML elements,
 a full-whitespace string or another ParsedObj.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new ParsedObj(node: window.Node, ideas: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>)</div>
+  <div class='pre p1 fill-light mt0'>new ParsedObj(node: window.Node, ideas: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>, delimiter: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
   
   
 
@@ -1406,6 +1406,15 @@ a full-whitespace string or another ParsedObj.</p>
           <div>
             <span class='code bold'>ideas</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>)</code>
 	    Array of ideas
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>delimiter</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    Delimiter
 
           </div>
           
@@ -1466,6 +1475,80 @@ hacks are welcome!</p>
   
 </section>
 </div>
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='getdata'>
+      getData
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/gauge.js#L112-L126'>
+      <span>src/gauge.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Retrieves values from <code>document.body.dataset</code>. Relies on attributes created using
+<a href="#gaugedocument">gaugeDocument</a> and optionally using <a href="#gaugepublication">gaugePublication</a>.</p>
+
+
+  <div class='pre p1 fill-light mt0'>getData(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript">document</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>document</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript">document</a>)</code>
+	    DOM document
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        Array of name/value pairs
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
           
         
       </div>

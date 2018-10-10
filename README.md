@@ -5,26 +5,26 @@ A tool for mapping HTML files for use with next-book tools. See [an example][exa
 
 ## Use with node.js
 
-Install from npm:
+Install in a book's repository (global installation is discouraged as nb-mapper is in its early development and API changes are expected):
 
 ```
-npm install nb-mapper
+npm i nb-mapper
 ```
-
-Map HTML string or JSDOM objects:
-
-```js
-const html = '...';
-const mapper = require('nb-mapper');
-mapper.map(html);
-```
-
-Config the mapper with an options object `mapper.map(html, conf)`, see [API docs for Options][options].
 
 
 ## CLI use
 
-Planned.
+Use nb-mapper command, e. g.
+
+```
+nb-mapper --src text --out book
+```
+
+Mapper reads all \*.html files in the source directory (`--src`, by default `./src`), sorts them by filename, maps them and outputs the result into the `output` directory (`--out`, by default `./book`).
+
+It also creates a `spine.json` file that collects metadata about the book and adds several structural meta tags into files (prev, next, license, spine) that allow book traversal (with Javascript or native browser affordances).
+
+It's possible to include a `book.json` file in the source directory that adds metadata and mapper configuration. It's possible to specify static folders that will be copied from source to output as they are.
 
 
 ## Use in browser
@@ -41,6 +41,19 @@ Download nb-mapper from npm or github and include it in your project files. Chec
 ```
 
 Browser use is currently primarily for quick try-outs, not intended for production use. 
+
+
+## Use in a Node.js script 
+
+Map HTML string or JSDOM objects in a script:
+
+```js
+const html = '...';
+const mapper = require('nb-mapper');
+mapper.map(html);
+```
+
+Config the mapper with an options object `mapper.map(html, conf)`, see [API docs for Options][options].
 
 
 ## Contributing
