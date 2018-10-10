@@ -34,7 +34,7 @@ function parse(node, delimiter) {
     }
   });
 
-  return new ParsedObj(node, filterPieces(pieces));
+  return new ParsedObj(node, filterPieces(pieces), delimiter);
 }
 
 function parseTextNode(node, pieces, delimiter) {

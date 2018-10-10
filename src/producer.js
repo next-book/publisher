@@ -10,16 +10,13 @@ const { ParsedObj } = require('./structures');
  *
  * @param      {Object}           document          DOM document
  * @param      {ParsedObj}        parsedObj         A parsed object
- * @param      {(string|RegExp)}  delimiter     The idea delimiter
- * @param      {(bool|string)}    restoreDelimiter  Restore delimiter (string required if delimiter
- *                                                  is a RegExp).
  * @return     {Node}             HTML node
  */
-function produce(document, parsedObj, delimiter, restoreDelimiter) {
+function produce(document, parsedObj) {
   const fragment = document.createDocumentFragment();
-  const { node, ideas } = parsedObj;
+  const { node, ideas, delimiter } = parsedObj;
 
-  ideas.forEach((idea) => {
+  ideas.forEach((idea, index) => {
     if (Array.isArray(idea)) {
       if (containsParsedObj(idea)) {
         fragment.appendChild(anchorObject(idea, document));
@@ -30,7 +27,9 @@ function produce(document, parsedObj, delimiter, restoreDelimiter) {
       fragment.appendChild(document.createTextNode(idea));
     }
 
-    if (restoreDelimiter) fragment.appendChild(document.createTextNode(delimiter));
+    if (!Object.is(ideas.length - 1, index) && typeof delimiter === 'string') {
+      fragment.appendChild(document.createTextNode(delimiter));
+    }
   });
 
   const chunk = emptyNode(node.cloneNode());
