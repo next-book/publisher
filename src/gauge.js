@@ -5,13 +5,13 @@
 
 
 const attrNames = {
-  charCount: 'data-nb-chars',
-  wordCount: 'data-nb-words',
-  publicationCharCount: 'data-nb-publication-chars',
-  publicationWordCount: 'data-nb-publication-words',
+  chars: 'data-nb-chars',
+  words: 'data-nb-words',
+  publicationChars: 'data-nb-publication-chars',
+  publicationWords: 'data-nb-publication-words',
   charOffset: 'data-nb-chars-offset',
   wordOffset: 'data-nb-words-offset',
-  sectionNumber: 'data-nb-section-number',
+  id: 'data-nb-document-id',
 };
 
 const sumAttr = attr => ideas => Array.prototype.reduce
@@ -23,13 +23,13 @@ const setSumAttr = attr => (el) => {
 
 function countChars(document) {
   Array.prototype.map.call(document.querySelectorAll('.idea'), (idea) => {
-    idea.setAttribute(attrNames.charCount, idea.textContent.length);
+    idea.setAttribute(attrNames.chars, idea.textContent.length);
   });
 }
 
 function countWords(document) {
   Array.prototype.map.call(document.querySelectorAll('.idea'), (idea) => {
-    idea.setAttribute(attrNames.wordCount, idea.textContent.split(/\s+/g).length);
+    idea.setAttribute(attrNames.words, idea.textContent.split(/\s+/g).length);
   });
 }
 
@@ -46,8 +46,8 @@ function gaugeContent(document, attr, gaugeFn) {
  * @return     {void}  Modifies DOM document
  */
 function gaugeDocument(document) {
-  gaugeContent(document, attrNames.wordCount, countWords);
-  gaugeContent(document, attrNames.charCount, countChars);
+  gaugeContent(document, attrNames.words, countWords);
+  gaugeContent(document, attrNames.chars, countChars);
 }
 
 
@@ -72,10 +72,10 @@ function gaugeTotals(attr, pubAttr, offsetAttr) {
  * @return     {void}  Modifies DOM documents
  */
 function gaugePublication(documents) {
-  gaugeTotals(attrNames.wordCount, attrNames.publicationWordCount, attrNames.wordOffset)(documents);
-  gaugeTotals(attrNames.charCount, attrNames.publicationCharCount, attrNames.charOffset)(documents);
+  gaugeTotals(attrNames.words, attrNames.publicationWords, attrNames.wordOffset)(documents);
+  gaugeTotals(attrNames.chars, attrNames.publicationChars, attrNames.charOffset)(documents);
   documents.forEach((document, index) =>
-    document.body.setAttribute(attrNames.sectionNumber, index + 1));
+    document.body.setAttribute(attrNames.id, index + 1));
 }
 
 
