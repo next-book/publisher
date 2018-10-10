@@ -101,4 +101,34 @@ function setGaugeMetatags(document) {
   Object.keys(attrNames).map(attrName => appendMeta(document, attrName));
 }
 
-module.exports = { gaugeDocument, gaugePublication, setGaugeMetatags };
+
+/**
+ * Retrieves values from `document.body.dataset`. Relies on attributes created using
+ * {@link gaugeDocument} and optionally using {@link gaugePublication}.
+ *
+ * @param      {document}  document  DOM document
+ * @return     {Object}  Array of name/value pairs
+ */
+function getData(document) {
+  const data = {};
+
+  Object.keys(attrNames).forEach((attrName) => {
+    const raw = document.body.getAttribute(attrNames[attrName]);
+    const value = raw == parseInt(raw, 10) // eslint-disable-line eqeqeq
+      ? parseInt(raw, 10)
+      : raw == parseFloat(raw) // eslint-disable-line eqeqeq
+        ? parseFloat(raw)
+        : raw;
+    data[attrName] = value;
+  });
+
+  return data;
+}
+
+
+module.exports = {
+  gaugeDocument,
+  gaugePublication,
+  setGaugeMetatags,
+  getData,
+};
