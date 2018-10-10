@@ -47,9 +47,7 @@ Download nb-mapper from npm or github and include it in your project files. Chec
 ```html
 <script type="text/javascript" src="nb-mapper/dist/browser.js"></script>
 <script type="text/javascript">
-	window.addEventListener('load', () => {
-	  NbMapper.mapHtml();
-	});
+  window.addEventListener('load', () => NbMapper.mapHtml());
 </script>
 ```
 
@@ -72,8 +70,6 @@ Config the mapper with an options object `mapper.map(html, conf)`, see [API docs
 ## Contributing
 
 Clone repository and install devDependencies. Build a complete project with `npm run build`. Limit PRs only to changed source files.
-
-
 
 [fc]: https://github.com/next-book/free-culture/
 [example]: http://next-book.github.io/nb-mapper/
