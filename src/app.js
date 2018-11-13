@@ -166,7 +166,7 @@ function exportDoms(doms, format) {
 
 
 function dumpArray(arr) {
-  return JSON.stringify(arr, null, 2).split('\n').map(line => '> ' + line).join('\n');
+  return JSON.stringify(arr, null, 2).split('\n').map(line => `>${line}`).join('\n');
 }
 
 module.exports = { map, addMetaNavigation };
