@@ -5,7 +5,7 @@ const rimraf = require('rimraf');
 const ncp = require('ncp');
 
 function prepContent(srcDir, filter) {
-  console.log(`Looking up files in "${srcDir}" (using filename filter \\${filter}\\, sorting by parseInt(filename)).`);
+  console.log(`Looking up files in "${srcDir}" (using filename filter \\${filter}\\).`);
 
   const content = fs.readdirSync(srcDir, {
     encoding: 'utf8',
@@ -15,10 +15,9 @@ function prepContent(srcDir, filter) {
     .map(file => ({
       name: file.name,
       data: fs.readFileSync(path.join(srcDir, file.name), 'utf8'),
-    }))
-    .sort((a, b) => customParseInt(a.name) - customParseInt(b.name));
+    }));
 
-  content.forEach(file => console.log(`  [${String(customParseInt(file.name)).padStart(4, '·')}] ${file.name}`));
+  content.forEach(file => console.log(`> ${file.name}`));
 
   return { content: content.map(file => file.data), filenames: content.map(file => file.name) };
 }
@@ -64,10 +63,6 @@ function copyFolders(message, src, out, folders) {
       },
     ));
   }
-}
-
-function customParseInt(str) {
-  return parseInt(str, 10) || 9999;
 }
 
 module.exports = {

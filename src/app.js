@@ -26,6 +26,7 @@ function map(content, filenames, options) {
 
   const doms = content.map(doc => getJsdomObj(doc));
   const documents = doms.map(dom => dom.window.document);
+  const { chapters } = conf;
 
   // map
   console.log('Mapping documents:');
@@ -35,48 +36,100 @@ function map(content, filenames, options) {
   documents.forEach((document, index) => {
     tagger.tagDocument(document, conf);
     gauge.gaugeDocument(document);
+
     bar.update(index + 1);
   });
 
   bar.stop();
 
   // gauge
-  if (documents.length > 1) gauge.gaugePublication(documents);
-  documents.forEach(document => gauge.setGaugeMetatags(document));
-
-  const metadata = Object.assign(
-    {},
-    conf.meta,
-    { chapters: documents.map(document => gauge.getData(document)) },
-  );
+  const lengths = gauge.gaugePublication(documents);
+  const docMetadata = gatherMetadata(documents, filenames, chapters, lengths);
+  const spine = Object.assign({}, conf.meta, { documents: docMetadata, totals: sumPublication(docMetadata) });
 
   // add nav
-  addMetaNavigation(documents, filenames);
+  addMetaNavigation(documents, docMetadata);
 
-  return { metadata, documents: exportDoms(doms, conf.output) };
+  return { spine, documents: exportDoms(doms, conf.output) };
 }
 
-function addMetaNavigation(documents, filenames) {
+function sumPublication(metadata) {
+  return metadata.reduce((totals, document) => {
+    totals.all.words += document.words;
+    totals.all.chars += document.chars;
+    if (document.isChapter) {
+      totals.chapters.words += document.words;
+      totals.chapters.chars += document.chars;
+    }
+    return totals;
+  }, {
+    all: { words: 0, chars: 0 },
+    chapters: { words: 0, chars: 0 },
+  });
+}
+
+function gatherMetadata(documents, filenames, chapters, lengths) {
+  console.log('\nGathering metadata…');
+
+  return documents.map((document, index) => {
+    const meta = {};
+
+    meta.file = filenames[index];
+    meta.words = lengths[index].words;
+    meta.chars = lengths[index].chars;
+    if (filenames[index] === 'index.html') meta.next = chapters[0];
+
+    if (chapters.includes(filenames[index])) {
+      const position = chapters.indexOf(filenames[index]);
+      meta.isChapter = true;
+      meta.position = position + 1;
+
+      if (position !== 0) meta.prev = chapters[position - 1];
+      if (position < chapters.length - 1) meta.next = chapters[position + 1];
+    }
+
+    return meta;
+  });
+}
+
+function addMetaNavigation(documents, metadata) {
   console.log('\nAdding meta navigation…');
 
-  documents.forEach((document, index) => {
-    const links = [
-      { rel: 'index', href: './index.html' },
-      { rel: 'prev', href: `./${filenames[index - 1]}` },
-      { rel: 'next', href: `./${filenames[index + 1]}` },
-      { rel: 'license', href: './license.html' },
-      { rel: 'import', href: './spine.json', id: 'spine' },
-    ];
+  const base = [
+    { tagName: 'link', rel: 'index', href: './index.html' },
+    { tagName: 'link', rel: 'license', href: './license.html' },
+    {
+      tagName: 'link',
+      rel: 'import',
+      href: './spine.json',
+      id: 'spine',
+    },
+  ];
 
-    links.filter(link => link.href).forEach((link) => {
-      const el = document.createElement('link');
-      el.setAttribute('rel', link.rel);
-      el.setAttribute('href', link.href);
-      if (link.id) el.setAttribute('id', link.id);
+  documents.forEach((document, index) => {
+    const extra = Object.keys(metadata[index]).map((name) => {
+      const value = metadata[index][name];
+      return ['prev', 'next'].includes(name)
+        ? { tagName: 'link', rel: name, href: `./${value}` }
+        : name === 'position'
+          ? { tagName: 'meta', name, content: value }
+          : null;
+    });
+
+    base.concat(extra).forEach((meta) => {
+      if (meta === null) return;
+
+      const el = document.createElement(meta.tagName);
+      Object.keys(meta)
+        .filter(key => ['name', 'content', 'rel', 'href', 'id']
+          .includes(key)).forEach((key) => {
+          el.setAttribute(key, meta[key]);
+        });
       document.querySelector('head').appendChild(el);
     });
   });
 }
+
 
 /**
  * Converts HTML string into jsdom object if needed.

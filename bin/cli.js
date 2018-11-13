@@ -13,8 +13,8 @@ const args = cmd([
 
 const config = data.prepConfig(args.src);
 const { content, filenames } = data.prepContent(args.src, args.filter);
-const { documents, metadata } = app.map(content, filenames, config);
+const { documents, spine } = app.map(content, filenames, config);
 
-data.writeOutput(args.out, filenames, documents, metadata);
+data.writeOutput(args.out, filenames, documents, spine);
 data.copyFolders('\nCopying static folders…', args.src, args.out, config.static);
 
