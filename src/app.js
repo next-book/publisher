@@ -74,6 +74,7 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
   return documents.map((document, index) => {
     const meta = {};
 
+    meta.title = document.querySelector('title').textContent;
     meta.file = filenames[index];
     meta.words = lengths[index].words;
     meta.chars = lengths[index].chars;
