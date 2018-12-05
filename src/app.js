@@ -7,6 +7,7 @@
 const Jsdom = require('jsdom').JSDOM;
 const tagger = require('./tagger');
 const gauge = require('./gauge');
+const { getToc } = require('./toc');
 const config = require('./config');
 const Progress = require('cli-progress');
 const pretty = require('pretty');
@@ -75,6 +76,7 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
     const title = document.querySelector('title').textContent;
     const file = filenames[index];
     const { words, chars } = lengths[index];
+    const toc = getToc(document);
 
     const isChapter = chapters.includes(filenames[index]);
     const pos = chapters.indexOf(filenames[index]);
@@ -96,6 +98,7 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
       order,
       prev,
       next,
+      toc,
     };
   });
 }
