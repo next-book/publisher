@@ -11,6 +11,9 @@ const { getToc } = require('./toc');
 const config = require('./config');
 const Progress = require('cli-progress');
 const pretty = require('pretty');
+const slug = require('slug');
+const gitRev = require('@destinationstransfers/git-rev-sync');
+const hash = require('object-hash');
 
 /**
  * Maps HTML for *next-book* use.
@@ -46,12 +49,35 @@ function map(content, filenames, options) {
   // gauge
   const lengths = gauge.gaugePublication(documents);
   const docMetadata = gatherMetadata(documents, filenames, chapters, lengths);
-  const spine = Object.assign({}, conf.meta, { documents: docMetadata, totals: sumPublication(docMetadata) });
+  const spine = composeSpine(conf.meta, docMetadata, sumPublication(docMetadata));
 
   // add nav
   addMetaNavigation(documents, docMetadata);
 
   return { spine, documents: exportDoms(doms, conf.output) };
+}
+
+function composeSpine(meta, documents, totals) {
+  const id = [
+    meta.author.split(' ').pop(),
+    meta.title,
+    meta.published,
+    hash(meta).substring(0, 6),
+  ].filter(str => str).join(' ');
+
+  const time = new Date();
+
+  return {
+    ...meta,
+    slug: slug(id, { lower: true }),
+    revision: gitRev.short(),
+    generatedAt: {
+      date: String(time),
+      unix: time.getTime(),
+    },
+    documents,
+    totals,
+  };
 }
 
 function sumPublication(metadata) {
