@@ -72,24 +72,31 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
   console.log('\nGathering metadata…');
 
   return documents.map((document, index) => {
-    const meta = {};
+    const title = document.querySelector('title').textContent;
+    const file = filenames[index];
+    const { words, chars } = lengths[index];
 
-    meta.title = document.querySelector('title').textContent;
-    meta.file = filenames[index];
-    meta.words = lengths[index].words;
-    meta.chars = lengths[index].chars;
-    if (filenames[index] === 'index.html') meta.next = chapters[0];
+    const isChapter = chapters.includes(filenames[index]);
+    const pos = chapters.indexOf(filenames[index]);
+    const order = isChapter ? pos + 1 : 0;
 
-    if (chapters.includes(filenames[index])) {
-      const position = chapters.indexOf(filenames[index]);
-      meta.isChapter = true;
-      meta.position = position + 1;
+    const prev = pos !== 0 ? chapters[pos - 1] : null;
+    const next = pos < chapters.length - 1
+      ? chapters[pos + 1]
+      : filenames[index] === 'index.html'
+        ? chapters[0]
+        : null;
 
-      if (position !== 0) meta.prev = chapters[position - 1];
-      if (position < chapters.length - 1) meta.next = chapters[position + 1];
-    }
-
-    return meta;
+    return {
+      title,
+      file,
+      words,
+      chars,
+      isChapter,
+      order,
+      prev,
+      next,
+    };
   });
 }
 
@@ -112,7 +119,7 @@ function addMetaNavigation(documents, metadata) {
       const value = metadata[index][name];
       return ['prev', 'next'].includes(name)
         ? { tagName: 'link', rel: name, href: `./${value}` }
-        : name === 'position'
+        : name === 'order'
           ? { tagName: 'meta', name, content: value }
           : null;
     });
