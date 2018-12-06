@@ -144,14 +144,16 @@ function addMetaNavigation(documents, metadata) {
   ];
 
   documents.forEach((document, index) => {
-    const extra = Object.keys(metadata[index]).map((name) => {
-      const value = metadata[index][name];
-      return ['prev', 'next'].includes(name)
-        ? { tagName: 'link', rel: name, href: `./${value}` }
-        : name === 'order'
-          ? { tagName: 'meta', name, content: value }
-          : null;
-    });
+    const extra = Object.keys(metadata[index])
+      .filter(name => metadata[index][name])
+      .map((name) => {
+        const value = metadata[index][name];
+        return ['prev', 'next'].includes(name)
+          ? { tagName: 'link', rel: name, href: `./${value}` }
+          : name === 'order'
+            ? { tagName: 'meta', name, content: value }
+            : null;
+      });
 
     base.concat(extra).forEach((meta) => {
       if (meta === null) return;
