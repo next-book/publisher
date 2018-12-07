@@ -3,6 +3,7 @@
  * @module
  * @ignore
  */
+const { spawnSync } = require('child_process');
 
 const Jsdom = require('jsdom').JSDOM;
 const tagger = require('./tagger');
@@ -12,7 +13,6 @@ const config = require('./config');
 const Progress = require('cli-progress');
 const pretty = require('pretty');
 const slug = require('slug');
-const gitRev = require('@destinationstransfers/git-rev-sync');
 const hash = require('object-hash');
 
 /**
@@ -70,7 +70,7 @@ function composeSpine(meta, documents, totals) {
   return {
     ...meta,
     slug: slug(id, { lower: true }),
-    revision: gitRev.short(),
+    revision: getGitRev(),
     generatedAt: {
       date: String(time),
       unix: time.getTime(),
@@ -78,6 +78,22 @@ function composeSpine(meta, documents, totals) {
     documents,
     totals,
   };
+}
+
+function getGitRev() {
+  try {
+    const spawn = spawnSync('git', ['rev-parse', '--short', 'HEAD']);
+
+    const errorText = spawn.stderr.toString().trim();
+    if (errorText) {
+      console.log('There was a problem checking for git revision. Perhaps this book is not a git repo?.');
+      console.log(`Specific git error: ${errorText}`);
+    }
+
+    return spawn.stdout.toString().trim().substr(0, 7);
+  } catch (err) {
+    return null;
+  }
 }
 
 function sumPublication(metadata) {
