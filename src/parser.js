@@ -20,7 +20,7 @@ let lastNodeWasFinal = null;
 function parse(node, delimiter) {
   const pieces = [];
 
-  node.childNodes.forEach((childNode) => {
+  node.childNodes.forEach(childNode => {
     if (childNode.nodeType === childNode.TEXT_NODE) {
       if (typeof delimiter === 'function') delimiter(node, pieces);
       else parseTextNode(childNode, pieces, delimiter);
@@ -38,7 +38,7 @@ function parse(node, delimiter) {
 }
 
 function parseTextNode(node, pieces, delimiter) {
-  node.textContent.split(delimiter).forEach((text) => {
+  node.textContent.split(delimiter).forEach(text => {
     if (lastNodeWasFinal !== true) {
       lastValue(pieces).push(text);
       lastNodeWasFinal = true;
@@ -63,20 +63,21 @@ function lastValue(arr) {
 
 function separateWhitespace(piece) {
   if (piece.length > 1) {
-    const [before, firstItem] = typeof piece[0] === 'string'
-      ? piece[0].match(/^(\s*)([\s\S]+)$/).slice(1)
-      : [[], piece[0]];
-    const [lastItem, after] = typeof piece[piece.length - 1] === 'string'
-      ? piece[piece.length - 1].match(/^([\s\S]+?)(\s*)$/).slice(1)
-      : [piece[piece.length - 1], []];
+    const [before, firstItem] =
+      typeof piece[0] === 'string' ? piece[0].match(/^(\s*)([\s\S]+)$/).slice(1) : [[], piece[0]];
+    const [lastItem, after] =
+      typeof piece[piece.length - 1] === 'string'
+        ? piece[piece.length - 1].match(/^([\s\S]+?)(\s*)$/).slice(1)
+        : [piece[piece.length - 1], []];
     const mid = piece.slice(1, piece.length - 1);
     return [before, [firstItem, ...mid, lastItem], after];
   } else if (piece.length === 1 && typeof piece[0] === 'string' && /^\s+$/.test(piece[0])) {
     return [piece[0]];
   } else if (piece.length === 1) {
-    const [before, text, after] = typeof piece[0] === 'string'
-      ? piece[0].match(/^(\s*)([\s\S]+?)(\s*)$/).slice(1)
-      : [[], piece[0], []];
+    const [before, text, after] =
+      typeof piece[0] === 'string'
+        ? piece[0].match(/^(\s*)([\s\S]+?)(\s*)$/).slice(1)
+        : [[], piece[0], []];
     return [before, [text], after];
   }
 

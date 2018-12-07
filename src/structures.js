@@ -33,5 +33,4 @@ function ParsedObj(node, ideas, delimiter) {
   this.delimiter = delimiter;
 }
 
-
 module.exports = { ParsedObj };

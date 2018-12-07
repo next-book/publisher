@@ -26,7 +26,7 @@ function getChildren(list, currentRoot) {
   let returnedToLevel = false;
 
   return list
-    .filter((header) => {
+    .filter(header => {
       if (returnedToLevel || isTheNextHeaderOnSameLevel(header, currentRoot)) {
         returnedToLevel = true;
         return false;

@@ -8,21 +8,21 @@ const attrNames = {
   words: 'data-nb-words',
 };
 
-const sumAttr = attr => ideas => Array.prototype.reduce
-  .call(ideas, (acc, idea) => acc + parseInt(idea.getAttribute(attr), 10), 0);
+const sumAttr = attr => ideas =>
+  Array.prototype.reduce.call(ideas, (acc, idea) => acc + parseInt(idea.getAttribute(attr), 10), 0);
 
-const setSumAttr = attr => (el) => {
+const setSumAttr = attr => el => {
   el.setAttribute(attr, sumAttr(attr)(el.querySelectorAll('.idea')));
 };
 
 function countChars(document) {
-  Array.prototype.map.call(document.querySelectorAll('.idea'), (idea) => {
+  Array.prototype.map.call(document.querySelectorAll('.idea'), idea => {
     idea.setAttribute(attrNames.chars, idea.textContent.length);
   });
 }
 
 function countWords(document) {
-  Array.prototype.map.call(document.querySelectorAll('.idea'), (idea) => {
+  Array.prototype.map.call(document.querySelectorAll('.idea'), idea => {
     idea.setAttribute(attrNames.words, idea.textContent.split(/\s+/g).length);
   });
 }

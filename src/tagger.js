@@ -24,7 +24,6 @@ function tagDocument(document, options) {
   numberEls(document, '.idea', 'idea');
 }
 
-
 /**
  * Mark DOM elements to be tagged.
  *
@@ -34,9 +33,8 @@ function tagDocument(document, options) {
  * @private
  */
 function tagChunks(document, selectors) {
-  const elements = typeof selectors === 'function'
-    ? selectors(document)
-    : document.querySelectorAll(selectors);
+  const elements =
+    typeof selectors === 'function' ? selectors(document) : document.querySelectorAll(selectors);
 
   Array.prototype.forEach.call(elements, el => el.classList.add('chunk'));
 }
@@ -48,7 +46,6 @@ function tagChunks(document, selectors) {
  * @return     {void}    Modifies DOM document
  */
 
-
 /**
  * Map ideas in specific DOM context.
  *
@@ -59,7 +56,7 @@ function tagChunks(document, selectors) {
  * @private
  */
 function tagIdeas(document, delimiter) {
-  document.querySelectorAll('.chunk').forEach((chunk) => {
+  document.querySelectorAll('.chunk').forEach(chunk => {
     const tagged = produce(document, parse(chunk, delimiter));
     chunk.parentNode.replaceChild(tagged, chunk);
   });
@@ -73,7 +70,6 @@ function tagIdeas(document, delimiter) {
  * @return     {string[]}  Text split into 1-n parts (string, Node or ParsedObj) used for idea
  *                         construction.
  */
-
 
 /**
  * Numbers selected elements (<1…n>), adding a data attribute and an numbered id attribute

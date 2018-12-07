@@ -6,14 +6,15 @@
 const { spawnSync } = require('child_process');
 
 const Jsdom = require('jsdom').JSDOM;
-const tagger = require('./tagger');
-const gauge = require('./gauge');
-const { getToc } = require('./toc');
-const config = require('./config');
 const Progress = require('cli-progress');
 const pretty = require('pretty');
 const slug = require('slug');
 const hash = require('object-hash');
+
+const tagger = require('./tagger');
+const gauge = require('./gauge');
+const { getToc } = require('./toc');
+const config = require('./config');
 
 /**
  * Maps HTML for *next-book* use.
@@ -58,12 +59,9 @@ function map(content, filenames, options) {
 }
 
 function composeSpine(meta, documents, totals) {
-  const id = [
-    meta.author.split(' ').pop(),
-    meta.title,
-    meta.published,
-    hash(meta).substring(0, 6),
-  ].filter(str => str).join(' ');
+  const id = [meta.author.split(' ').pop(), meta.title, meta.published, hash(meta).substring(0, 6)]
+    .filter(str => str)
+    .join(' ');
 
   const time = new Date();
 
@@ -86,29 +84,37 @@ function getGitRev() {
 
     const errorText = spawn.stderr.toString().trim();
     if (errorText) {
-      console.log('There was a problem checking for git revision. Perhaps this book is not a git repo?.');
+      console.log(
+        'There was a problem checking for git revision. Perhaps this book is not a git repo?.'
+      );
       console.log(`Specific git error: ${errorText}`);
     }
 
-    return spawn.stdout.toString().trim().substr(0, 7);
+    return spawn.stdout
+      .toString()
+      .trim()
+      .substr(0, 7);
   } catch (err) {
     return null;
   }
 }
 
 function sumPublication(metadata) {
-  return metadata.reduce((totals, document) => {
-    totals.all.words += document.words;
-    totals.all.chars += document.chars;
-    if (document.isChapter) {
-      totals.chapters.words += document.words;
-      totals.chapters.chars += document.chars;
+  return metadata.reduce(
+    (totals, document) => {
+      totals.all.words += document.words;
+      totals.all.chars += document.chars;
+      if (document.isChapter) {
+        totals.chapters.words += document.words;
+        totals.chapters.chars += document.chars;
+      }
+      return totals;
+    },
+    {
+      all: { words: 0, chars: 0 },
+      chapters: { words: 0, chars: 0 },
     }
-    return totals;
-  }, {
-    all: { words: 0, chars: 0 },
-    chapters: { words: 0, chars: 0 },
-  });
+  );
 }
 
 function gatherMetadata(documents, filenames, chapters, lengths) {
@@ -125,11 +131,10 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
     const order = isChapter ? pos + 1 : 0;
 
     const prev = pos !== 0 ? chapters[pos - 1] : null;
-    const next = pos < chapters.length - 1
-      ? chapters[pos + 1]
-      : filenames[index] === 'index.html'
-        ? chapters[0]
-        : null;
+    const next =
+      pos < chapters.length - 1
+        ? chapters[pos + 1]
+        : filenames[index] === 'index.html' ? chapters[0] : null;
 
     return {
       title,
@@ -162,29 +167,26 @@ function addMetaNavigation(documents, metadata) {
   documents.forEach((document, index) => {
     const extra = Object.keys(metadata[index])
       .filter(name => metadata[index][name])
-      .map((name) => {
+      .map(name => {
         const value = metadata[index][name];
         return ['prev', 'next'].includes(name)
           ? { tagName: 'link', rel: name, href: `./${value}` }
-          : name === 'order'
-            ? { tagName: 'meta', name, content: value }
-            : null;
+          : name === 'order' ? { tagName: 'meta', name, content: value } : null;
       });
 
-    base.concat(extra).forEach((meta) => {
+    base.concat(extra).forEach(meta => {
       if (meta === null) return;
 
       const el = document.createElement(meta.tagName);
       Object.keys(meta)
-        .filter(key => ['name', 'content', 'rel', 'href', 'id']
-          .includes(key)).forEach((key) => {
+        .filter(key => ['name', 'content', 'rel', 'href', 'id'].includes(key))
+        .forEach(key => {
           el.setAttribute(key, meta[key]);
         });
       document.querySelector('head').appendChild(el);
     });
   });
 }
-
 
 /**
  * Converts HTML string into jsdom object if needed.
@@ -219,9 +221,11 @@ function exportDoms(doms, format) {
   return doms.map(dom => routines[format](dom));
 }
 
-
 function dumpArray(arr) {
-  return JSON.stringify(arr, null, 2).split('\n').map(line => `>${line}`).join('\n');
+  return JSON.stringify(arr, null, 2)
+    .split('\n')
+    .map(line => `>${line}`)
+    .join('\n');
 }
 
 module.exports = { map, addMetaNavigation };

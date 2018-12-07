@@ -49,7 +49,7 @@ function produceIdea(idea, document) {
   const span = document.createElement('SPAN');
   span.classList.add('idea');
 
-  idea.forEach((item) => {
+  idea.forEach(item => {
     if (typeof item === 'string') {
       span.appendChild(document.createTextNode(item));
     } else if (isNode(item)) {
@@ -85,7 +85,7 @@ function containsParsedObj(idea) {
 function anchorObject(idea, document) {
   const fragment = document.createDocumentFragment();
 
-  idea.forEach((item) => {
+  idea.forEach(item => {
     if (item instanceof ParsedObj) {
       fragment.appendChild(produce(document, item));
     } else if (isNode(item)) {
@@ -105,6 +105,5 @@ function emptyNode(node) {
 
   return node;
 }
-
 
 module.exports = { produce };
