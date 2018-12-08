@@ -101,15 +101,16 @@ function getGitRev() {
 
 function sumPublication(metadata) {
   return metadata.reduce(
-    (totals, document) => {
-      totals.all.words += document.words;
-      totals.all.chars += document.chars;
-      if (document.isChapter) {
-        totals.chapters.words += document.words;
-        totals.chapters.chars += document.chars;
-      }
-      return totals;
-    },
+    (acc, doc) => ({
+      all: {
+        words: acc.all.words + doc.words,
+        chars: acc.all.chars + doc.chars,
+      },
+      chapters: {
+        words: doc.isChapter ? acc.chapters.words + doc.words : acc.chapters.words,
+        chars: doc.isChapter ? acc.chapters.chars + doc.chars : acc.chapters.chars,
+      },
+    }),
     {
       all: { words: 0, chars: 0 },
       chapters: { words: 0, chars: 0 },
@@ -197,7 +198,7 @@ function addMetaNavigation(documents, metadata) {
  */
 function getJsdomObj(doc) {
   if (Object.prototype.isPrototypeOf.call(doc, Jsdom)) return doc.cloneNode(true);
-  else if (typeof doc === 'string') return new Jsdom(doc);
+  if (typeof doc === 'string') return new Jsdom(doc);
 
   throw new Error('Input document format not recognized!');
 }

@@ -71,9 +71,13 @@ function separateWhitespace(piece) {
         : [piece[piece.length - 1], []];
     const mid = piece.slice(1, piece.length - 1);
     return [before, [firstItem, ...mid, lastItem], after];
-  } else if (piece.length === 1 && typeof piece[0] === 'string' && /^\s+$/.test(piece[0])) {
+  }
+
+  if (piece.length === 1 && typeof piece[0] === 'string' && /^\s+$/.test(piece[0])) {
     return [piece[0]];
-  } else if (piece.length === 1) {
+  }
+
+  if (piece.length === 1) {
     const [before, text, after] =
       typeof piece[0] === 'string'
         ? piece[0].match(/^(\s*)([\s\S]+?)(\s*)$/).slice(1)

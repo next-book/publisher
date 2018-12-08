@@ -1,3 +1,9 @@
+/**
+ * Toc module: generates a TOC by searching for headers in documents
+ * @module
+ * @ignore
+ */
+
 function getToc(doc) {
   const headers = [...doc.querySelectorAll('h1, h2, h3, h4, h5, h6')];
   return headers
