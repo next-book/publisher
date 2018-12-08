@@ -24,7 +24,7 @@ Mapper reads all `\*.html` files in the source directory (`--src`, by default `.
 
 It also creates a `spine.json` file that collects metadata about the book and adds several structural meta tags into files (prev, next, license, spine) that allow book traversal (with Javascript or native browser affordances).
 
-It's possible to include a `book.json` file in the source directory that adds metadata and mapper configuration. It's possible to specify static folders that will be copied from source to output as they are. 
+It's required to include a `book.json` file in the source directory that adds metadata and a list of chapters. It's possible to specify static folders that will be copied from source to output as they are.
 
 ```json
 {
@@ -35,8 +35,25 @@ It's possible to include a `book.json` file in the source directory that adds me
     "published": 2004,
     "keywords": ["copyright law", "intellectual property", "public domain", "web", "Napster"]
   },
+  "chapters": [
+	"01-preface.html",
+	"02-introduction.html",
+	"03-piracy.html",
+	"04-property.html",
+	"05-puzzles.html",
+	"06-balances.html",
+	"07-conclusion.html",
+	"08-afterword.html",
+	"09-acknowledgments.html"
+  ],
   "static": ["style", "scripts", "images"]
 }
+```
+
+You can preview the book on a local web server by running the `nb-mapper` with `-w` flag (or with `--server` param).
+
+```sh
+nb-mapper --src text --out book --server
 ```
 
 
