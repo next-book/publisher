@@ -6,7 +6,8 @@ toc:
   - map
   - name: browser
     description: Mapper for browser env, mapping DOM contents. Accessible at `window.NbMapper`.
-  - mapHtml
+    children:
+      - mapHtml
   - name: config
   - Options
   - load
@@ -27,7 +28,6 @@ toc:
     description: Gauge counts words and characters in a document and sums those in a publication.
   - gaugeDocument
   - gaugePublication
-  - setGaugeMetatags
   - name: structures
     description: Data structures used in the other parts.
   - ParsedObj

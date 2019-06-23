@@ -2,19 +2,20 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>nb-mapper 0.2.0 | Documentation</title>
+  <title>nb-mapper 0.2.4 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
   <link href='assets/github.css' type='text/css' rel='stylesheet' />
   <link href='assets/split.css' type='text/css' rel='stylesheet' />
+  <meta name='description' content='Map HTML files for use with next-book tools'>
 </head>
 <body class='documentation m0'>
     <div class='flex'>
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>nb-mapper</h3>
-          <div class='mb1'><code>0.2.0</code></div>
+          <div class='mb1'><code>0.2.4</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -46,20 +47,28 @@
                 
                 <li><a
                   href='#browser'
-                  class="h5 bold black caps">
+                  class="h5 bold black caps toggle-sibling">
                   browser
-                  
+                  <span class='icon'>▸</span>
                 </a>
                 
-                </li>
-              
-                
-                <li><a
-                  href='#maphtml'
-                  class="">
-                  mapHtml
+                <div class='toggle-target display-none'>
                   
-                </a>
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#maphtml'
+                        class='regular pre-open'>
+                        .mapHtml
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -205,16 +214,6 @@
               
                 
                 <li><a
-                  href='#setgaugemetatags'
-                  class="">
-                  setGaugeMetatags
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#structures'
                   class="h5 bold black caps">
                   structures
@@ -243,42 +242,77 @@
                 
                 </li>
               
-                
-                <li><a
-                  href='#getdata'
-                  class="">
-                  getData
-                  
-                </a>
-                
-                </li>
-              
             </ul>
           </div>
           <div class='mt1 h6 quiet'>
-            <a href='http://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+            <a href='https://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
           </div>
         </div>
       </div>
       <div id='split-right' class='relative overflow-auto height-viewport-100'>
         
           
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+            <div class='keyline-top-not py2'>
+  <section class='py2 clearfix'>
 
-  <h2 id='app' class='mt0'>
-    app
-  </h2>
+    <h2 id='app' class='mt0'>
+      app
+    </h2>
+
+    
+      <p>Mapper for server env, mapping strings or jsdom objects.</p>
+
+    
+  </section>
+</div>
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
-    <p>Mapper for server env, mapping strings or jsdom objects.</p>
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='app'>
+      app
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Mapper for server env, mapping strings or jsdom objects.</p>
+
+ 
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 </section>
-</div>
-          
+
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -288,7 +322,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/app.js#L23-L57'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/app.js#L28-L59'>
       <span>src/app.js</span>
       </a>
     
@@ -297,8 +331,10 @@
 
   <p>Maps HTML for <em>next-book</em> use.</p>
 
-
-  <div class='pre p1 fill-light mt0'>map(content: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;JSDOM>), filenames: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>, options: config~Options): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a></div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>map(content: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;JSDOM>), filenames: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>, options: config~Options): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a></div>
+   
   
   
 
@@ -368,35 +404,66 @@
   
 </section>
 
-          
         
           
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='browser' class='mt0'>
-    browser
-  </h2>
-
-  
-    <p>Mapper for browser env, mapping DOM contents. Accessible at <code>window.NbMapper</code>.</p>
-
-  
-</section>
-</div>
+            <div class='keyline-top-not py2'></div>
           
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='maphtml'>
-      mapHtml
+    <h3 class='fl m0' id='browser'>
+      browser
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/browser.js#L18-L22'>
+  </div>
+  
+
+  <p>Mapper for browser env, mapping DOM contents. Accessible at <code>window.NbMapper</code>.</p>
+
+ 
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='maphtml'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>mapHtml(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/browser.js#L18-L22'>
       <span>src/browser.js</span>
       </a>
     
@@ -405,8 +472,10 @@
 
   <p>Maps document contents — to be used in browser env.</p>
 
-
-  <div class='pre p1 fill-light mt0'>mapHtml(options: <a href="#options">Options</a>): void</div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>mapHtml(options: <a href="#options">Options</a>): void</div>
+   
   
   
 
@@ -456,25 +525,81 @@
   
 </section>
 
-          
-        
-          
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='config' class='mt0'>
-    config
-  </h2>
+      </div>
+    </div>
+  
+</div>
 
   
-    
+
+  
 
   
 </section>
-</div>
-          
+
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+            <div class='keyline-top-not py2'>
+  <section class='py2 clearfix'>
+
+    <h2 id='config' class='mt0'>
+      config
+    </h2>
+
+    
+      
+
+    
+  </section>
+</div>
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='config'>
+      config
+    </h3>
+    
+    
+  </div>
+  
+
+  
+
+ 
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -484,7 +609,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/config.js#L7-L22'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/config.js#L7-L22'>
       <span>src/config.js</span>
       </a>
     
@@ -493,8 +618,10 @@
 
   <p>Set of config options. See default values in <a href="defaults">defaults</a>.</p>
 
-
-  <div class='pre p1 fill-light mt0'>Options</div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>Options</div>
+   
   
     <p>
       Type:
@@ -568,10 +695,9 @@ that marks chunks.
   
 </section>
 
-          
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -581,7 +707,7 @@ that marks chunks.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/config.js#L41-L41'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/config.js#L41-L41'>
       <span>src/config.js</span>
       </a>
     
@@ -590,8 +716,10 @@ that marks chunks.
 
   <p>Merges defaults with provided overrides.</p>
 
-
-  <div class='pre p1 fill-light mt0'>load</div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>load</div>
+   
   
   
 
@@ -641,25 +769,69 @@ that marks chunks.
   
 </section>
 
-          
         
           
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+            <div class='keyline-top-not py2'>
+  <section class='py2 clearfix'>
 
-  <h2 id='tagger' class='mt0'>
-    tagger
-  </h2>
+    <h2 id='tagger' class='mt0'>
+      tagger
+    </h2>
+
+    
+      <p>Tagger parses, produces and numbers chunks and ideas.</p>
+
+    
+  </section>
+</div>
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
-    <p>Tagger parses, produces and numbers chunks and ideas.</p>
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='tagger'>
+      tagger
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Tagger parses, produces and numbers chunks and ideas.</p>
+
+ 
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 </section>
-</div>
-          
+
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -669,7 +841,7 @@ that marks chunks.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/tagger.js#L19-L25'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/tagger.js#L19-L25'>
       <span>src/tagger.js</span>
       </a>
     
@@ -678,8 +850,10 @@ that marks chunks.
 
   <p>Recognizes and tags chunks and ideas in a document</p>
 
-
-  <div class='pre p1 fill-light mt0'>tagDocument(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, options: <a href="#options">Options</a>): void</div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>tagDocument(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, options: <a href="#options">Options</a>): void</div>
+   
   
   
 
@@ -738,10 +912,9 @@ that marks chunks.
   
 </section>
 
-          
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -751,7 +924,7 @@ that marks chunks.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/tagger.js#L44-L49'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/tagger.js#L47-L52'>
       <span>src/tagger.js</span>
       </a>
     
@@ -760,8 +933,10 @@ that marks chunks.
 
   <p>Callback that marks elements as chunks of ideas. Those are then used for idea mapping.</p>
 
-
-  <div class='pre p1 fill-light mt0'>selectorFn(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): void</div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>selectorFn(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): void</div>
+   
   
     <p>
       Type:
@@ -816,10 +991,9 @@ that marks chunks.
   
 </section>
 
-          
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -829,7 +1003,7 @@ that marks chunks.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/tagger.js#L68-L75'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/tagger.js#L70-L77'>
       <span>src/tagger.js</span>
       </a>
     
@@ -838,8 +1012,10 @@ that marks chunks.
 
   <p>Callback used to split chunk contents into ideas.</p>
 
-
-  <div class='pre p1 fill-light mt0'>tokenizerFn(node: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>tokenizerFn(node: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></div>
+   
   
     <p>
       Type:
@@ -904,25 +1080,69 @@ construction.
   
 </section>
 
-          
         
           
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+            <div class='keyline-top-not py2'>
+  <section class='py2 clearfix'>
 
-  <h2 id='parser' class='mt0'>
-    parser
-  </h2>
+    <h2 id='parser' class='mt0'>
+      parser
+    </h2>
+
+    
+      <p>Parser produces instances of <a href="#parsedobj">ParsedObj</a> from Element contents.</p>
+
+    
+  </section>
+</div>
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
-    <p>Parser produces instances of <a href="#parsedobj">ParsedObj</a> from Element contents.</p>
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='parser'>
+      parser
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Parser produces instances of <a href="#parsedobj">ParsedObj</a> from Element contents.</p>
+
+ 
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 </section>
-</div>
-          
+
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -932,7 +1152,7 @@ construction.
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/parser.js#L20-L38'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/parser.js#L20-L38'>
       <span>src/parser.js</span>
       </a>
     
@@ -943,8 +1163,10 @@ construction.
 represents one idea or ParsedObj. Ideas are delimited with a delimiter that is searched for in
 text nodes.</p>
 
-
-  <div class='pre p1 fill-light mt0'>parse(node: <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">Node</a>, delimiter: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a> | <a href="#tokenizerfn">tokenizerFn</a>)): <a href="#parsedobj">ParsedObj</a></div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>parse(node: <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">Node</a>, delimiter: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a> | <a href="#tokenizerfn">tokenizerFn</a>)): <a href="#parsedobj">ParsedObj</a></div>
+   
   
   
 
@@ -1004,26 +1226,71 @@ text nodes.</p>
   
 </section>
 
-          
         
           
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+            <div class='keyline-top-not py2'>
+  <section class='py2 clearfix'>
 
-  <h2 id='producer' class='mt0'>
-    producer
-  </h2>
+    <h2 id='producer' class='mt0'>
+      producer
+    </h2>
+
+    
+      <p>Producer assembles ideas back into HTML where ideas are represented with
+annotated span elements.</p>
+
+    
+  </section>
+</div>
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
-    <p>Producer assembles ideas back into HTML where ideas are represented with
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='producer'>
+      producer
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Producer assembles ideas back into HTML where ideas are represented with
 annotated span elements.</p>
+
+ 
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 </section>
-</div>
-          
+
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -1033,7 +1300,7 @@ annotated span elements.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/producer.js#L15-L38'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/producer.js#L15-L38'>
       <span>src/producer.js</span>
       </a>
     
@@ -1042,8 +1309,10 @@ annotated span elements.</p>
 
   <p>Produces ideas from a parsedObj</p>
 
-
-  <div class='pre p1 fill-light mt0'>produce(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, parsedObj: <a href="#parsedobj">ParsedObj</a>): <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">Node</a></div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>produce(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, parsedObj: <a href="#parsedobj">ParsedObj</a>): <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">Node</a></div>
+   
   
   
 
@@ -1102,25 +1371,69 @@ annotated span elements.</p>
   
 </section>
 
-          
         
           
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+            <div class='keyline-top-not py2'>
+  <section class='py2 clearfix'>
 
-  <h2 id='gauge' class='mt0'>
-    gauge
-  </h2>
+    <h2 id='gauge' class='mt0'>
+      gauge
+    </h2>
+
+    
+      <p>Gauge counts words and characters in a document and sums those in a publication.</p>
+
+    
+  </section>
+</div>
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
-    <p>Gauge counts words and characters in a document and sums those in a publication.</p>
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='gauge'>
+      gauge
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Gauge counts words and characters in a document and sums those in a publication.</p>
+
+ 
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 </section>
-</div>
-          
+
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -1130,7 +1443,7 @@ annotated span elements.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/gauge.js#L48-L51'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/gauge.js#L42-L45'>
       <span>src/gauge.js</span>
       </a>
     
@@ -1139,8 +1452,10 @@ annotated span elements.</p>
 
   <p>Gauges words and characters in a document.</p>
 
-
-  <div class='pre p1 fill-light mt0'>gaugeDocument(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): void</div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>gaugeDocument(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): void</div>
+   
   
   
 
@@ -1190,10 +1505,9 @@ annotated span elements.</p>
   
 </section>
 
-          
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -1203,7 +1517,7 @@ annotated span elements.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/gauge.js#L74-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/gauge.js#L54-L59'>
       <span>src/gauge.js</span>
       </a>
     
@@ -1213,8 +1527,10 @@ annotated span elements.</p>
   <p>Gauges words and characters in a publication. Relies on previous gauging of individual chunks
 using <a href="#gaugedocument">gaugeDocument</a>.</p>
 
-
-  <div class='pre p1 fill-light mt0'>gaugePublication(documents: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>>): void</div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>gaugePublication(documents: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>>): void</div>
+   
   
   
 
@@ -1264,67 +1580,53 @@ using <a href="#gaugedocument">gaugeDocument</a>.</p>
   
 </section>
 
-          
         
           
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+            <div class='keyline-top-not py2'>
+  <section class='py2 clearfix'>
+
+    <h2 id='structures' class='mt0'>
+      structures
+    </h2>
+
+    
+      <p>Data structures used in the other parts.</p>
+
+    
+  </section>
+</div>
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='setgaugemetatags'>
-      setGaugeMetatags
+    <h3 class='fl m0' id='structures'>
+      structures
     </h3>
     
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/gauge.js#L100-L102'>
-      <span>src/gauge.js</span>
-      </a>
     
   </div>
   
 
-  <p>Sets the gauge metatags inferred from <code>document.body.dataset</code>. Relies on attributes created using
-<a href="#gaugedocument">gaugeDocument</a> and optionally using <a href="#gaugepublication">gaugePublication</a>.</p>
+  <p>Data structures used in the other parts.</p>
 
-
-  <div class='pre p1 fill-light mt0'>setGaugeMetatags(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript">document</a>): void</div>
-  
-  
-
-  
-  
-  
-  
+ 
+   
   
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>document</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript">document</a>)</code>
-	    DOM document
-
-          </div>
-          
-        </div>
-      
-    </div>
+  
+  
+  
+  
   
 
   
 
   
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>void</code>:
-        Modifies DOM document
 
-      
-    
   
 
   
@@ -1338,25 +1640,9 @@ using <a href="#gaugedocument">gaugeDocument</a>.</p>
   
 </section>
 
-          
         
           
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='structures' class='mt0'>
-    structures
-  </h2>
-
-  
-    <p>Data structures used in the other parts.</p>
-
-  
-</section>
-</div>
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
@@ -1366,7 +1652,7 @@ using <a href="#gaugedocument">gaugeDocument</a>.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/structures.js#L30-L34'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://git@github.com/:next-book/nb-mapper/blob/61e813113a2cdf58edcf23b1fd91547c614bc996/src/structures.js#L30-L34'>
       <span>src/structures.js</span>
       </a>
     
@@ -1377,8 +1663,10 @@ using <a href="#gaugedocument">gaugeDocument</a>.</p>
 in which every item is an array of strings and HTML elements,
 a full-whitespace string or another ParsedObj.</p>
 
-
-  <div class='pre p1 fill-light mt0'>new ParsedObj(node: window.Node, ideas: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>, delimiter: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+ 
+  
+    <div class='pre p1 fill-light mt0'>new ParsedObj(node: window.Node, ideas: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>, delimiter: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+   
   
   
 
@@ -1457,85 +1745,59 @@ a full-whitespace string or another ParsedObj.</p>
   
 </section>
 
-          
         
           
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+            <div class='keyline-top-not py2'>
+  <section class='py2 clearfix'>
 
-  <h2 id='a-note-about-these-docs' class='mt0'>
-    A note about these docs
-  </h2>
+    <h2 id='a-note-about-these-docs' class='mt0'>
+      A note about these docs
+    </h2>
 
-  
-    <p>See <a href="http://github.com/next-book/nb-mapper/">project's README</a>.</p>
+    
+      <p>See <a href="http://github.com/next-book/nb-mapper/">project's README</a>.</p>
 <p>With current versions of JSDoc, ESDoc and documentation.js it is hard to work<br>
 with ES6 modules that do not use classes internally. Any tips for tools that do not require
 hacks are welcome!</p>
 
-  
-</section>
+    
+  </section>
 </div>
           
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='getdata'>
-      getData
+    <h3 class='fl m0' id='a-note-about-these-docs'>
+      A note about these docs
     </h3>
     
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/nb-mapper/blob/f9de5ac93d8757dff1d147b49cbfb5ff0ea51497/src/gauge.js#L112-L126'>
-      <span>src/gauge.js</span>
-      </a>
     
   </div>
   
 
-  <p>Retrieves values from <code>document.body.dataset</code>. Relies on attributes created using
-<a href="#gaugedocument">gaugeDocument</a> and optionally using <a href="#gaugepublication">gaugePublication</a>.</p>
+  <p>See <a href="http://github.com/next-book/nb-mapper/">project's README</a>.</p>
+<p>With current versions of JSDoc, ESDoc and documentation.js it is hard to work<br>
+with ES6 modules that do not use classes internally. Any tips for tools that do not require
+hacks are welcome!</p>
 
-
-  <div class='pre p1 fill-light mt0'>getData(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript">document</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
-  
-  
-
-  
-  
-  
-  
+ 
+   
   
   
 
   
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>document</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript">document</a>)</code>
-	    DOM document
-
-          </div>
-          
-        </div>
-      
-    </div>
+  
+  
+  
+  
   
 
   
 
   
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
-        Array of name/value pairs
 
-      
-    
   
 
   
@@ -1549,7 +1811,6 @@ hacks are welcome!</p>
   
 </section>
 
-          
         
       </div>
     </div>

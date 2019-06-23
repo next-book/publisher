@@ -7,19 +7,19 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 (function () {
-  function e(t, n, r) {
-    function s(o, u) {
-      if (!n[o]) {
-        if (!t[o]) {
-          var a = typeof require == "function" && require;if (!u && a) return a(o, !0);if (i) return i(o, !0);var f = new Error("Cannot find module '" + o + "'");throw f.code = "MODULE_NOT_FOUND", f;
-        }var l = n[o] = { exports: {} };t[o][0].call(l.exports, function (e) {
-          var n = t[o][1][e];return s(n ? n : e);
-        }, l, l.exports, e, t, n, r);
-      }return n[o].exports;
-    }var i = typeof require == "function" && require;for (var o = 0; o < r.length; o++) {
-      s(r[o]);
-    }return s;
-  }return e;
+  function r(e, n, t) {
+    function o(i, f) {
+      if (!n[i]) {
+        if (!e[i]) {
+          var c = "function" == typeof require && require;if (!f && c) return c(i, !0);if (u) return u(i, !0);var a = new Error("Cannot find module '" + i + "'");throw a.code = "MODULE_NOT_FOUND", a;
+        }var p = n[i] = { exports: {} };e[i][0].call(p.exports, function (r) {
+          var n = e[i][1][r];return o(n || r);
+        }, p, p.exports, r, e, n, t);
+      }return n[i].exports;
+    }for (var u = "function" == typeof require && require, i = 0; i < t.length; i++) {
+      o(t[i]);
+    }return o;
+  }return r;
 })()({ 1: [function (require, module, exports) {
     /**
      * Browser module is entry point for browser, bundled and transpiled into dist directory.
@@ -98,13 +98,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      */
 
     var attrNames = {
-      charCount: 'data-nb-chars',
-      wordCount: 'data-nb-words',
-      publicationCharCount: 'data-nb-publication-chars',
-      publicationWordCount: 'data-nb-publication-words',
-      charOffset: 'data-nb-chars-offset',
-      wordOffset: 'data-nb-words-offset',
-      sectionNumber: 'data-nb-section-number'
+      chars: 'data-nb-chars',
+      words: 'data-nb-words'
     };
 
     var sumAttr = function sumAttr(attr) {
@@ -123,13 +118,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     function countChars(document) {
       Array.prototype.map.call(document.querySelectorAll('.idea'), function (idea) {
-        idea.setAttribute(attrNames.charCount, idea.textContent.length);
+        idea.setAttribute(attrNames.chars, idea.textContent.length);
       });
     }
 
     function countWords(document) {
       Array.prototype.map.call(document.querySelectorAll('.idea'), function (idea) {
-        idea.setAttribute(attrNames.wordCount, idea.textContent.split(/\s+/g).length);
+        idea.setAttribute(attrNames.words, idea.textContent.split(/\s+/g).length);
       });
     }
 
@@ -146,25 +141,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * @return     {void}  Modifies DOM document
      */
     function gaugeDocument(document) {
-      gaugeContent(document, attrNames.wordCount, countWords);
-      gaugeContent(document, attrNames.charCount, countChars);
-    }
-
-    function gaugeTotals(attr, pubAttr, offsetAttr) {
-      return function (documents) {
-        var counts = documents.map(function (document) {
-          return parseInt(document.body.getAttribute(attr), 10);
-        });
-        var total = counts.reduce(function (a, b) {
-          return a + b;
-        }, 0);
-
-        documents.reduce(function (runningTotal, document, index) {
-          document.body.setAttribute(pubAttr, total);
-          document.body.setAttribute(offsetAttr, runningTotal);
-          return runningTotal + counts[index];
-        }, 0);
-      };
+      gaugeContent(document, attrNames.words, countWords);
+      gaugeContent(document, attrNames.chars, countChars);
     }
 
     /**
@@ -175,38 +153,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * @return     {void}  Modifies DOM documents
      */
     function gaugePublication(documents) {
-      gaugeTotals(attrNames.wordCount, attrNames.publicationWordCount, attrNames.wordOffset)(documents);
-      gaugeTotals(attrNames.charCount, attrNames.publicationCharCount, attrNames.charOffset)(documents);
-      documents.forEach(function (document, index) {
-        return document.body.setAttribute(attrNames.sectionNumber, index + 1);
+      return documents.map(function (document) {
+        return {
+          words: parseInt(document.body.getAttribute(attrNames.words), 10),
+          chars: parseInt(document.body.getAttribute(attrNames.chars), 10)
+        };
       });
     }
 
-    function appendMeta(document, name) {
-      var value = document.body.getAttribute(attrNames[name]);
-
-      if (value !== null && value !== '') {
-        var el = document.createElement('meta');
-        el.setAttribute('name', name);
-        el.setAttribute('content', parseInt(value, 10));
-        document.querySelector('head').appendChild(el);
-      }
-    }
-
-    /**
-     * Sets the gauge metatags inferred from `document.body.dataset`. Relies on attributes created using
-     * {@link gaugeDocument} and optionally using {@link gaugePublication}.
-     *
-     * @param      {document}  document  DOM document
-     * @return     {void}  Modifies DOM document
-     */
-    function setGaugeMetatags(document) {
-      Object.keys(attrNames).map(function (attrName) {
-        return appendMeta(document, attrName);
-      });
-    }
-
-    module.exports = { gaugeDocument: gaugeDocument, gaugePublication: gaugePublication, setGaugeMetatags: setGaugeMetatags };
+    module.exports = {
+      gaugeDocument: gaugeDocument,
+      gaugePublication: gaugePublication
+    };
   }, {}], 4: [function (require, module, exports) {
     /**
      * @module
@@ -244,7 +202,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       });
 
-      return new ParsedObj(node, filterPieces(pieces));
+      return new ParsedObj(node, filterPieces(pieces), delimiter);
     }
 
     function parseTextNode(node, pieces, delimiter) {
@@ -285,9 +243,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         var mid = piece.slice(1, piece.length - 1);
         return [before, [firstItem].concat(_toConsumableArray(mid), [lastItem]), after];
-      } else if (piece.length === 1 && typeof piece[0] === 'string' && /^\s+$/.test(piece[0])) {
+      }
+
+      if (piece.length === 1 && typeof piece[0] === 'string' && /^\s+$/.test(piece[0])) {
         return [piece[0]];
-      } else if (piece.length === 1) {
+      }
+
+      if (piece.length === 1) {
         var _ref5 = typeof piece[0] === 'string' ? piece[0].match(/^(\s*)([\s\S]+?)(\s*)$/).slice(1) : [[], piece[0], []],
             _ref6 = _slicedToArray(_ref5, 3),
             _before = _ref6[0],
@@ -334,20 +296,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      *
      * @param      {Object}           document          DOM document
      * @param      {ParsedObj}        parsedObj         A parsed object
-     * @param      {(string|RegExp)}  delimiter     The idea delimiter
-     * @param      {(bool|string)}    restoreDelimiter  Restore delimiter (string required if delimiter
-     *                                                  is a RegExp).
      * @return     {Node}             HTML node
      */
 
 
-    function produce(document, parsedObj, delimiter, restoreDelimiter) {
+    function produce(document, parsedObj) {
       var fragment = document.createDocumentFragment();
       var node = parsedObj.node,
-          ideas = parsedObj.ideas;
+          ideas = parsedObj.ideas,
+          delimiter = parsedObj.delimiter;
 
 
-      ideas.forEach(function (idea) {
+      ideas.forEach(function (idea, index) {
         if (Array.isArray(idea)) {
           if (containsParsedObj(idea)) {
             fragment.appendChild(anchorObject(idea, document));
@@ -358,7 +318,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           fragment.appendChild(document.createTextNode(idea));
         }
 
-        if (restoreDelimiter) fragment.appendChild(document.createTextNode(delimiter));
+        if (!Object.is(ideas.length - 1, index) && typeof delimiter === 'string') {
+          fragment.appendChild(document.createTextNode(delimiter));
+        }
       });
 
       var chunk = emptyNode(node.cloneNode());
@@ -449,8 +411,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * in which every item is an array of strings and HTML elements,
      * a full-whitespace string or another ParsedObj.
      * @constructor
-     * @param   {window.Node}   node    DOM node
-     * @param   {array}         ideas   Array of ideas
+     * @param   {window.Node}   node      DOM node
+     * @param   {array}         ideas     Array of ideas
+     * @param   {string}        delimiter Delimiter
      * @example
      * {
      *  node: <p class="chunk">,
@@ -467,9 +430,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      *  ]
      * }
      */
-    function ParsedObj(node, ideas) {
+    function ParsedObj(node, ideas, delimiter) {
       this.node = node;
       this.ideas = ideas;
+      this.delimiter = delimiter;
     }
 
     module.exports = { ParsedObj: ParsedObj };
@@ -504,7 +468,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
 
     /**
-     * Mark DOM elements to be tagged.
+     * Mark DOM elements to be tagged, skips nodes
+     * with class nb-skip (and their child nodes).
      *
      * @param      {Object}            document   DOM document
      * @param      {array|selectorFn}  selectors  Array of selectors or a {@link selectorFn} callback.
@@ -515,7 +480,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var elements = typeof selectors === 'function' ? selectors(document) : document.querySelectorAll(selectors);
 
       Array.prototype.forEach.call(elements, function (el) {
-        return el.classList.add('chunk');
+        if (!(el.closest('.nb-skip') || el.classList.contains('nb-skip'))) {
+          el.classList.add('chunk');
+        }
       });
     }
 
@@ -564,7 +531,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     function numberEls(document, selector, name) {
       Array.prototype.forEach.call(document.querySelectorAll(selector), function (el, index) {
         el.setAttribute(refNumAttr, index + 1);
-        el.setAttribute('id', "" + name + (index + 1));
+        if (!el.getAttribute('id')) el.setAttribute('id', "" + name + (index + 1));
       });
     }
 

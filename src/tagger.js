@@ -25,7 +25,8 @@ function tagDocument(document, options) {
 }
 
 /**
- * Mark DOM elements to be tagged.
+ * Mark DOM elements to be tagged, skips nodes
+ * with class nb-skip (and their child nodes).
  *
  * @param      {Object}            document   DOM document
  * @param      {array|selectorFn}  selectors  Array of selectors or a {@link selectorFn} callback.
@@ -36,7 +37,11 @@ function tagChunks(document, selectors) {
   const elements =
     typeof selectors === 'function' ? selectors(document) : document.querySelectorAll(selectors);
 
-  Array.prototype.forEach.call(elements, el => el.classList.add('chunk'));
+  Array.prototype.forEach.call(elements, el => {
+    if (!(el.closest('.nb-skip') || el.classList.contains('nb-skip'))) {
+      el.classList.add('chunk');
+    }
+  });
 }
 
 /**
