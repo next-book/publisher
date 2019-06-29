@@ -5,7 +5,7 @@
  */
 
 function getToc(doc) {
-  const headers = [...doc.querySelectorAll('h1, h2, h3, h4, h5, h6')];
+  const headers = [...doc.querySelectorAll('h1.chunk, h2.chunk, h3.chunk, h4.chunk, h5.chunk, h6.chunk')];
   return headers
     .map(fetchAttributes)
     .map(nestChildren)
