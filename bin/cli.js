@@ -5,6 +5,7 @@ const path = require('path');
 
 const app = require('../src/app.js');
 const data = require('../src/data-helper.js');
+const revision = require('../src/revision.js').get();
 
 cmd
   .option('-v, --verbose', 'More verbose output')

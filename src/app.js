@@ -3,8 +3,6 @@
  * @module
  * @ignore
  */
-const { spawnSync } = require('child_process');
-
 const Jsdom = require('jsdom').JSDOM;
 const Progress = require('cli-progress');
 const pretty = require('pretty');
@@ -22,10 +20,11 @@ const config = require('./config');
  * @param      {string[]|JSDOM[]}  content   Array of *jsdom* objects or strings
  * @param      {array}             filenames Names of files from which content was read
  * @param      {config~Options}    options   The options
+ * @param      {string}            revision  Revision identifier string
  * @return     {array}             Array of mapped documents in specified format
  * @public
  */
-function map(content, filenames, options) {
+function map(content, filenames, options, revision) {
   const conf = config.load(options);
   console.log(`\nUsing mapper config:\n${dumpArray(conf)}\n`);
 
@@ -50,7 +49,7 @@ function map(content, filenames, options) {
   // gauge
   const lengths = gauge.gaugePublication(documents);
   const docMetadata = gatherMetadata(documents, filenames, chapters, lengths);
-  const spine = composeSpine(conf.meta, docMetadata, sumPublication(docMetadata));
+  const manifest = composeManifest(conf.meta, docMetadata, sumPublication(docMetadata), revision);
 
   // add nav
   addMetaNavigation(documents, docMetadata);
@@ -58,7 +57,7 @@ function map(content, filenames, options) {
   return { spine, documents: exportDoms(doms, conf.output) };
 }
 
-function composeSpine(meta, documents, totals) {
+function composeManifest(meta, documents, totals, revision) {
   const id = [meta.author.split(' ').pop(), meta.title, meta.published, hash(meta).substring(0, 6)]
     .filter(str => str)
     .join(' ');
@@ -68,7 +67,7 @@ function composeSpine(meta, documents, totals) {
   return {
     ...meta,
     slug: slug(id, { lower: true }),
-    revision: getGitRev(),
+    revision,
     generatedAt: {
       date: String(time),
       unix: time.getTime(),
@@ -76,27 +75,6 @@ function composeSpine(meta, documents, totals) {
     documents,
     totals,
   };
-}
-
-function getGitRev() {
-  try {
-    const spawn = spawnSync('git', ['rev-parse', '--short', 'HEAD']);
-
-    const errorText = spawn.stderr.toString().trim();
-    if (errorText) {
-      console.log(
-        'There was a problem checking for git revision. Perhaps this book is not a git repo?.'
-      );
-      console.log(`Specific git error: ${errorText}`);
-    }
-
-    return spawn.stdout
-      .toString()
-      .trim()
-      .substr(0, 7);
-  } catch (err) {
-    return null;
-  }
 }
 
 function sumPublication(metadata) {
