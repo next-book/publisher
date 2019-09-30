@@ -107,7 +107,7 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
 
     const isChapter = chapters.includes(filenames[index]);
     const pos = chapters.indexOf(filenames[index]);
-    const order = isChapter ? pos + 1 : 0;
+    const order = isChapter ? pos : 0;
 
     const prev = pos !== 0 ? chapters[pos - 1] : null;
     const next =
