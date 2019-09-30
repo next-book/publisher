@@ -53,6 +53,7 @@ function map(content, filenames, options, revision) {
 
   // add nav
   addMetaNavigation(documents, docMetadata);
+  addChapterEndAnchor(documents);
 
   return { manifest, documents: exportDoms(doms, conf.output) };
 }
@@ -183,6 +184,15 @@ function getJsdomObj(doc) {
   if (typeof doc === 'string') return new Jsdom(doc);
 
   throw new Error('Input document format not recognized!');
+}
+
+function addChapterEndAnchor(documents) {
+  documents.forEach(doc => {
+    const anchor = doc.createElement('a');
+    anchor.setAttribute('id', 'chapter-end');
+
+    doc.querySelector('body').appendChild(anchor);
+  });
 }
 
 /**
