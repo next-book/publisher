@@ -1,26 +1,57 @@
 "use strict";
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 (function () {
   function r(e, n, t) {
     function o(i, f) {
       if (!n[i]) {
         if (!e[i]) {
-          var c = "function" == typeof require && require;if (!f && c) return c(i, !0);if (u) return u(i, !0);var a = new Error("Cannot find module '" + i + "'");throw a.code = "MODULE_NOT_FOUND", a;
-        }var p = n[i] = { exports: {} };e[i][0].call(p.exports, function (r) {
-          var n = e[i][1][r];return o(n || r);
+          var c = "function" == typeof require && require;
+          if (!f && c) return c(i, !0);
+          if (u) return u(i, !0);
+          var a = new Error("Cannot find module '" + i + "'");
+          throw a.code = "MODULE_NOT_FOUND", a;
+        }
+
+        var p = n[i] = {
+          exports: {}
+        };
+        e[i][0].call(p.exports, function (r) {
+          var n = e[i][1][r];
+          return o(n || r);
         }, p, p.exports, r, e, n, t);
-      }return n[i].exports;
-    }for (var u = "function" == typeof require && require, i = 0; i < t.length; i++) {
+      }
+
+      return n[i].exports;
+    }
+
+    for (var u = "function" == typeof require && require, i = 0; i < t.length; i++) {
       o(t[i]);
-    }return o;
-  }return r;
-})()({ 1: [function (require, module, exports) {
+    }
+
+    return o;
+  }
+
+  return r;
+})()({
+  1: [function (require, module, exports) {
     /**
      * Browser module is entry point for browser, bundled and transpiled into dist directory.
      * @module
@@ -29,23 +60,33 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     /* eslint-env browser */
     var tagger = require('./tagger');
-    var gauge = require('./gauge');
-    var config = require('./config');
 
+    var gauge = require('./gauge');
+
+    var config = require('./config');
     /**
      * Maps document contents — to be used in browser env.
      *
      * @param      {Options}  options  The options
      * @return     {void}  Modifies document
      */
+
+
     function mapHtml(options) {
       tagger.tagDocument(document, config.load(options));
       gauge.gaugeDocument(document);
       gauge.setGaugeMetatags(document);
     }
 
-    window.NbMapper = { mapHtml: mapHtml };
-  }, { "./config": 2, "./gauge": 3, "./tagger": 7 }], 2: [function (require, module, exports) {
+    window.NbMapper = {
+      mapHtml: mapHtml
+    };
+  }, {
+    "./config": 2,
+    "./gauge": 3,
+    "./tagger": 7
+  }],
+  2: [function (require, module, exports) {
     /**
      * Config module
      * @module
@@ -79,24 +120,26 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       restoreDelimiter: false,
       selectors: ['p', 'li', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'dl']
     };
-
     /**
      * Merges defaults with provided overrides.
      *
      * @param      {Object}  options  Config overrides
      * @return     {Object}  Complete configuration
      */
+
     var load = function load(options) {
       return Object.assign({}, defaults, options);
     };
 
-    module.exports = { load: load };
-  }, {}], 3: [function (require, module, exports) {
+    module.exports = {
+      load: load
+    };
+  }, {}],
+  3: [function (require, module, exports) {
     /**
      * @module
      * @ignore
      */
-
     var attrNames = {
       chars: 'data-nb-chars',
       words: 'data-nb-words'
@@ -133,18 +176,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       setSumAttr(attr)(document.body);
       Array.prototype.forEach.call(document.querySelectorAll('.chunk'), setSumAttr(attr));
     }
-
     /**
      * Gauges words and characters in a document.
      *
      * @param      {Object}  document  DOM document
      * @return     {void}  Modifies DOM document
      */
+
+
     function gaugeDocument(document) {
       gaugeContent(document, attrNames.words, countWords);
       gaugeContent(document, attrNames.chars, countChars);
     }
-
     /**
      * Gauges words and characters in a publication. Relies on previous gauging of individual chunks
      * using {@link gaugeDocument}.
@@ -152,6 +195,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * @param      {Object[]}  documents  DOM documents
      * @return     {void}  Modifies DOM documents
      */
+
+
     function gaugePublication(documents) {
       return documents.map(function (document) {
         return {
@@ -165,17 +210,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       gaugeDocument: gaugeDocument,
       gaugePublication: gaugePublication
     };
-  }, {}], 4: [function (require, module, exports) {
+  }, {}],
+  4: [function (require, module, exports) {
     /**
      * @module
      * @ignore
      */
-
     var _require = require('./structures'),
         ParsedObj = _require.ParsedObj;
 
     var lastNodeWasFinal = null;
-
     /**
      * Returns ParsedObj which contains original node and an array of arrays in which every array
      * represents one idea or ParsedObj. Ideas are delimited with a delimiter that is searched for in
@@ -186,9 +230,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * @public
      * @return     {ParsedObj}                  An instance of {@link ParsedObj}
      */
+
     function parse(node, delimiter) {
       var pieces = [];
-
       node.childNodes.forEach(function (childNode) {
         if (childNode.nodeType === childNode.TEXT_NODE) {
           if (typeof delimiter === 'function') delimiter(node, pieces);else parseTextNode(childNode, pieces, delimiter);
@@ -201,7 +245,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           }
         }
       });
-
       return new ParsedObj(node, filterPieces(pieces), delimiter);
     }
 
@@ -214,18 +257,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           pieces.push([text]);
         }
       });
-
       lastNodeWasFinal = isDelimiterAtEnd(node.textContent, delimiter);
     }
 
     function isDelimiterAtEnd(string, delimiter) {
-      return new RegExp(delimiter.replace('\\', '\\\\') + "\\s*$").test(string);
+      return new RegExp("".concat(delimiter.replace('\\', '\\\\'), "\\s*$")).test(string);
     }
 
     function lastValue(arr) {
       if (arr.length === 0) {
         arr.push([]);
       }
+
       return arr[arr.length - 1];
     }
 
@@ -281,16 +324,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return true;
     }
 
-    module.exports = { parse: parse };
-  }, { "./structures": 6 }], 5: [function (require, module, exports) {
+    module.exports = {
+      parse: parse
+    };
+  }, {
+    "./structures": 6
+  }],
+  5: [function (require, module, exports) {
     /**
      * @module
      * @ignore
      */
-
     var _require2 = require('./structures'),
         ParsedObj = _require2.ParsedObj;
-
     /**
      * Produces ideas from a parsedObj
      *
@@ -305,8 +351,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var node = parsedObj.node,
           ideas = parsedObj.ideas,
           delimiter = parsedObj.delimiter;
-
-
       ideas.forEach(function (idea, index) {
         if (Array.isArray(idea)) {
           if (containsParsedObj(idea)) {
@@ -322,12 +366,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           fragment.appendChild(document.createTextNode(delimiter));
         }
       });
-
       var chunk = emptyNode(node.cloneNode());
       chunk.appendChild(fragment);
       return chunk;
     }
-
     /**
      * Produces idea from an array of parts
      *
@@ -336,10 +378,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * @return     {Object}  HTML Element span
      * @private
      */
+
+
     function produceIdea(idea, document) {
       var span = document.createElement('SPAN');
       span.classList.add('idea');
-
       idea.forEach(function (item) {
         if (typeof item === 'string') {
           span.appendChild(document.createTextNode(item));
@@ -347,10 +390,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           span.appendChild(item);
         }
       });
-
       return span;
     }
-
     /**
      * Determines if an object is a DOM Node, works outside of browsers.
      *
@@ -358,10 +399,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * @return     {boolean}  True if node, False otherwise.
      * @private
      */
-    function isNode(obj) {
-      return (typeof obj === "undefined" ? "undefined" : _typeof(obj)) === 'object' && 'nodeType' in obj && obj.nodeType === 1 && obj.cloneNode;
-    }
 
+
+    function isNode(obj) {
+      return _typeof(obj) === 'object' && 'nodeType' in obj && obj.nodeType === 1 && obj.cloneNode;
+    }
     /**
      * Determines if array contains parsed object. See {@link ParsedObj}.
      *
@@ -369,6 +411,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * @return     {bool}   True if contains parsed object, False otherwise.
      * @private
      */
+
+
     function containsParsedObj(idea) {
       return idea.reduce(function (acc, item) {
         return acc || item instanceof ParsedObj;
@@ -377,7 +421,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     function anchorObject(idea, document) {
       var fragment = document.createDocumentFragment();
-
       idea.forEach(function (item) {
         if (item instanceof ParsedObj) {
           fragment.appendChild(produce(document, item));
@@ -387,7 +430,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           fragment.appendChild(document.createTextNode(item));
         }
       });
-
       return fragment;
     }
 
@@ -399,8 +441,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return node;
     }
 
-    module.exports = { produce: produce };
-  }, { "./structures": 6 }], 6: [function (require, module, exports) {
+    module.exports = {
+      produce: produce
+    };
+  }, {
+    "./structures": 6
+  }],
+  6: [function (require, module, exports) {
     /**
      * @module
      * @ignore
@@ -436,14 +483,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.delimiter = delimiter;
     }
 
-    module.exports = { ParsedObj: ParsedObj };
-  }, {}], 7: [function (require, module, exports) {
+    module.exports = {
+      ParsedObj: ParsedObj
+    };
+  }, {}],
+  7: [function (require, module, exports) {
     /**
      * Tagger module: tagger parses, produces and numbers chunks and ideas.
      * @module
      * @ignore
      */
-
     var _require3 = require('./producer'),
         produce = _require3.produce;
 
@@ -451,7 +500,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         parse = _require4.parse;
 
     var refNumAttr = 'data-nb-ref-number';
-
     /**
      * Recognizes and tags chunks and ideas in a document
      *
@@ -459,14 +507,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * @param      {Options}  options   Config
      * @return     {void}  Modifies DOM document
      */
+
     function tagDocument(document, options) {
       tagChunks(document, options.selectors);
       tagIdeas(document, options.delimiter);
-
       numberEls(document, '.chunk', 'chunk');
       numberEls(document, '.idea', 'idea');
     }
-
     /**
      * Mark DOM elements to be tagged, skips nodes
      * with class nb-skip (and their child nodes).
@@ -476,16 +523,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * @return     {void}  Modifies DOM document
      * @private
      */
+
+
     function tagChunks(document, selectors) {
       var elements = typeof selectors === 'function' ? selectors(document) : document.querySelectorAll(selectors);
-
       Array.prototype.forEach.call(elements, function (el) {
         if (!(el.closest('.nb-skip') || el.classList.contains('nb-skip'))) {
           el.classList.add('chunk');
         }
       });
     }
-
     /**
      * Callback that marks elements as chunks of ideas. Those are then used for idea mapping.
      * @callback   selectorFn
@@ -502,13 +549,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * @return     {void}  Modifies DOM document
      * @private
      */
+
+
     function tagIdeas(document, delimiter) {
       document.querySelectorAll('.chunk').forEach(function (chunk) {
         var tagged = produce(document, parse(chunk, delimiter));
         chunk.parentNode.replaceChild(tagged, chunk);
       });
     }
-
     /**
      * Callback used to split chunk contents into ideas.
      * @callback   tokenizerFn
@@ -528,12 +576,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
      * @return     {void}  Modifies DOM document
      * @private
      */
+
+
     function numberEls(document, selector, name) {
       Array.prototype.forEach.call(document.querySelectorAll(selector), function (el, index) {
         el.setAttribute(refNumAttr, index + 1);
-        if (!el.getAttribute('id')) el.setAttribute('id', "" + name + (index + 1));
+        if (!el.getAttribute('id')) el.setAttribute('id', "".concat(name).concat(index + 1));
       });
     }
 
-    module.exports = { tagDocument: tagDocument };
-  }, { "./parser": 4, "./producer": 5 }] }, {}, [1]);
+    module.exports = {
+      tagDocument: tagDocument
+    };
+  }, {
+    "./parser": 4,
+    "./producer": 5
+  }]
+}, {}, [1]);

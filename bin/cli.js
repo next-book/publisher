@@ -19,8 +19,10 @@ const config = data.prepConfig(cmd.src);
 const { content, filenames } = data.prepContent(cmd.src, cmd.filter);
 const { documents, manifest } = app.map(content, filenames, config, revision);
 
-data.copyFolders('\nCopying static folders…', cmd.src, cmd.out, config.static);
 data.writeOutput(cmd.out, filenames, documents, manifest);
+data.copyFolders('\nCopying static folders…', cmd.src, cmd.out, config.static, () => {
+  data.buildServiceWorker(cmd.out, revision);
+});
 
 if (cmd.server) {
   const server = express();

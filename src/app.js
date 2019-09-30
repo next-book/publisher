@@ -113,7 +113,9 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
     const next =
       pos < chapters.length - 1
         ? chapters[pos + 1]
-        : filenames[index] === 'index.html' ? chapters[0] : null;
+        : filenames[index] === 'index.html'
+        ? chapters[0]
+        : null;
 
     return {
       title,
@@ -150,7 +152,9 @@ function addMetaNavigation(documents, metadata) {
         const value = metadata[index][name];
         return ['prev', 'next'].includes(name)
           ? { tagName: 'link', rel: name, href: `./${value}` }
-          : name === 'order' ? { tagName: 'meta', name, content: value } : null;
+          : name === 'order'
+          ? { tagName: 'meta', name, content: value }
+          : null;
       });
 
     base.concat(extra).forEach(meta => {
