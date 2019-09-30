@@ -17,10 +17,10 @@ cmd
 
 const config = data.prepConfig(cmd.src);
 const { content, filenames } = data.prepContent(cmd.src, cmd.filter);
-const { documents, spine } = app.map(content, filenames, config);
+const { documents, manifest } = app.map(content, filenames, config, revision);
 
-data.writeOutput(cmd.out, filenames, documents, spine);
 data.copyFolders('\nCopying static folders…', cmd.src, cmd.out, config.static);
+data.writeOutput(cmd.out, filenames, documents, manifest);
 
 if (cmd.server) {
   const server = express();

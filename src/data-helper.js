@@ -45,7 +45,7 @@ function writeOutput(dir, filenames, documents, metadata) {
     fs.writeFileSync(path.join(dir, filename), documents[index]);
   });
 
-  fs.writeFileSync(path.join(dir, 'spine.json'), JSON.stringify(metadata, null, 2));
+  fs.writeFileSync(path.join(dir, 'manifest.json'), JSON.stringify(metadata, null, 2));
 }
 
 function copyFolders(message, src, out, folders, callback) {

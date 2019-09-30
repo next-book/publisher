@@ -54,7 +54,7 @@ function map(content, filenames, options, revision) {
   // add nav
   addMetaNavigation(documents, docMetadata);
 
-  return { spine, documents: exportDoms(doms, conf.output) };
+  return { manifest, documents: exportDoms(doms, conf.output) };
 }
 
 function composeManifest(meta, documents, totals, revision) {
@@ -137,9 +137,9 @@ function addMetaNavigation(documents, metadata) {
     { tagName: 'link', rel: 'license', href: './license.html' },
     {
       tagName: 'link',
-      rel: 'import',
-      href: './spine.json',
-      id: 'spine',
+      rel: 'publication',
+      href: './manifest.json',
+      id: 'manifest',
     },
   ];
 
