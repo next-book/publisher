@@ -108,7 +108,7 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
 
     const isChapter = chapters.includes(filenames[index]);
     const pos = chapters.indexOf(filenames[index]);
-    const order = isChapter ? pos : 0;
+    const order = isChapter ? pos : null;
 
     const prev = pos !== 0 ? chapters[pos - 1] : null;
     const next =
@@ -148,7 +148,7 @@ function addMetaNavigation(documents, metadata) {
 
   documents.forEach((document, index) => {
     const extra = Object.keys(metadata[index])
-      .filter(name => metadata[index][name])
+      .filter(name => metadata[index][name] !== null)
       .map(name => {
         const value = metadata[index][name];
         return ['prev', 'next'].includes(name)
