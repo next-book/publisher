@@ -2,7 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 const rimraf = require('rimraf');
-const ncp = require('ncp');
+const copy = require('recursive-copy');
+
+const sw = require('./service-worker/builder.js');
 
 function prepContent(srcDir, filter) {
   console.log(`Looking up files in "${srcDir}" (using filename filter \\${filter}\\).`);
@@ -46,17 +48,34 @@ function writeOutput(dir, filenames, documents, metadata) {
   fs.writeFileSync(path.join(dir, 'spine.json'), JSON.stringify(metadata, null, 2));
 }
 
-function copyFolders(message, src, out, folders) {
+function copyFolders(message, src, out, folders, callback) {
   console.log(message);
 
   if (folders && Array.isArray(folders)) {
-    folders.forEach(folder =>
-      ncp(path.join(src, folder), path.join(out, folder), err => {
-        if (err) console.error(err);
-        else console.log(`Copied folder "${folder}".`);
-      })
-    );
+    const pairs = folders.map(folder => ({
+      from: path.join(src, folder),
+      to: path.join(out, folder),
+    }));
+
+    copyFolder(pairs, callback);
   }
+}
+
+function copyFolder(pairs, finalCallback) {
+  const pair = pairs.shift();
+
+  copy(pair.from, pair.to, () => {
+    if (pairs.length > 0) copyFolder(pairs, finalCallback);
+    else finalCallback();
+  });
+}
+
+function buildServiceWorker(dir, revision) {
+  console.log('Building service worker…');
+
+  sw.build(dir, revision).then(code => {
+    fs.writeFileSync(path.join(dir, 'service-worker.js'), code, 'utf8');
+  });
 }
 
 module.exports = {
@@ -64,4 +83,5 @@ module.exports = {
   prepConfig,
   writeOutput,
   copyFolders,
+  buildServiceWorker,
 };
