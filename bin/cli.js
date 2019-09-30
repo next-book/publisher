@@ -24,12 +24,12 @@ data.writeOutput(cmd.out, filenames, documents, manifest);
 
 if (cmd.server) {
   const server = express();
-  const port = 3000;
+  const port = 23011; // B-O-O-K => 2-15-15-11 => 2-2*15-11 => 2-30-11
 
   server.use('/', express.static(path.join(process.cwd(), '/', cmd.out)));
   server.listen(port, () => {
     const message = [
-      '\nWeb server running at http://localhost:3000/',
+      '\nWeb server running at http://127.0.0.1:23011/',
       'Press CTRL+C to stop the server.\n',
     ].join('\n');
     console.log(message);
