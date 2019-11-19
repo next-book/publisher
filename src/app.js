@@ -12,6 +12,7 @@ const hash = require('object-hash');
 const tagger = require('./tagger');
 const gauge = require('./gauge');
 const { getToc } = require('./toc');
+const chapterNavigation = require('./chapter-navigation');
 const config = require('./config');
 
 /**
@@ -53,7 +54,8 @@ function map(content, filenames, options, revision) {
 
   // add nav
   addMetaNavigation(documents, docMetadata);
-  addChapterEndAnchor(documents);
+  chapterNavigation.addChapterEndAnchor(documents);
+  chapterNavigation.addChapterInPageNavigation(documents);
 
   return { manifest, documents: exportDoms(doms, conf.output) };
 }
@@ -148,7 +150,7 @@ function addMetaNavigation(documents, metadata) {
 
   documents.forEach((document, index) => {
     const extra = Object.keys(metadata[index])
-      .filter(name => metadata[index][name] !== null)
+      .filter(name => metadata[index][name] !== null && metadata[index][name] !== undefined)
       .map(name => {
         const value = metadata[index][name];
         return ['prev', 'next'].includes(name)
@@ -158,17 +160,18 @@ function addMetaNavigation(documents, metadata) {
           : null;
       });
 
-    base.concat(extra).forEach(meta => {
-      if (meta === null) return;
-
-      const el = document.createElement(meta.tagName);
-      Object.keys(meta)
-        .filter(key => ['name', 'content', 'rel', 'href', 'id'].includes(key))
-        .forEach(key => {
-          el.setAttribute(key, meta[key]);
-        });
-      document.querySelector('head').appendChild(el);
-    });
+    base
+      .concat(extra)
+      .filter(meta => meta !== null)
+      .forEach(meta => {
+        const el = document.createElement(meta.tagName);
+        Object.keys(meta)
+          .filter(key => ['name', 'content', 'rel', 'href', 'id'].includes(key))
+          .forEach(key => {
+            el.setAttribute(key, meta[key]);
+          });
+        document.querySelector('head').appendChild(el);
+      });
   });
 }
 
@@ -184,15 +187,6 @@ function getJsdomObj(doc) {
   if (typeof doc === 'string') return new Jsdom(doc);
 
   throw new Error('Input document format not recognized!');
-}
-
-function addChapterEndAnchor(documents) {
-  documents.forEach(doc => {
-    const anchor = doc.createElement('a');
-    anchor.setAttribute('id', 'chapter-end');
-
-    doc.querySelector('body').appendChild(anchor);
-  });
 }
 
 /**
