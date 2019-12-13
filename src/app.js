@@ -52,6 +52,9 @@ function map(content, filenames, options, revision) {
   const docMetadata = gatherMetadata(documents, filenames, chapters, lengths);
   const manifest = composeManifest(conf.meta, docMetadata, sumPublication(docMetadata), revision);
 
+  //preview
+  if (options.fullTextUrl) chapterNavigation.addFullTextUrl(documents, options.fullTextUrl);
+
   // add nav
   addMetaNavigation(documents, docMetadata);
   chapterNavigation.addChapterEndAnchor(documents);
@@ -61,7 +64,7 @@ function map(content, filenames, options, revision) {
 }
 
 function composeManifest(meta, documents, totals, revision) {
-  const id = [meta.author.split(' ').pop(), meta.title, meta.published, hash(meta).substring(0, 6)]
+  const id = [meta.author.split(' ').pop(), meta.title, meta.published, revision]
     .filter(str => str)
     .join(' ');
 
@@ -114,10 +117,10 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
 
     const prev = pos !== 0 ? chapters[pos - 1] : null;
     const next =
-      pos < chapters.length - 1
-        ? chapters[pos + 1]
-        : filenames[index] === 'index.html'
+      filenames[index] === 'index.html'
         ? chapters[0]
+        : pos < chapters.length - 1
+        ? chapters[pos + 1]
         : null;
 
     return {

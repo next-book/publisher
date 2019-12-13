@@ -63,14 +63,29 @@ function createLink(doc, rel, urlFragment, text, callback) {
 
 function addChapterEndAnchor(documents) {
   documents.forEach(doc => {
-    const anchor = doc.createElement('a');
+    const anchor = doc.createElement('A');
     anchor.setAttribute('id', 'chapter-end');
 
     doc.querySelector('.content').appendChild(anchor);
   });
 }
 
+function addFullTextUrl(documents, url) {
+  documents.forEach(doc => {
+    const p = doc.createElement('P');
+    p.setAttribute('id', 'full-text-link');
+
+    const anchor = doc.createElement('A');
+    anchor.setAttribute('href', url);
+    anchor.innerHTML = `Follow this link to see the full version of this book.`;
+    p.appendChild(anchor);
+
+    doc.querySelector('.content').appendChild(p);
+  });
+}
+
 module.exports = {
   addChapterInPageNavigation,
   addChapterEndAnchor,
+  addFullTextUrl,
 };

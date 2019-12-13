@@ -5,7 +5,7 @@ const path = require('path');
 
 const app = require('../src/app.js');
 const data = require('../src/data-helper.js');
-const revision = require('../src/revision.js').get();
+const revision = require('../src/revision.js');
 
 cmd
   .option('-v, --verbose', 'More verbose output')
@@ -13,15 +13,20 @@ cmd
   .option('-s, --src [path]', 'Source directory', 'src')
   .option('-o, --out [path]', 'Output directory', 'book')
   .option('-f, --filter [regex]', 'File filter for mapper sourcers', '\\.html?$')
+  .option('-p, --preview [url]', 'Generate a preview (three chapters only)')
   .parse(process.argv);
 
-const config = data.prepConfig(cmd.src);
-const { content, filenames } = data.prepContent(cmd.src, cmd.filter);
-const { documents, manifest } = app.map(content, filenames, config, revision);
+const config = cmd.preview
+  ? data.prepPreviewConfig(cmd.src, cmd.preview)
+  : data.prepConfig(cmd.src);
+
+const revisionIdentifier = cmd.preview ? `${revision.get()}-preview` : revision.get();
+const { content, filenames } = data.prepContent(cmd.src, cmd.filter, config.removeChapters);
+const { documents, manifest } = app.map(content, filenames, config, revisionIdentifier);
 
 data.writeOutput(cmd.out, filenames, documents, manifest);
 data.copyFolders('\nCopying static folders…', cmd.src, cmd.out, config.static, () => {
-  data.buildServiceWorker(cmd.out, revision);
+  data.buildServiceWorker(cmd.out, revisionIdentifier, config);
 });
 
 if (cmd.server) {

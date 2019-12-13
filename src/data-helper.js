@@ -6,7 +6,7 @@ const copy = require('recursive-copy');
 
 const sw = require('./service-worker/builder.js');
 
-function prepContent(srcDir, filter) {
+function prepContent(srcDir, filter, previewRemovals) {
   console.log(`Looking up files in "${srcDir}" (using filename filter \\${filter}\\).`);
 
   const content = fs
@@ -15,6 +15,7 @@ function prepContent(srcDir, filter) {
       withFileTypes: true,
     })
     .filter(file => file.isFile() && file.name.match(new RegExp(filter)))
+    .filter(file => previewRemovals === undefined || !previewRemovals.includes(file.name))
     .map(file => ({
       name: file.name,
       data: fs.readFileSync(path.join(srcDir, file.name), 'utf8'),
@@ -35,6 +36,18 @@ function prepConfig(srcDir) {
   console.log(bookConfig ? 'Found custom book config.' : 'Custom book config not found.');
 
   return bookConfig;
+}
+
+function prepPreviewConfig(srcDir, fullTextUrl) {
+  console.log('Preparing preview version of the book.');
+
+  const config = prepConfig(srcDir);
+  if (!config) return null;
+  return Object.assign({}, config, {
+    chapters: config.chapters.slice(0, 3),
+    removeChapters: config.chapters.slice(3),
+    fullTextUrl,
+  });
 }
 
 function writeOutput(dir, filenames, documents, metadata) {
@@ -81,6 +94,7 @@ function buildServiceWorker(dir, revision) {
 module.exports = {
   prepContent,
   prepConfig,
+  prepPreviewConfig,
   writeOutput,
   copyFolders,
   buildServiceWorker,
