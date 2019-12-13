@@ -1,6 +1,6 @@
 {
   "name": "nb-mapper",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Map HTML files for use with next-book tools",
   "main": "src/app.js",
   "bin": {
@@ -36,10 +36,10 @@
   "dependencies": {
     "acorn": "^7.1.0",
     "cli-progress": "^2.1.1",
-    "commander": "^2.20.1",
+    "commander": "^2.20.3",
     "express": "^4.17.1",
     "jsdom": "^11.12.0",
-    "nb-base": "^0.1.10",
+    "nb-base": "^0.1.15",
     "object-hash": "^1.3.1",
     "pretty": "^2.0.0",
     "recursive-copy": "^2.0.10",
@@ -48,16 +48,16 @@
     "slug": "^0.9.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.6.2",
-    "@babel/core": "^7.6.2",
-    "@babel/preset-env": "^7.6.2",
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
     "browserify": "^16.5.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^3.6.0",
-    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react": "^7.17.0",
     "jest": "^25.0.0",
     "onchange": "^6.1.0"
   }
