@@ -77,10 +77,15 @@ function addFullTextUrl(documents, url) {
 
     const anchor = doc.createElement('A');
     anchor.setAttribute('href', url);
-    anchor.innerHTML = `Follow this link to see the full version of this book.`;
+    anchor.innerHTML = `Toto je ukázka. Pro zobrazení plné verze knihy následujte tento odkaz.`;
     p.appendChild(anchor);
 
-    doc.querySelector('.content').appendChild(p);
+    if (doc.querySelector('body').getAttribute('class') === 'home') {
+      const content = doc.querySelector('.content');
+      content.insertBefore(p, content.firstChild);
+    } else {
+      doc.querySelector('.content').appendChild(p);
+    }
   });
 }
 
