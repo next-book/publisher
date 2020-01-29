@@ -1,6 +1,6 @@
 {
   "name": "nb-mapper",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "description": "Map HTML files for use with next-book tools",
   "main": "src/app.js",
   "bin": {

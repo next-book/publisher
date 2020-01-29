@@ -89,15 +89,17 @@ function sumPublication(metadata) {
       all: {
         words: acc.all.words + doc.words,
         chars: acc.all.chars + doc.chars,
+        ideas: acc.all.ideas + doc.ideas,
       },
       chapters: {
         words: doc.isChapter ? acc.chapters.words + doc.words : acc.chapters.words,
         chars: doc.isChapter ? acc.chapters.chars + doc.chars : acc.chapters.chars,
+        ideas: doc.isChapter ? acc.chapters.ideas + doc.ideas : acc.chapters.ideas,
       },
     }),
     {
-      all: { words: 0, chars: 0 },
-      chapters: { words: 0, chars: 0 },
+      all: { words: 0, chars: 0, ideas: 0 },
+      chapters: { words: 0, chars: 0, ideas: 0 },
     }
   );
 }
@@ -108,7 +110,7 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
   return documents.map((document, index) => {
     const title = document.querySelector('title').textContent;
     const file = filenames[index];
-    const { words, chars } = lengths[index];
+    const { words, chars, ideas } = lengths[index];
     const toc = getToc(document);
 
     const isChapter = chapters.includes(filenames[index]);
@@ -128,6 +130,7 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
       file,
       words,
       chars,
+      ideas,
       isChapter,
       order,
       prev,

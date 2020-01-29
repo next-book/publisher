@@ -55,6 +55,7 @@ function gaugePublication(documents) {
   return documents.map(document => ({
     words: parseInt(document.body.getAttribute(attrNames.words), 10),
     chars: parseInt(document.body.getAttribute(attrNames.chars), 10),
+    ideas: document.querySelectorAll('.idea').length,
   }));
 }
 
