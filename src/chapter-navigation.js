@@ -8,11 +8,11 @@ function addChapterInPageNavigation(documents) {
       appendLinkToNav(doc, endNav, anchor.cloneNode(true));
     });
 
-    createLink(doc, 'prev', 'chapter-end', '←', anchor => {
+    createLink(doc, 'prev', 'chapter-end', '← Previous chapter', anchor => {
       appendLinkToNav(doc, beginNav, anchor);
     });
 
-    createLink(doc, 'next', 'chunk1', '→', anchor => {
+    createLink(doc, 'next', 'chunk1', 'Next chapter →', anchor => {
       appendLinkToNav(doc, endNav, anchor);
     });
 
