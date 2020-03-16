@@ -13,6 +13,7 @@ cmd
   .option('-s, --src [path]', 'Source directory', 'src')
   .option('-o, --out [path]', 'Output directory', 'book')
   .option('-f, --filter [regex]', 'File filter for mapper sourcers', '\\.html?$')
+  .option('-d, --dev', 'Dev mode (no service worker)')
   .option('-p, --preview [url]', 'Generate a preview (three chapters only)')
   .parse(process.argv);
 
@@ -26,7 +27,7 @@ const { documents, manifest } = app.map(content, filenames, config, revisionIden
 
 data.writeOutput(cmd.out, filenames, documents, manifest);
 data.copyFolders('\nCopying static folders…', cmd.src, cmd.out, config.static, () => {
-  data.buildServiceWorker(cmd.out, revisionIdentifier, config);
+  if (!cmd.dev) data.buildServiceWorker(cmd.out, revisionIdentifier, config);
 });
 
 if (cmd.server) {
