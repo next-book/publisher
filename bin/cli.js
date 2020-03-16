@@ -36,10 +36,11 @@ if (cmd.server) {
 
   server.use('/', express.static(path.join(process.cwd(), '/', cmd.out)));
   server.listen(port, () => {
-    const message = [
-      '\nWeb server running at http://127.0.0.1:23011/',
-      'Press CTRL+C to stop the server.\n',
-    ].join('\n');
-    console.log(message);
+    console.log(
+      [
+        '\nWeb server running at http://127.0.0.1:23011/',
+        'Press CTRL+C to stop the server.\n',
+      ].join('\n')
+    );
   });
 }
