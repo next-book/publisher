@@ -1,3 +1,5 @@
+const i18n = require('./i18n');
+
 function addChapterInPageNavigation(documents) {
   documents.forEach(doc => {
     const beginNav = createNavFragment(doc, 'begin-nav');
@@ -8,11 +10,11 @@ function addChapterInPageNavigation(documents) {
       appendLinkToNav(doc, endNav, anchor.cloneNode(true));
     });
 
-    createLink(doc, 'prev', 'chapter-end', '← Previous chapter', anchor => {
+    createLink(doc, 'prev', 'chapter-end', `← ${i18n.t('navigation:prev-chapter')}`, anchor => {
       appendLinkToNav(doc, beginNav, anchor);
     });
 
-    createLink(doc, 'next', 'chunk1', 'Next chapter →', anchor => {
+    createLink(doc, 'next', 'chunk1', `${i18n.t('navigation:prev-chapter')} →`, anchor => {
       appendLinkToNav(doc, endNav, anchor);
     });
 
