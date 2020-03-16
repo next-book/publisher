@@ -55,6 +55,9 @@ function map(content, filenames, options, revision) {
   //preview
   if (options.fullTextUrl) chapterNavigation.addFullTextUrl(documents, options.fullTextUrl);
 
+  // add language
+  addLanguageCode(documents, conf.languageCode);
+
   // add nav
   addMetaNavigation(documents, docMetadata);
   chapterNavigation.addChapterEndAnchor(documents);
@@ -138,6 +141,15 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
       toc,
     };
   });
+}
+
+function addLanguageCode(documents, code) {
+  console.log('\nAdding language code…');
+
+  if (code)
+    documents.forEach(document => {
+      document.querySelector('html').setAttribute('lang', code);
+    });
 }
 
 function addMetaNavigation(documents, metadata) {

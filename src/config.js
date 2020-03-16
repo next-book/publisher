@@ -26,6 +26,7 @@
  * @private
  */
 const defaults = {
+  languageCode: 'en',
   output: 'html',
   delimiter: '\n',
   restoreDelimiter: false,
