@@ -14,7 +14,7 @@ function addChapterInPageNavigation(documents) {
       appendLinkToNav(doc, beginNav, anchor);
     });
 
-    createLink(doc, 'next', 'chunk1', `${i18n.t('navigation:prev-chapter')} →`, anchor => {
+    createLink(doc, 'next', 'chunk1', `${i18n.t('navigation:next-chapter')} →`, anchor => {
       appendLinkToNav(doc, endNav, anchor);
     });
 
