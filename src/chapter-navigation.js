@@ -5,7 +5,7 @@ function addChapterInPageNavigation(documents) {
     const beginNav = createNavFragment(doc, 'begin-nav');
     const endNav = createNavFragment(doc, 'end-nav');
 
-    createLink(doc, 'index', '', 'Home', anchor => {
+    createLink(doc, 'index', '', i18n.t('navigation:title-page'), anchor => {
       appendLinkToNav(doc, beginNav, anchor.cloneNode(true));
       appendLinkToNav(doc, endNav, anchor.cloneNode(true));
     });

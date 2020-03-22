@@ -14,6 +14,7 @@ const gauge = require('./gauge');
 const { getToc } = require('./toc');
 const chapterNavigation = require('./chapter-navigation');
 const config = require('./config');
+const i18n = require('./i18n');
 
 /**
  * Maps HTML for *next-book* use.
@@ -55,7 +56,8 @@ function map(content, filenames, options, revision) {
   //preview
   if (options.fullTextUrl) chapterNavigation.addFullTextUrl(documents, options.fullTextUrl);
 
-  // add language
+  // set language and add code to html
+  i18n.changeLanguage(conf.languageCode);
   addLanguageCode(documents, conf.languageCode);
 
   // add nav
