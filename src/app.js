@@ -91,7 +91,7 @@ function composeManifest(meta, documents, totals, revision) {
   };
 }
 
-const DocRoles = {
+const DocRole = {
   Chapter: 'chapter',
   Index: 'index',
   Colophon: 'colophon',
@@ -107,9 +107,9 @@ function sumPublication(metadata) {
         ideas: acc.all.ideas + doc.ideas,
       },
       chapters: {
-        words: doc.role === DocRoles.Chapter ? acc.chapters.words + doc.words : acc.chapters.words,
-        chars: doc.role === DocRoles.Chapter ? acc.chapters.chars + doc.chars : acc.chapters.chars,
-        ideas: doc.role === DocRoles.Chapter ? acc.chapters.ideas + doc.ideas : acc.chapters.ideas,
+        words: doc.role === DocRole.Chapter ? acc.chapters.words + doc.words : acc.chapters.words,
+        chars: doc.role === DocRole.Chapter ? acc.chapters.chars + doc.chars : acc.chapters.chars,
+        ideas: doc.role === DocRole.Chapter ? acc.chapters.ideas + doc.ideas : acc.chapters.ideas,
       },
     }),
     {
@@ -129,14 +129,14 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
     const toc = getToc(document);
 
     const role = chapters.includes(file)
-      ? DocRoles.Chapter
+      ? DocRole.Chapter
       : file === 'index.html'
-      ? DocRoles.Index
+      ? DocRole.Index
       : file === 'colophon.html'
-      ? DocRoles.Colophon
-      : DocRoles.Other;
+      ? DocRole.Colophon
+      : DocRole.Other;
     const pos = chapters.indexOf(file);
-    const order = role === DocRoles.Chapter ? pos : null;
+    const order = role === DocRole.Chapter ? pos : null;
 
     const prev = pos !== 0 ? chapters[pos - 1] : null;
     const next =
@@ -159,11 +159,14 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
 
 function addDocRoles(documents, metadata) {
   documents.forEach((document, index) => {
+    const role = metadata[index].role;
+
     const el = document.createElement('META');
     el.setAttribute('name', 'role');
-    el.setAttribute('value', metadata[index].role);
-
+    el.setAttribute('content', role);
     document.querySelector('head').appendChild(el);
+
+    document.body.classList.add(`nb-role-${role}`);
   });
 }
 
@@ -190,6 +193,11 @@ function addMetaNavigation(documents, metadata) {
     },
   ];
 
+  const colophon = getColophon(metadata);
+  if (colophon !== null) {
+    base.push({ tagName: 'link', rel: 'colophon', href: colophon });
+  }
+
   documents.forEach((document, index) => {
     const extra = Object.keys(metadata[index])
       .filter(name => metadata[index][name] !== null && metadata[index][name] !== undefined)
@@ -202,8 +210,11 @@ function addMetaNavigation(documents, metadata) {
           : null;
       });
 
+    const self = [{ tagName: 'link', rel: 'self', href: metadata[index].file }];
+
     base
       .concat(extra)
+      .concat(self)
       .filter(meta => meta !== null)
       .forEach(meta => {
         const el = document.createElement(meta.tagName);
@@ -215,6 +226,11 @@ function addMetaNavigation(documents, metadata) {
         document.querySelector('head').appendChild(el);
       });
   });
+}
+
+function getColophon(metadata) {
+  const files = metadata.filter(item => item.role === DocRole.Colophon);
+  return files.length ? files[0].file : null;
 }
 
 /**
