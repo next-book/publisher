@@ -65,6 +65,9 @@ function map(content, filenames, options, revision) {
   chapterNavigation.addChapterEndAnchor(documents);
   chapterNavigation.addChapterInPageNavigation(documents);
 
+  // add roles
+  addDocRoles(documents, docMetadata);
+
   return { manifest, documents: exportDoms(doms, conf.output) };
 }
 
@@ -88,6 +91,13 @@ function composeManifest(meta, documents, totals, revision) {
   };
 }
 
+const DocRoles = {
+  Chapter: 'chapter',
+  Index: 'index',
+  Colophon: 'colophon',
+  Other: 'other',
+};
+
 function sumPublication(metadata) {
   return metadata.reduce(
     (acc, doc) => ({
@@ -97,9 +107,9 @@ function sumPublication(metadata) {
         ideas: acc.all.ideas + doc.ideas,
       },
       chapters: {
-        words: doc.isChapter ? acc.chapters.words + doc.words : acc.chapters.words,
-        chars: doc.isChapter ? acc.chapters.chars + doc.chars : acc.chapters.chars,
-        ideas: doc.isChapter ? acc.chapters.ideas + doc.ideas : acc.chapters.ideas,
+        words: doc.role === DocRoles.Chapter ? acc.chapters.words + doc.words : acc.chapters.words,
+        chars: doc.role === DocRoles.Chapter ? acc.chapters.chars + doc.chars : acc.chapters.chars,
+        ideas: doc.role === DocRoles.Chapter ? acc.chapters.ideas + doc.ideas : acc.chapters.ideas,
       },
     }),
     {
@@ -118,17 +128,19 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
     const { words, chars, ideas } = lengths[index];
     const toc = getToc(document);
 
-    const isChapter = chapters.includes(filenames[index]);
-    const pos = chapters.indexOf(filenames[index]);
-    const order = isChapter ? pos : null;
+    const role = chapters.includes(file)
+      ? DocRoles.Chapter
+      : file === 'index.html'
+      ? DocRoles.Index
+      : file === 'colophon.html'
+      ? DocRoles.Colophon
+      : DocRoles.Other;
+    const pos = chapters.indexOf(file);
+    const order = role === DocRoles.Chapter ? pos : null;
 
     const prev = pos !== 0 ? chapters[pos - 1] : null;
     const next =
-      filenames[index] === 'index.html'
-        ? chapters[0]
-        : pos < chapters.length - 1
-        ? chapters[pos + 1]
-        : null;
+      file === 'index.html' ? chapters[0] : pos < chapters.length - 1 ? chapters[pos + 1] : null;
 
     return {
       title,
@@ -136,12 +148,22 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
       words,
       chars,
       ideas,
-      isChapter,
+      role,
       order,
       prev,
       next,
       toc,
     };
+  });
+}
+
+function addDocRoles(documents, metadata) {
+  documents.forEach((document, index) => {
+    const el = document.createElement('META');
+    el.setAttribute('name', 'role');
+    el.setAttribute('value', metadata[index].role);
+
+    document.querySelector('head').appendChild(el);
   });
 }
 
