@@ -66,6 +66,7 @@ function map(content, filenames, options, revision) {
   chapterNavigation.addChapterInPageNavigation(documents);
 
   // add roles
+  addIdentifier(documents, manifest.identifier);
   addDocRoles(documents, docMetadata);
 
   return { manifest, documents: exportDoms(doms, conf.output) };
@@ -80,7 +81,7 @@ function composeManifest(meta, documents, totals, revision) {
 
   return {
     ...meta,
-    slug: slug(id, { lower: true }),
+    identifier: slug(id, { lower: true }),
     revision,
     generatedAt: {
       date: String(time),
@@ -177,6 +178,15 @@ function addLanguageCode(documents, code) {
     documents.forEach(document => {
       document.querySelector('html').setAttribute('lang', code);
     });
+}
+
+function addIdentifier(documents, identifier) {
+  documents.forEach(document => {
+    const el = document.createElement('META');
+    el.setAttribute('name', 'identifier');
+    el.setAttribute('content', identifier);
+    document.querySelector('head').appendChild(el);
+  });
 }
 
 function addMetaNavigation(documents, metadata) {
