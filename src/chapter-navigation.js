@@ -63,6 +63,15 @@ function createLink(doc, rel, urlFragment, text, callback) {
   }
 }
 
+function addChapterStartAnchor(documents) {
+  documents.forEach(doc => {
+    const anchor = doc.createElement('A');
+    anchor.setAttribute('id', 'chapter-start');
+
+    doc.querySelector('.content').insertBefore(anchor, doc.querySelector('.content main'));
+  });
+}
+
 function addChapterEndAnchor(documents) {
   documents.forEach(doc => {
     const anchor = doc.createElement('A');
@@ -93,6 +102,7 @@ function addFullTextUrl(documents, url) {
 
 module.exports = {
   addChapterInPageNavigation,
+  addChapterStartAnchor,
   addChapterEndAnchor,
   addFullTextUrl,
 };

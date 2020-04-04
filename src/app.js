@@ -62,6 +62,7 @@ function map(content, filenames, options, revision) {
 
   // add nav
   addMetaNavigation(documents, docMetadata);
+  chapterNavigation.addChapterStartAnchor(documents);
   chapterNavigation.addChapterEndAnchor(documents);
   chapterNavigation.addChapterInPageNavigation(documents);
 
