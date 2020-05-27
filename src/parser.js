@@ -5,8 +5,6 @@
 
 const { ParsedObj } = require('./structures');
 
-let lastNodeWasFinal = null;
-
 /**
  * Returns ParsedObj which contains original node and an array of arrays in which every array
  * represents one idea or ParsedObj. Ideas are delimited with a delimiter that is searched for in
@@ -25,12 +23,9 @@ function parse(node, delimiter) {
       if (typeof delimiter === 'function') delimiter(node, pieces);
       else parseTextNode(childNode, pieces, delimiter);
     } else if (childNode.nodeType === childNode.ELEMENT_NODE) {
-      if (lastNodeWasFinal === true) {
-        pieces.push([parse(childNode, delimiter)]);
-        lastNodeWasFinal = false;
-      } else {
-        lastValue(pieces).push(childNode);
-      }
+      pieces.push([parse(childNode, delimiter)]);
+    } else {
+      if (childNode.nodeType !== childNode.COMMENT_NODE) throw new Error('Unexpected nodeType!');
     }
   });
 
@@ -39,26 +34,8 @@ function parse(node, delimiter) {
 
 function parseTextNode(node, pieces, delimiter) {
   node.textContent.split(delimiter).forEach(text => {
-    if (lastNodeWasFinal !== true) {
-      lastValue(pieces).push(text);
-      lastNodeWasFinal = true;
-    } else {
-      pieces.push([text]);
-    }
+    pieces.push([text]);
   });
-
-  lastNodeWasFinal = isDelimiterAtEnd(node.textContent, delimiter);
-}
-
-function isDelimiterAtEnd(string, delimiter) {
-  return new RegExp(`${delimiter.replace('\\', '\\\\')}\\s*$`).test(string);
-}
-
-function lastValue(arr) {
-  if (arr.length === 0) {
-    arr.push([]);
-  }
-  return arr[arr.length - 1];
 }
 
 function separateWhitespace(piece) {

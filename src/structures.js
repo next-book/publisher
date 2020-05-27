@@ -28,9 +28,34 @@
  * }
  */
 function ParsedObj(node, ideas, delimiter) {
+  const ideaProblems = listProblemIdeas(ideas);
+
+  if (ideaProblems.length > 0)
+    throw new Error(
+      `Invalid ideas at node ${JSON.stringify(node)}, problems: ${JSON.stringify(ideaProblems)}.`
+    );
+
   this.node = node;
   this.ideas = ideas;
   this.delimiter = delimiter;
+}
+
+function listProblemIdeas(ideas) {
+  return ideas.filter(idea => {
+    if (idea instanceof ParsedObj) return false;
+    if (typeof idea === 'string' && /^\s+$/.test(idea)) return false;
+    if (Array.isArray(idea) && ideaItemsAreValid(idea)) return false;
+    return true;
+  });
+}
+
+function ideaItemsAreValid(items) {
+  return (
+    items.filter(item => {
+      if (typeof item === 'string') return false;
+      return false;
+    }).length === 0
+  );
 }
 
 module.exports = { ParsedObj };
