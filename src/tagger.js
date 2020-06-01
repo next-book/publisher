@@ -17,7 +17,7 @@ const refNumAttr = 'data-nb-ref-number';
  * @return     {void}  Modifies DOM document
  */
 function tagDocument(document, options) {
-  tagChunks(document, options.selectors);
+  tagChunks(document, options.root, options.selectors);
   tagIdeas(document, options.delimiter);
 
   numberEls(document, '.chunk', 'chunk');
@@ -33,9 +33,13 @@ function tagDocument(document, options) {
  * @return     {void}  Modifies DOM document
  * @private
  */
-function tagChunks(document, selectors) {
+function tagChunks(document, root, selectors) {
+  const rootElement = root ? document.querySelector(root) : document;
+
   const elements =
-    typeof selectors === 'function' ? selectors(document) : document.querySelectorAll(selectors);
+    typeof selectors === 'function'
+      ? selectors(rootElement)
+      : rootElement.querySelectorAll(selectors);
 
   Array.prototype.forEach.call(elements, el => {
     if (!(el.closest('.nb-skip') || el.classList.contains('nb-skip'))) {
