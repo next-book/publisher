@@ -4,12 +4,92 @@
  */
 
 /**
+ * Ideas contains an array of items in which every
+ * item is an array of strings and HTML elements,
+ * a whitespace-only string or a ParsedObj.
+ * @constructor
+ * @param   {window.Node}   node      DOM node
+ * @param   {Ideas}         ideas     Ideas object
+ * @param   {string}        delimiter Delimiter
+ * @example
+ * {
+ *  arr: [
+ *    ["Integer nec odio."],
+ *    " ",
+ *    ["Praesent ", <strong>, ", nibh elementum imperdiet."],
+ *    " ",
+ *    ["Sed cursus ante dapibus diam."],
+ *    " ",
+ *    [ParsedObj],
+ *    " ",
+ *    …
+ *  ]
+ * }
+ */
+function Ideas() {
+  this.arr = [];
+
+  this.append = idea => {
+    this.arr.push(idea);
+  };
+
+  this.appendToTheLast = idea => {
+    if (this.arr.length === 0) this.arr.push([]);
+
+    this.arr[this.arr.length - 1].push(idea);
+  };
+
+  this.fetch = () => {
+    return this.arr
+      .map(piece => piece.filter(isEmpty))
+      .reduce((acc, piece) => {
+        separateWhitespace(piece).forEach(sep => acc.push(sep));
+        return acc;
+      }, [])
+      .filter(piece => piece.length !== 0);
+  };
+}
+
+function separateWhitespace(piece) {
+  if (piece.length > 1) {
+    const [before, firstItem] =
+      typeof piece[0] === 'string' ? piece[0].match(/^(\s*)([\s\S]+)$/).slice(1) : [[], piece[0]];
+    const [lastItem, after] =
+      typeof piece[piece.length - 1] === 'string'
+        ? piece[piece.length - 1].match(/^([\s\S]+?)(\s*)$/).slice(1)
+        : [piece[piece.length - 1], []];
+    const mid = piece.slice(1, piece.length - 1);
+    return [before, [firstItem, ...mid, lastItem], after];
+  }
+
+  if (piece.length === 1 && typeof piece[0] === 'string' && /^\s+$/.test(piece[0])) {
+    return [piece[0]];
+  }
+
+  if (piece.length === 1) {
+    const [before, text, after] =
+      typeof piece[0] === 'string'
+        ? piece[0].match(/^(\s*)([\s\S]+?)(\s*)$/).slice(1)
+        : [[], piece[0], []];
+    return [before, [text], after];
+  }
+
+  return [];
+}
+
+function isEmpty(string) {
+  if (typeof string !== 'string') return true;
+  if (string === '') return false;
+  return true;
+}
+
+/**
  * ParsedObj contains original node and an array
  * in which every item is an array of strings and HTML elements,
  * a full-whitespace string or another ParsedObj.
  * @constructor
  * @param   {window.Node}   node      DOM node
- * @param   {array}         ideas     Array of ideas
+ * @param   {Ideas}         ideas     Ideas object
  * @param   {string}        delimiter Delimiter
  * @example
  * {
@@ -58,4 +138,4 @@ function ideaItemsAreValid(items) {
   );
 }
 
-module.exports = { ParsedObj };
+module.exports = { Ideas, ParsedObj };
