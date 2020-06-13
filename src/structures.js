@@ -29,24 +29,29 @@
 function Ideas() {
   this.arr = [];
 
-  this.append = idea => {
-    this.arr.push(idea);
+  this.addIdea = () => {
+    this.arr.push([]);
   };
 
-  this.appendToTheLast = idea => {
-    if (this.arr.length === 0) this.arr.push([]);
+  this.addObj = obj => {
+    this.addIdea();
+    this.appendToIdea(obj);
+    this.addIdea();
+  };
 
-    this.arr[this.arr.length - 1].push(idea);
+  this.appendToIdea = piece => {
+    if (this.arr.length === 0) this.arr.push([]);
+    this.arr[this.arr.length - 1].push(piece);
   };
 
   this.fetch = () => {
     return this.arr
-      .map(piece => piece.filter(isEmpty))
-      .reduce((acc, piece) => {
-        separateWhitespace(piece).forEach(sep => acc.push(sep));
+      .map(idea => idea.filter(isNotEmpty))
+      .reduce((acc, idea) => {
+        separateWhitespace(idea).forEach(sep => acc.push(sep));
         return acc;
       }, [])
-      .filter(piece => piece.length !== 0);
+      .filter(idea => idea.length !== 0);
   };
 }
 
@@ -77,9 +82,10 @@ function separateWhitespace(piece) {
   return [];
 }
 
-function isEmpty(string) {
-  if (typeof string !== 'string') return true;
-  if (string === '') return false;
+function isNotEmpty(idea) {
+  if (Array.isArray(idea) && idea.length === 0) return false;
+  if (typeof idea !== 'string') return true;
+  if (idea === '') return false;
   return true;
 }
 
