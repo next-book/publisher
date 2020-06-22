@@ -1,7 +1,5 @@
 "use strict";
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -17,6 +15,8 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function () {
   function r(e, n, t) {
@@ -115,9 +115,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
      * @private
      */
     var defaults = {
+      languageCode: 'en',
       output: 'html',
       delimiter: '\n',
       restoreDelimiter: false,
+      root: '.content',
       selectors: ['p', 'li', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'dl']
     };
     /**
@@ -201,7 +203,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       return documents.map(function (document) {
         return {
           words: parseInt(document.body.getAttribute(attrNames.words), 10),
-          chars: parseInt(document.body.getAttribute(attrNames.chars), 10)
+          chars: parseInt(document.body.getAttribute(attrNames.chars), 10),
+          ideas: document.querySelectorAll('.idea').length
         };
       });
     }
@@ -217,9 +220,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
      * @ignore
      */
     var _require = require('./structures'),
+        Ideas = _require.Ideas,
         ParsedObj = _require.ParsedObj;
 
-    var lastNodeWasFinal = null;
+    function Separator() {}
     /**
      * Returns ParsedObj which contains original node and an array of arrays in which every array
      * represents one idea or ParsedObj. Ideas are delimited with a delimiter that is searched for in
@@ -231,97 +235,33 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
      * @return     {ParsedObj}                  An instance of {@link ParsedObj}
      */
 
+
     function parse(node, delimiter) {
-      var pieces = [];
-      node.childNodes.forEach(function (childNode) {
-        if (childNode.nodeType === childNode.TEXT_NODE) {
-          if (typeof delimiter === 'function') delimiter(node, pieces);else parseTextNode(childNode, pieces, delimiter);
-        } else if (childNode.nodeType === childNode.ELEMENT_NODE) {
-          if (lastNodeWasFinal === true) {
-            pieces.push([parse(childNode, delimiter)]);
-            lastNodeWasFinal = false;
-          } else {
-            lastValue(pieces).push(childNode);
-          }
+      var pieces = []; //first create a flat list of strings, HTML Elements, ParsedObjs, and Separators
+      //matrix text/obj v hasBreak
+
+      node.childNodes.forEach(function (n, index) {
+        if (n.nodeType === n.TEXT_NODE) {
+          var texts = n.textContent.split(delimiter);
+          texts.forEach(function (text, index) {
+            pieces.push(text);
+            if (texts.length - 1 !== index) pieces.push(new Separator());
+          });
+        } else if (n.nodeType === n.ELEMENT_NODE) {
+          if (nodeBreaksInside(n, delimiter)) pieces.push(parse(n, delimiter));else pieces.push(n);
         }
+      }); //then cluster it into ideas
+
+      var ideas = new Ideas();
+      pieces.forEach(function (piece) {
+        if (piece instanceof Separator) ideas.addIdea();
+        if (piece instanceof ParsedObj) ideas.addObj(piece);else ideas.appendToIdea(piece);
       });
-      return new ParsedObj(node, filterPieces(pieces), delimiter);
+      return new ParsedObj(node, ideas.fetch(), delimiter);
     }
 
-    function parseTextNode(node, pieces, delimiter) {
-      node.textContent.split(delimiter).forEach(function (text) {
-        if (lastNodeWasFinal !== true) {
-          lastValue(pieces).push(text);
-          lastNodeWasFinal = true;
-        } else {
-          pieces.push([text]);
-        }
-      });
-      lastNodeWasFinal = isDelimiterAtEnd(node.textContent, delimiter);
-    }
-
-    function isDelimiterAtEnd(string, delimiter) {
-      return new RegExp("".concat(delimiter.replace('\\', '\\\\'), "\\s*$")).test(string);
-    }
-
-    function lastValue(arr) {
-      if (arr.length === 0) {
-        arr.push([]);
-      }
-
-      return arr[arr.length - 1];
-    }
-
-    function separateWhitespace(piece) {
-      if (piece.length > 1) {
-        var _ref = typeof piece[0] === 'string' ? piece[0].match(/^(\s*)([\s\S]+)$/).slice(1) : [[], piece[0]],
-            _ref2 = _slicedToArray(_ref, 2),
-            before = _ref2[0],
-            firstItem = _ref2[1];
-
-        var _ref3 = typeof piece[piece.length - 1] === 'string' ? piece[piece.length - 1].match(/^([\s\S]+?)(\s*)$/).slice(1) : [piece[piece.length - 1], []],
-            _ref4 = _slicedToArray(_ref3, 2),
-            lastItem = _ref4[0],
-            after = _ref4[1];
-
-        var mid = piece.slice(1, piece.length - 1);
-        return [before, [firstItem].concat(_toConsumableArray(mid), [lastItem]), after];
-      }
-
-      if (piece.length === 1 && typeof piece[0] === 'string' && /^\s+$/.test(piece[0])) {
-        return [piece[0]];
-      }
-
-      if (piece.length === 1) {
-        var _ref5 = typeof piece[0] === 'string' ? piece[0].match(/^(\s*)([\s\S]+?)(\s*)$/).slice(1) : [[], piece[0], []],
-            _ref6 = _slicedToArray(_ref5, 3),
-            _before = _ref6[0],
-            text = _ref6[1],
-            _after = _ref6[2];
-
-        return [_before, [text], _after];
-      }
-
-      return [];
-    }
-
-    function filterPieces(pieces) {
-      return pieces.map(function (piece) {
-        return piece.filter(isEmpty);
-      }).reduce(function (acc, piece) {
-        separateWhitespace(piece).forEach(function (sep) {
-          return acc.push(sep);
-        });
-        return acc;
-      }, []).filter(function (piece) {
-        return piece.length !== 0;
-      });
-    }
-
-    function isEmpty(string) {
-      if (typeof string !== 'string') return true;
-      if (string === '') return false;
-      return true;
+    function nodeBreaksInside(node, delimiter) {
+      return new RegExp(delimiter.replace('\\', '\\\\')).test(node.textContent);
     }
 
     module.exports = {
@@ -454,12 +394,111 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
      */
 
     /**
+     * Ideas contains an array of items in which every
+     * item is an array of strings and HTML elements,
+     * a whitespace-only string or a ParsedObj.
+     * @constructor
+     * @param   {window.Node}   node      DOM node
+     * @param   {Ideas}         ideas     Ideas object
+     * @param   {string}        delimiter Delimiter
+     * @example
+     * {
+     *  arr: [
+     *    ["Integer nec odio."],
+     *    " ",
+     *    ["Praesent ", <strong>, ", nibh elementum imperdiet."],
+     *    " ",
+     *    ["Sed cursus ante dapibus diam."],
+     *    " ",
+     *    [ParsedObj],
+     *    " ",
+     *    …
+     *  ]
+     * }
+     */
+    function Ideas() {
+      var _this = this;
+
+      this.arr = [];
+
+      this.addIdea = function () {
+        _this.arr.push([]);
+      };
+
+      this.addObj = function (obj) {
+        _this.addIdea();
+
+        _this.appendToIdea(obj);
+
+        _this.addIdea();
+      };
+
+      this.appendToIdea = function (piece) {
+        if (_this.arr.length === 0) _this.arr.push([]);
+
+        _this.arr[_this.arr.length - 1].push(piece);
+      };
+
+      this.fetch = function () {
+        return _this.arr.map(function (idea) {
+          return idea.filter(isNotEmpty);
+        }).reduce(function (acc, idea) {
+          separateWhitespace(idea).forEach(function (sep) {
+            return acc.push(sep);
+          });
+          return acc;
+        }, []).filter(function (idea) {
+          return idea.length !== 0;
+        });
+      };
+    }
+
+    function separateWhitespace(piece) {
+      if (piece.length > 1) {
+        var _ref = typeof piece[0] === 'string' ? piece[0].match(/^(\s*)([\s\S]+)$/).slice(1) : [[], piece[0]],
+            _ref2 = _slicedToArray(_ref, 2),
+            before = _ref2[0],
+            firstItem = _ref2[1];
+
+        var _ref3 = typeof piece[piece.length - 1] === 'string' ? piece[piece.length - 1].match(/^([\s\S]+?)(\s*)$/).slice(1) : [piece[piece.length - 1], []],
+            _ref4 = _slicedToArray(_ref3, 2),
+            lastItem = _ref4[0],
+            after = _ref4[1];
+
+        var mid = piece.slice(1, piece.length - 1);
+        return [before, [firstItem].concat(_toConsumableArray(mid), [lastItem]), after];
+      }
+
+      if (piece.length === 1 && typeof piece[0] === 'string' && /^\s+$/.test(piece[0])) {
+        return [piece[0]];
+      }
+
+      if (piece.length === 1) {
+        var _ref5 = typeof piece[0] === 'string' ? piece[0].match(/^(\s*)([\s\S]+?)(\s*)$/).slice(1) : [[], piece[0], []],
+            _ref6 = _slicedToArray(_ref5, 3),
+            _before = _ref6[0],
+            text = _ref6[1],
+            _after = _ref6[2];
+
+        return [_before, [text], _after];
+      }
+
+      return [];
+    }
+
+    function isNotEmpty(idea) {
+      if (Array.isArray(idea) && idea.length === 0) return false;
+      if (typeof idea !== 'string') return true;
+      if (idea === '') return false;
+      return true;
+    }
+    /**
      * ParsedObj contains original node and an array
      * in which every item is an array of strings and HTML elements,
      * a full-whitespace string or another ParsedObj.
      * @constructor
      * @param   {window.Node}   node      DOM node
-     * @param   {array}         ideas     Array of ideas
+     * @param   {Ideas}         ideas     Ideas object
      * @param   {string}        delimiter Delimiter
      * @example
      * {
@@ -477,13 +516,34 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
      *  ]
      * }
      */
+
+
     function ParsedObj(node, ideas, delimiter) {
+      var ideaProblems = listProblemIdeas(ideas);
+      if (ideaProblems.length > 0) throw new Error("Invalid ideas at node ".concat(JSON.stringify(node), ", problems: ").concat(JSON.stringify(ideaProblems), "."));
       this.node = node;
       this.ideas = ideas;
       this.delimiter = delimiter;
     }
 
+    function listProblemIdeas(ideas) {
+      return ideas.filter(function (idea) {
+        if (idea instanceof ParsedObj) return false;
+        if (typeof idea === 'string' && /^\s+$/.test(idea)) return false;
+        if (Array.isArray(idea) && ideaItemsAreValid(idea)) return false;
+        return true;
+      });
+    }
+
+    function ideaItemsAreValid(items) {
+      return items.filter(function (item) {
+        if (typeof item === 'string') return false;
+        return false;
+      }).length === 0;
+    }
+
     module.exports = {
+      Ideas: Ideas,
       ParsedObj: ParsedObj
     };
   }, {}],
@@ -509,7 +569,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
      */
 
     function tagDocument(document, options) {
-      tagChunks(document, options.selectors);
+      tagChunks(document, options.root, options.selectors);
       tagIdeas(document, options.delimiter);
       numberEls(document, '.chunk', 'chunk');
       numberEls(document, '.idea', 'idea');
@@ -525,8 +585,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
      */
 
 
-    function tagChunks(document, selectors) {
-      var elements = typeof selectors === 'function' ? selectors(document) : document.querySelectorAll(selectors);
+    function tagChunks(document, root, selectors) {
+      var rootElement = root ? document.querySelector(root) : document;
+      var elements = typeof selectors === 'function' ? selectors(rootElement) : rootElement.querySelectorAll(selectors);
       Array.prototype.forEach.call(elements, function (el) {
         if (!(el.closest('.nb-skip') || el.classList.contains('nb-skip'))) {
           el.classList.add('chunk');
