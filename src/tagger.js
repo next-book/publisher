@@ -25,8 +25,8 @@ function tagDocument(document, options) {
 }
 
 /**
- * Mark DOM elements to be tagged, skips nodes
- * with class nb-skip (and their child nodes).
+ * Mark DOM elements to be tagged, skips nested nodes
+ * and nodes with class nb-skip (and their child nodes).
  *
  * @param      {Object}            document   DOM document
  * @param      {array|selectorFn}  selectors  Array of selectors or a {@link selectorFn} callback.
@@ -42,10 +42,23 @@ function tagChunks(document, root, selectors) {
       : rootElement.querySelectorAll(selectors);
 
   Array.prototype.forEach.call(elements, el => {
-    if (!(el.closest('.nb-skip') || el.classList.contains('nb-skip'))) {
+    if (
+      !(el.closest('.nb-skip') || el.classList.contains('nb-skip')) &&
+      !hasAncestorChunk(el, elements)
+    ) {
       el.classList.add('chunk');
     }
   });
+}
+
+function hasAncestorChunk(testedEl, elements) {
+  return (
+    [...elements].filter(el => {
+      if (el === testedEl) return false;
+      else if (el.contains(testedEl)) return true;
+      else return false;
+    }).length !== 0
+  );
 }
 
 /**
