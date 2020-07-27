@@ -69,6 +69,7 @@ function map(content, filenames, options, revision) {
   // add roles
   addIdentifier(documents, manifest.identifier);
   addDocRoles(documents, docMetadata);
+  addDefaultBodyClasses(documents);
 
   return { manifest, documents: exportDoms(doms, conf.output) };
 }
@@ -156,6 +157,12 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
       next,
       toc,
     };
+  });
+}
+
+function addDefaultBodyClasses(documents) {
+  documents.forEach((document, index) => {
+    document.querySelector('body').classList.add('nb-custom-style');
   });
 }
 
