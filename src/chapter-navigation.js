@@ -18,7 +18,7 @@ function addChapterInPageNavigation(documents) {
       appendLinkToNav(doc, endNav, anchor);
     });
 
-    const content = doc.querySelector('.content');
+    const content = doc.querySelector('main');
     content.insertBefore(beginNav, content.firstChild);
     content.appendChild(endNav);
   });
@@ -68,7 +68,7 @@ function addChapterStartAnchor(documents) {
     const anchor = doc.createElement('A');
     anchor.setAttribute('id', 'chapter-start');
 
-    doc.querySelector('.content').insertBefore(anchor, doc.querySelector('.content main'));
+    doc.querySelector('main').insertBefore(anchor, doc.querySelector('main').firstChild);
   });
 }
 
@@ -77,7 +77,7 @@ function addChapterEndAnchor(documents) {
     const anchor = doc.createElement('A');
     anchor.setAttribute('id', 'chapter-end');
 
-    doc.querySelector('.content').appendChild(anchor);
+    doc.querySelector('main').appendChild(anchor);
   });
 }
 
@@ -92,10 +92,10 @@ function addFullTextUrl(documents, url) {
     p.appendChild(anchor);
 
     if (doc.querySelector('body').getAttribute('class') === 'home') {
-      const content = doc.querySelector('.content');
+      const content = doc.querySelector('main');
       content.insertBefore(p, content.firstChild);
     } else {
-      doc.querySelector('.content').appendChild(p);
+      doc.querySelector('main').appendChild(p);
     }
   });
 }
