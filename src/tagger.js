@@ -106,7 +106,7 @@ function tagIdeas(document, delimiter) {
 function numberEls(document, selector, name) {
   Array.prototype.forEach.call(document.querySelectorAll(selector), (el, index) => {
     el.setAttribute(refNumAttr, index + 1);
-    if (!el.getAttribute('id')) el.setAttribute('id', `${name}${index + 1}`);
+    el.setAttribute('id', `${name}${index + 1}`);
   });
 }
 
