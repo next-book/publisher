@@ -35,6 +35,12 @@ function tagDocument(document, options) {
  */
 function tagChunks(document, root, selectors) {
   const rootElement = root ? document.querySelector(root) : document;
+  if (!rootElement) {
+    console.error(
+      `No root element found in document titled "${document.querySelector('title').innerHTML}".`
+    );
+    return;
+  }
 
   const elements =
     typeof selectors === 'function'

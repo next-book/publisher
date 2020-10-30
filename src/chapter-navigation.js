@@ -1,7 +1,9 @@
 const i18n = require('./i18n');
 
-function addChapterInPageNavigation(documents) {
+function addChapterInPageNavigation(documents, root) {
   documents.forEach(doc => {
+    if (!doc.querySelector(root)) return;
+
     const beginNav = createNavFragment(doc, 'begin-nav');
     const endNav = createNavFragment(doc, 'end-nav');
 
@@ -18,7 +20,7 @@ function addChapterInPageNavigation(documents) {
       appendLinkToNav(doc, endNav, anchor);
     });
 
-    const content = doc.querySelector('main');
+    const content = doc.querySelector(root);
     content.insertBefore(beginNav, content.firstChild);
     content.appendChild(endNav);
   });
@@ -63,26 +65,33 @@ function createLink(doc, rel, urlFragment, text, callback) {
   }
 }
 
-function addChapterStartAnchor(documents) {
+function addChapterStartAnchor(documents, root) {
   documents.forEach(doc => {
+    console.log(root);
+    if (!doc.querySelector(root)) return;
+
     const anchor = doc.createElement('A');
     anchor.setAttribute('id', 'chapter-start');
 
-    doc.querySelector('main').insertBefore(anchor, doc.querySelector('main').firstChild);
+    doc.querySelector(root).insertBefore(anchor, doc.querySelector(root).firstChild);
   });
 }
 
-function addChapterEndAnchor(documents) {
+function addChapterEndAnchor(documents, root) {
   documents.forEach(doc => {
+    if (!doc.querySelector(root)) return;
+
     const anchor = doc.createElement('A');
     anchor.setAttribute('id', 'chapter-end');
 
-    doc.querySelector('main').appendChild(anchor);
+    doc.querySelector(root).appendChild(anchor);
   });
 }
 
-function addFullTextUrl(documents, url) {
+function addFullTextUrl(documents, url, root) {
   documents.forEach(doc => {
+    if (!doc.querySelector(root)) return;
+
     const p = doc.createElement('P');
     p.setAttribute('id', 'full-text-link');
 
@@ -92,10 +101,10 @@ function addFullTextUrl(documents, url) {
     p.appendChild(anchor);
 
     if (doc.querySelector('body').getAttribute('class') === 'home') {
-      const content = doc.querySelector('main');
+      const content = doc.querySelector(root);
       content.insertBefore(p, content.firstChild);
     } else {
-      doc.querySelector('main').appendChild(p);
+      doc.querySelector(root).appendChild(p);
     }
   });
 }

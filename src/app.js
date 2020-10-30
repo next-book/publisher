@@ -54,7 +54,7 @@ function map(content, filenames, options, revision) {
   const manifest = composeManifest(conf.meta, docMetadata, sumPublication(docMetadata), revision);
 
   //preview
-  if (options.fullTextUrl) chapterNavigation.addFullTextUrl(documents, options.fullTextUrl);
+  if (conf.fullTextUrl) chapterNavigation.addFullTextUrl(documents, conf.fullTextUrl, conf.root);
 
   // set language and add code to html
   i18n.changeLanguage(conf.languageCode);
@@ -62,9 +62,9 @@ function map(content, filenames, options, revision) {
 
   // add nav
   addMetaNavigation(documents, docMetadata);
-  chapterNavigation.addChapterStartAnchor(documents);
-  chapterNavigation.addChapterEndAnchor(documents);
-  chapterNavigation.addChapterInPageNavigation(documents);
+  chapterNavigation.addChapterStartAnchor(documents, conf.root);
+  chapterNavigation.addChapterEndAnchor(documents, conf.root);
+  chapterNavigation.addChapterInPageNavigation(documents, conf.root);
 
   // add roles
   addIdentifier(documents, manifest.identifier);
