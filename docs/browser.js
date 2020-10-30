@@ -119,7 +119,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       output: 'html',
       delimiter: '\n',
       restoreDelimiter: false,
-      root: '.content',
+      root: 'main',
       selectors: ['p', 'li', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'dl']
     };
     /**
@@ -575,8 +575,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       numberEls(document, '.idea', 'idea');
     }
     /**
-     * Mark DOM elements to be tagged, skips nodes
-     * with class nb-skip (and their child nodes).
+     * Mark DOM elements to be tagged, skips nested nodes
+     * and nodes with class nb-skip (and their child nodes).
      *
      * @param      {Object}            document   DOM document
      * @param      {array|selectorFn}  selectors  Array of selectors or a {@link selectorFn} callback.
@@ -587,12 +587,24 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
     function tagChunks(document, root, selectors) {
       var rootElement = root ? document.querySelector(root) : document;
+
+      if (!rootElement) {
+        console.error("No root element found in document titled \"".concat(document.querySelector('title').innerHTML, "\"."));
+        return;
+      }
+
       var elements = typeof selectors === 'function' ? selectors(rootElement) : rootElement.querySelectorAll(selectors);
       Array.prototype.forEach.call(elements, function (el) {
-        if (!(el.closest('.nb-skip') || el.classList.contains('nb-skip'))) {
+        if (!(el.closest('.nb-skip') || el.classList.contains('nb-skip')) && !hasAncestorChunk(el, elements)) {
           el.classList.add('chunk');
         }
       });
+    }
+
+    function hasAncestorChunk(testedEl, elements) {
+      return _toConsumableArray(elements).filter(function (el) {
+        if (el === testedEl) return false;else if (el.contains(testedEl)) return true;else return false;
+      }).length !== 0;
     }
     /**
      * Callback that marks elements as chunks of ideas. Those are then used for idea mapping.
@@ -642,7 +654,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     function numberEls(document, selector, name) {
       Array.prototype.forEach.call(document.querySelectorAll(selector), function (el, index) {
         el.setAttribute(refNumAttr, index + 1);
-        if (!el.getAttribute('id')) el.setAttribute('id', "".concat(name).concat(index + 1));
+        el.setAttribute('id', "".concat(name).concat(index + 1));
       });
     }
 
