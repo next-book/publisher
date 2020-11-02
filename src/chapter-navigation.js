@@ -67,7 +67,6 @@ function createLink(doc, rel, urlFragment, text, callback) {
 
 function addChapterStartAnchor(documents, root) {
   documents.forEach(doc => {
-    console.log(root);
     if (!doc.querySelector(root)) return;
 
     const anchor = doc.createElement('A');

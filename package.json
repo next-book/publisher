@@ -49,7 +49,7 @@
     "slug": "^0.9.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.5",
+    "@babel/cli": "^7.12.1",
     "@babel/core": "^7.7.5",
     "@babel/preset-env": "^7.7.6",
     "browserify": "^16.5.0",
