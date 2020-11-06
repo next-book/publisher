@@ -92,3 +92,9 @@ Clone repository and install devDependencies. Build a complete project with `npm
 [example]: http://next-book.github.io/nb-mapper/
 [api]: http://next-book.github.io/nb-mapper/api
 [options]: http://next-book.github.io/nb-mapper/api/#options
+
+## License
+
+nb-mapper &copy; 2016–2020 next-book
+
+You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.
