@@ -111,8 +111,19 @@ function tagIdeas(document, delimiter) {
  */
 function numberEls(document, selector, name) {
   Array.prototype.forEach.call(document.querySelectorAll(selector), (el, index) => {
-    el.setAttribute(refNumAttr, index + 1);
-    el.setAttribute('id', `${name}${index + 1}`);
+    const nonZeroId = index + 1;
+    el.setAttribute(refNumAttr, nonZeroId);
+
+    if (el.getAttribute('id')) {
+      const wrapper = document.createElement('SPAN');
+      wrapper.setAttribute('id', `${name}${nonZeroId}`);
+
+      [...el.childNodes].forEach(node => {
+        wrapper.appendChild(node);
+      });
+
+      el.appendChild(wrapper);
+    } else el.setAttribute('id', `${name}${nonZeroId}`);
   });
 }
 
