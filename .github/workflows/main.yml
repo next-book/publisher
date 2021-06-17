@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 14
       - run: npm install
-      - run: npm run build
+      - run: npm run bundle && npm run transpile
       - uses: JS-DevTools/npm-publish@v1
         with:
           access: public
