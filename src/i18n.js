@@ -1,7 +1,7 @@
 const i18n = require('i18next');
 
-const en = require('nb-base/src/js/translation/en.json');
-const cs = require('nb-base/src/js/translation/cs.json');
+const en = require('@next-book/interface/src/js/translation/en.json');
+const cs = require('@next-book/interface/src/js/translation/cs.json');
 
 i18n.init({
   fallbackLng: 'en',
