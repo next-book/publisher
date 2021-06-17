@@ -1,6 +1,6 @@
 # Next-book publishing tool
 
-Nb-mapper is a tool for mapping HTML files for use with next-book tools. See [an example][example], [API documentations][api] or a [example book created with publisher][fc], that builds functionalityon top of its markup: displaying and remembering position, tracing reader's journey through a book etc.
+@next-book/publisher is a tool for mapping HTML files for use with next-book tools. See [an example][example], [API documentations][api] or a [example book created with publisher][fc], that builds functionalityon top of its markup: displaying and remembering position, tracing reader's journey through a book etc.
 
 ## Use with node.js
 
