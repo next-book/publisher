@@ -33,7 +33,7 @@ toc:
   - ParsedObj
   - name: A note about these docs
     description: |
-      See [project's README](http://github.com/next-book/nb-mapper/).
+      See [project's README](http://github.com/next-book/publisher/).
 
       With current versions of JSDoc, ESDoc and documentation.js it is hard to work  
       with ES6 modules that do not use classes internally. Any tips for tools that do not require
