@@ -1,6 +1,6 @@
 {
   "name": "@next-book/publisher",
-  "version": "0.2.18",
+  "version": "0.2.19",
   "description": "Publish web books with next-book",
   "main": "src/app.js",
   "bin": {
@@ -31,7 +31,6 @@
   },
   "homepage": "https://github.com/next-book/publisher#readme",
   "dependencies": {
-    "@next-book/interface": "^0.1.21",
     "acorn": "^7.1.1",
     "cli-progress": "^2.1.1",
     "commander": "^2.20.3",
@@ -44,6 +43,9 @@
     "recursive-readdir": "^2.2.2",
     "rimraf": "^2.7.1",
     "slug": "^0.9.4"
+  },
+  "peerDependencies": {
+    "@next-book/interface": "^0.1.21"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
