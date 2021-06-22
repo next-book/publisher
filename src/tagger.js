@@ -4,6 +4,10 @@
  * @ignore
  */
 
+const IDEA_NAME = 'idea';
+const CHUNK_NAME = 'chunk';
+const SKIP_NAME = 'nb-skip';
+
 const { produce } = require('./producer');
 const { parse } = require('./parser');
 
@@ -20,13 +24,13 @@ function tagDocument(document, options) {
   tagChunks(document, options.root, options.selectors);
   tagIdeas(document, options.delimiter);
 
-  numberEls(document, '.chunk', 'chunk');
-  numberEls(document, '.idea', 'idea');
+  numberEls(document, `.${CHUNK_NAME}`, CHUNK_NAME);
+  numberEls(document, `.${IDEA_NAME}`, IDEA_NAME);
 }
 
 /**
  * Mark DOM elements to be tagged, skips nested nodes
- * and nodes with class nb-skip (and their child nodes).
+ * and nodes with SKIP_NAME class (and their child nodes).
  *
  * @param      {Object}            document   DOM document
  * @param      {array|selectorFn}  selectors  Array of selectors or a {@link selectorFn} callback.
@@ -49,10 +53,10 @@ function tagChunks(document, root, selectors) {
 
   Array.prototype.forEach.call(elements, el => {
     if (
-      !(el.closest('.nb-skip') || el.classList.contains('nb-skip')) &&
+      !(el.closest(`.${SKIP_NAME}`) || el.classList.contains(SKIP_NAME)) &&
       !hasAncestorChunk(el, elements)
     ) {
-      el.classList.add('chunk');
+      el.classList.add(CHUNK_NAME);
     }
   });
 }
@@ -84,7 +88,7 @@ function hasAncestorChunk(testedEl, elements) {
  * @private
  */
 function tagIdeas(document, delimiter) {
-  document.querySelectorAll('.chunk').forEach(chunk => {
+  document.querySelectorAll(`.${CHUNK_NAME}`).forEach(chunk => {
     const tagged = produce(document, parse(chunk, delimiter));
     chunk.parentNode.replaceChild(tagged, chunk);
   });
@@ -114,16 +118,18 @@ function numberEls(document, selector, name) {
     const nonZeroId = index + 1;
     el.setAttribute(refNumAttr, nonZeroId);
 
-    if (el.getAttribute('id')) {
-      const wrapper = document.createElement('SPAN');
-      wrapper.setAttribute('id', `${name}${nonZeroId}`);
+    if (name === IDEA_NAME) {
+      if (el.getAttribute('id')) {
+        const wrapper = document.createElement('SPAN');
+        wrapper.setAttribute('id', `${name}${nonZeroId}`);
 
-      [...el.childNodes].forEach(node => {
-        wrapper.appendChild(node);
-      });
+        [...el.childNodes].forEach(node => {
+          wrapper.appendChild(node);
+        });
 
-      el.appendChild(wrapper);
-    } else el.setAttribute('id', `${name}${nonZeroId}`);
+        el.appendChild(wrapper);
+      } else el.setAttribute('id', `${name}${nonZeroId}`);
+    }
   });
 }
 
