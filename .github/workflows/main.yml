@@ -11,12 +11,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+
       - uses: actions/setup-node@v1
         with:
           node-version: 14
+
       - run: npm install
+
       - run: npm run bundle && npm run transpile
+
       - uses: JS-DevTools/npm-publish@v1
         with:
           access: public
           token: ${{ secrets.NPM_TOKEN }}
+
+      - name: Build docs
+        run: npm run updateExample && npm run updateDocs
+
+      - name: Publish docs 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: docs
+          folder: docs
