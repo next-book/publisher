@@ -1,6 +1,6 @@
 {
   "name": "@next-book/publisher",
-  "version": "0.2.19",
+  "version": "0.2.20",
   "description": "Publish web books with next-book",
   "main": "src/app.js",
   "bin": {
@@ -36,7 +36,7 @@
     "commander": "^2.20.3",
     "express": "^4.17.1",
     "i18next": "^19.3.2",
-    "jsdom": "^11.12.0",
+    "jsdom": "^16.6.0",
     "object-hash": "^1.3.1",
     "pretty": "^2.0.0",
     "recursive-copy": "^2.0.10",
