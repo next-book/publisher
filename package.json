@@ -1,6 +1,6 @@
 {
   "name": "@next-book/publisher",
-  "version": "0.2.20",
+  "version": "0.2.21",
   "description": "Publish web books with next-book",
   "main": "src/app.js",
   "bin": {
@@ -10,7 +10,7 @@
     "bundle": "browserify src/browser.js -o dist/browser.js",
     "transpile": "babel dist/browser.js --out-file dist/browser.js",
     "updateExample": "cp dist/browser.js docs/browser.js",
-    "updateDocs": "documentation build src/**.js -f html -o ./docs/api --config documentation.yml --github",
+    "updateDocs": "npx documentation build src/**.js -f html -o ./docs/api --config documentation.yml --github",
     "build": "npm run bundle && npm run transpile && npm run updateExample && npm run updateDocs",
     "build:watch": "onchange 'src/*.js' -v -- npm run build",
     "test": "jest"
