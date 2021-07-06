@@ -96,7 +96,8 @@ function composeManifest(meta, documents, totals, revision) {
 
 const DocRole = {
   Chapter: 'chapter',
-  Index: 'index',
+  Cover: 'cover',
+  Break: 'break',
   Colophon: 'colophon',
   Other: 'other',
 };
@@ -131,15 +132,21 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
     const { words, chars, ideas } = lengths[index];
     const toc = getToc(document);
 
-    const role = chapters.includes(file)
-      ? DocRole.Chapter
-      : file === 'index.html'
-      ? DocRole.Index
-      : file === 'colophon.html'
-      ? DocRole.Colophon
-      : DocRole.Other;
+    const metaRole = document.querySelector('meta[name="nb-role"]');
+
+    if (metaRole) console.log('XXXX', metaRole.getAttribute('content'));
+    const role =
+      metaRole && Object.values(DocRole).includes(metaRole.getAttribute('content'))
+        ? metaRole.getAttribute('content')
+        : chapters.includes(file)
+        ? DocRole.Chapter
+        : file === 'index.html'
+        ? DocRole.Cover
+        : file === 'colophon.html'
+        ? DocRole.Colophon
+        : DocRole.Other;
     const pos = chapters.indexOf(file);
-    const order = role === DocRole.Chapter ? pos : null;
+    const order = role === DocRole.Chapter || role === DocRole.Break ? pos : null;
 
     const prev = pos !== 0 ? chapters[pos - 1] : null;
     const next =
@@ -171,7 +178,7 @@ function addDocRoles(documents, metadata) {
     const role = metadata[index].role;
 
     const el = document.createElement('META');
-    el.setAttribute('name', 'role');
+    el.setAttribute('name', 'nb-role');
     el.setAttribute('content', role);
     document.querySelector('head').appendChild(el);
 
@@ -191,7 +198,7 @@ function addLanguageCode(documents, code) {
 function addIdentifier(documents, identifier) {
   documents.forEach(document => {
     const el = document.createElement('META');
-    el.setAttribute('name', 'identifier');
+    el.setAttribute('name', 'nb-identifier');
     el.setAttribute('content', identifier);
     document.querySelector('head').appendChild(el);
   });
@@ -224,7 +231,7 @@ function addMetaNavigation(documents, metadata) {
         return ['prev', 'next'].includes(name)
           ? { tagName: 'link', rel: name, href: `./${value}` }
           : name === 'order'
-          ? { tagName: 'meta', name, content: value }
+          ? { tagName: 'meta', name: `nb-${name}`, content: value }
           : null;
       });
 
