@@ -134,7 +134,6 @@ function gatherMetadata(documents, filenames, chapters, lengths) {
 
     const metaRole = document.querySelector('meta[name="nb-role"]');
 
-    if (metaRole) console.log('XXXX', metaRole.getAttribute('content'));
     const role =
       metaRole && Object.values(DocRole).includes(metaRole.getAttribute('content'))
         ? metaRole.getAttribute('content')
