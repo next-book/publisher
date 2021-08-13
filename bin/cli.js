@@ -2,10 +2,9 @@
 const cmd = require('commander');
 const express = require('express');
 const path = require('path');
-
-const app = require('../src/app.js');
-const data = require('../src/data-helper.js');
-const revision = require('../src/revision.js');
+const app = require('../dist/app.js');
+const data = require('../dist/data-helper.js');
+const revision = require('../dist/revision.js');
 
 cmd
   .option('-v, --verbose', 'More verbose output')

@@ -1,7 +1,7 @@
-const fs = require('fs');
-const glob = require('recursive-readdir');
+import fs from 'fs';
+import glob from 'recursive-readdir';
 
-function build(dir, revision) {
+export function build(dir, revision) {
   const code = fs.readFileSync(`${__dirname}/code.tpl.js`, 'utf8');
 
   return glob(dir).then(paths => {
@@ -17,7 +17,3 @@ function listAssets(dir, paths) {
 function shiftRelative(dir, assets) {
   return assets.map(path => path.replace(new RegExp(`^\\.?\\/?${dir}`), '.'));
 }
-
-module.exports = {
-  build,
-};

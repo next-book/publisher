@@ -1,6 +1,6 @@
-const i18n = require('./i18n');
+import i18n from "./i18n";
 
-function addChapterInPageNavigation(documents, root) {
+export function addChapterInPageNavigation(documents, root) {
   documents.forEach(doc => {
     if (!doc.querySelector(root)) return;
 
@@ -65,7 +65,7 @@ function createLink(doc, rel, urlFragment, text, callback) {
   }
 }
 
-function addChapterStartAnchor(documents, root) {
+export function addChapterStartAnchor(documents, root) {
   documents.forEach(doc => {
     if (!doc.querySelector(root)) return;
 
@@ -76,7 +76,7 @@ function addChapterStartAnchor(documents, root) {
   });
 }
 
-function addChapterEndAnchor(documents, root) {
+export function addChapterEndAnchor(documents, root) {
   documents.forEach(doc => {
     if (!doc.querySelector(root)) return;
 
@@ -87,7 +87,7 @@ function addChapterEndAnchor(documents, root) {
   });
 }
 
-function addFullTextUrl(documents, url, root) {
+export function addFullTextUrl(documents, url, root) {
   documents.forEach(doc => {
     if (!doc.querySelector(root)) return;
 
@@ -107,10 +107,3 @@ function addFullTextUrl(documents, url, root) {
     }
   });
 }
-
-module.exports = {
-  addChapterInPageNavigation,
-  addChapterStartAnchor,
-  addChapterEndAnchor,
-  addFullTextUrl,
-};

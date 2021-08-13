@@ -1,9 +1,5 @@
-/**
- * @module
- * @ignore
- */
+import { ParsedObj } from "./structures";
 
-const { ParsedObj } = require('./structures');
 
 /**
  * Produces ideas from a parsedObj
@@ -12,7 +8,7 @@ const { ParsedObj } = require('./structures');
  * @param      {ParsedObj}        parsedObj         A parsed object
  * @return     {Node}             HTML node
  */
-function produce(document, parsedObj) {
+export default function produce(document, parsedObj) {
   const fragment = document.createDocumentFragment();
   const { node, ideas, delimiter } = parsedObj;
 
@@ -105,5 +101,3 @@ function emptyNode(node) {
 
   return node;
 }
-
-module.exports = { produce };

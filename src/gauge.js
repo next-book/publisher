@@ -1,8 +1,3 @@
-/**
- * @module
- * @ignore
- */
-
 const attrNames = {
   chars: 'data-nb-chars',
   words: 'data-nb-words',
@@ -39,7 +34,7 @@ function gaugeContent(document, attr, gaugeFn) {
  * @param      {Object}  document  DOM document
  * @return     {void}  Modifies DOM document
  */
-function gaugeDocument(document) {
+export function gaugeDocument(document) {
   gaugeContent(document, attrNames.words, countWords);
   gaugeContent(document, attrNames.chars, countChars);
 }
@@ -51,15 +46,10 @@ function gaugeDocument(document) {
  * @param      {Object[]}  documents  DOM documents
  * @return     {void}  Modifies DOM documents
  */
-function gaugePublication(documents) {
+export function gaugePublication(documents) {
   return documents.map(document => ({
     words: parseInt(document.body.getAttribute(attrNames.words), 10),
     chars: parseInt(document.body.getAttribute(attrNames.chars), 10),
     ideas: document.querySelectorAll('.idea').length,
   }));
 }
-
-module.exports = {
-  gaugeDocument,
-  gaugePublication,
-};

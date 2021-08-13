@@ -1,10 +1,9 @@
-const fs = require('fs');
-const path = require('path');
 
-const rimraf = require('rimraf');
-const copy = require('recursive-copy');
-
-const sw = require('./service-worker/builder.js');
+import fs from 'fs';
+import path from 'path';
+import rimraf from 'rimraf';
+import copy from 'recursive-copy';
+import * as sw from './service-worker/builder';
 
 function prepContent(srcDir, filter, previewRemovals) {
   console.log(`Looking up files in "${srcDir}" (using filename filter \\${filter}\\).`);
@@ -91,11 +90,11 @@ function buildServiceWorker(dir, revision) {
   });
 }
 
-module.exports = {
+export {
   prepContent,
   prepConfig,
   prepPreviewConfig,
   writeOutput,
   copyFolders,
   buildServiceWorker,
-};
+}

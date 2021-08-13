@@ -1,10 +1,10 @@
 /**
- * Toc module: generates a TOC by searching for headers in documents
- * @module
- * @ignore
+ * Generates a TOC by searching for headers in documents.
+ * 
+ * @param doc - todo: 
+ * @returns 
  */
-
-function getToc(doc) {
+export default function getToc(doc) {
   const headers = [...doc.querySelectorAll('h1.chunk, h2.chunk, h3.chunk, h4.chunk, h5.chunk, h6.chunk')];
   return headers
     .map(fetchAttributes)
@@ -50,5 +50,3 @@ function isOneLevelLower(header, currentRoot) {
 function isTheNextHeaderOnSameLevel(header, currentRoot) {
   return header.index > currentRoot.index && currentRoot.level === header.level;
 }
-
-module.exports = { getToc };

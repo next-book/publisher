@@ -1,23 +1,18 @@
-/**
- * @module
- * @ignore
- */
+import { Ideas, ParsedObj } from './structures';
 
-const { Ideas, ParsedObj } = require('./structures');
-
-function Separator() {}
+class Separator {}
 
 /**
  * Returns ParsedObj which contains original node and an array of arrays in which every array
  * represents one idea or ParsedObj. Ideas are delimited with a delimiter that is searched for in
  * text nodes.
  *
- * @param      {Node}                       node       DOM node
+ * @param      {Node|HTMLElement|null}                       node       DOM node
  * @param      {string|RegExp|tokenizerFn}  delimiter  The delimiter
  * @public
  * @return     {ParsedObj}                  An instance of {@link ParsedObj}
  */
-function parse(node, delimiter) {
+export default function parse(node, delimiter) {
   const pieces = [];
 
   //first create a flat list of strings, HTML Elements, ParsedObjs, and Separators
@@ -50,5 +45,3 @@ function parse(node, delimiter) {
 function nodeBreaksInside(node, delimiter) {
   return new RegExp(delimiter.replace('\\', '\\\\')).test(node.textContent);
 }
-
-module.exports = { parse };

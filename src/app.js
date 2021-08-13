@@ -1,20 +1,13 @@
-/**
- * App module used in node.js env.
- * @module
- * @ignore
- */
-const Jsdom = require('jsdom').JSDOM;
-const Progress = require('cli-progress');
-const pretty = require('pretty');
-const slug = require('slug');
-const hash = require('object-hash');
-
-const tagger = require('./tagger');
-const gauge = require('./gauge');
-const { getToc } = require('./toc');
-const chapterNavigation = require('./chapter-navigation');
-const config = require('./config');
-const i18n = require('./i18n');
+import { JSDOM as Jsdom } from 'jsdom';
+import Progress from 'cli-progress';
+import pretty from 'pretty';
+import slug from 'slug';
+import tagDocument from './tagger';
+import i18n from './i18n';
+import loadConfig from './config';
+import { gaugeDocument, gaugePublication } from './gauge';
+import getToc from './toc';
+import * as chapterNav from './chapter-navigation';
 
 /**
  * Maps HTML for *next-book* use.
@@ -27,7 +20,7 @@ const i18n = require('./i18n');
  * @public
  */
 function map(content, filenames, options, revision) {
-  const conf = config.load(options);
+  const conf = loadConfig(options); // ts: done
   console.log(`\nUsing mapper config:\n${dumpArray(conf)}\n`);
 
   const doms = content.map(doc => getJsdomObj(doc));
@@ -40,8 +33,8 @@ function map(content, filenames, options, revision) {
   bar.start(documents.length, 0);
 
   documents.forEach((document, index) => {
-    tagger.tagDocument(document, conf);
-    gauge.gaugeDocument(document);
+    tagDocument(document, conf); // ts: in progress
+    gaugeDocument(document); // ts: todo
 
     bar.update(index + 1);
   });
@@ -49,12 +42,12 @@ function map(content, filenames, options, revision) {
   bar.stop();
 
   // gauge
-  const lengths = gauge.gaugePublication(documents);
+  const lengths = gaugePublication(documents);
   const docMetadata = gatherMetadata(documents, filenames, chapters, lengths);
   const manifest = composeManifest(conf.meta, docMetadata, sumPublication(docMetadata), revision);
 
   //preview
-  if (conf.fullTextUrl) chapterNavigation.addFullTextUrl(documents, conf.fullTextUrl, conf.root);
+  if (conf.fullTextUrl) chapterNav.addFullTextUrl(documents, conf.fullTextUrl, conf.root);
 
   // set language and add code to html
   i18n.changeLanguage(conf.languageCode);
@@ -62,9 +55,9 @@ function map(content, filenames, options, revision) {
 
   // add nav
   addMetaNavigation(documents, docMetadata);
-  chapterNavigation.addChapterStartAnchor(documents, conf.root);
-  chapterNavigation.addChapterEndAnchor(documents, conf.root);
-  chapterNavigation.addChapterInPageNavigation(documents, conf.root);
+  chapterNav.addChapterStartAnchor(documents, conf.root);
+  chapterNav.addChapterEndAnchor(documents, conf.root);
+  chapterNav.addChapterInPageNavigation(documents, conf.root);
 
   // add roles
   addIdentifier(documents, manifest.identifier);
@@ -297,4 +290,4 @@ function dumpArray(arr) {
     .join('\n');
 }
 
-module.exports = { map, addMetaNavigation };
+export { map, addMetaNavigation };
