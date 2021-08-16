@@ -1,4 +1,6 @@
 import { Delimiter } from './config';
+
+// What counts as whitespace - varies by spec: https://gist.github.com/dd8/8a8149c2ec7093dcf8caae6b9645ac0b
 type WhiteSpaceCharacter = '\0x09' | '\0x0a' | '\0x0b' | '\0x0c' | '\0x0d' |' \0x20';
 type IdeasItemPiece = ParsedObj|string|Element;
 type IdeasItem =  WhiteSpaceCharacter | '' | IdeasItemPiece[];
