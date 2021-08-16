@@ -16,7 +16,6 @@ export interface Config {
   languageCode: string;
   output: 'jsdom'|'html';
   delimiter: Delimiter;
-  restoreDelimiter: boolean;
   root: keyof HTMLElementTagNameMap | string;
   selectors: Array<keyof HTMLElementTagNameMap> | SelectorFn;
   /** Book metadata, which may be later used e.g. for generating SEO
@@ -38,7 +37,6 @@ const defaults: Config = {
   languageCode: 'en',
   output: 'html',
   delimiter: '\n',
-  restoreDelimiter: false,
   root: 'main',
   selectors: ['p', 'li', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'dl']
 };
