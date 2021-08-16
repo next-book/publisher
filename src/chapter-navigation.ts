@@ -1,5 +1,7 @@
 import i18n from "./i18n";
 
+type DOMStringLike = string; 
+
 /**
  * Adds navigation between chapters (prev chapter link at the beggining and 
  * next chapter link at the end) to a provided list of documents (chapters).
@@ -7,7 +9,7 @@ import i18n from "./i18n";
  * @param chapters - Array of Documents each representing a chapter 
  * @param root - DOMString for selecting content root 
  */
-export function addChapterInPageNavigation(chapters: Document[], root: string): void {
+export function addChapterInPageNavigation(chapters: Document[], root: DOMStringLike): void {
   chapters.forEach(doc => {
     const content = doc.querySelector(root);
     if (!content) return;
@@ -74,7 +76,7 @@ function createLink(doc: Document, rel: string, urlFragment: string, text: strin
   }
 }
 
-export function addChapterStartAnchor(documents: Document[], root: string): void {
+export function addChapterStartAnchor(documents: Document[], root: DOMStringLike): void {
   documents.forEach(doc => {
     const content = doc.querySelector(root);
     if (!content) return;
@@ -86,7 +88,7 @@ export function addChapterStartAnchor(documents: Document[], root: string): void
   });
 }
 
-export function addChapterEndAnchor(documents: Document[], root: string): void {
+export function addChapterEndAnchor(documents: Document[], root: DOMStringLike): void {
   documents.forEach(doc => {
     const content = doc.querySelector(root);
     if (!content) return;
@@ -98,7 +100,7 @@ export function addChapterEndAnchor(documents: Document[], root: string): void {
   });
 }
 
-export function addFullTextUrl(documents: Document[], url: string, root: string): void {
+export function addFullTextUrl(documents: Document[], url: string, root: DOMStringLike): void {
   documents.forEach(doc => {
     const content = doc.querySelector(root);
     if (!content) return;
