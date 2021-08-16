@@ -1,8 +1,8 @@
 import { spawnSync } from 'child_process';
 
-let revision;
+let revision: string | null;
 
-function getGitRev() {
+function getGitRev(): string | null {
   try {
     const spawn = spawnSync('git', ['rev-parse', '--short', 'HEAD']);
 
@@ -23,11 +23,10 @@ function getGitRev() {
   }
 }
 
-function get() {
+export function getRevision(): string | null {
   if (revision) return revision;
 
   revision = getGitRev();
+  // todo: parse, dont validate
   return revision;
 }
-
-module.exports = { get };

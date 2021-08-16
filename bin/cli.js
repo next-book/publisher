@@ -20,7 +20,7 @@ const config = cmd.preview
   ? data.prepPreviewConfig(cmd.src, cmd.preview)
   : data.prepConfig(cmd.src);
 
-const revisionIdentifier = cmd.preview ? `${revision.get()}-preview` : revision.get();
+const revisionIdentifier = cmd.preview ? `${revision.getRevision()}-preview` : revision.getRevision();
 const { content, filenames } = data.prepContent(cmd.src, cmd.filter, config.removeChapters);
 const { documents, manifest } = app.map(content, filenames, config, revisionIdentifier);
 
