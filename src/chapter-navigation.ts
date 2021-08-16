@@ -48,14 +48,12 @@ function createNavFragment(doc: Document, className: string): DocumentFragment {
 function appendLinkToNav(doc: Document, navFragment: DocumentFragment, link: Node) {
   const nav = navFragment.firstChild;
   if (!nav) return;
-
+  const navFirstChild =  <HTMLElement| null>nav.firstChild;
   const li = doc.createElement('LI');
   li.appendChild(link);
 
-  if (nav.firstChild 
-    && nav.firstChild instanceof HTMLUListElement 
-    && nav.firstChild.tagName === 'UL') {
-    nav.firstChild.appendChild(li);
+  if (navFirstChild && navFirstChild.tagName === 'UL') {
+    navFirstChild.appendChild(li);
   } else {
     const ul = doc.createElement('UL');
     ul.appendChild(li);
@@ -64,9 +62,9 @@ function appendLinkToNav(doc: Document, navFragment: DocumentFragment, link: Nod
 }
 
 function createLink(doc: Document, rel: string, urlFragment: string, text: string, callback: (anchor: Node) => void) {
-  const el = doc.querySelector(`link[rel="${rel}"]`);
+  const el: HTMLAnchorElement | null = doc.querySelector(`link[rel="${rel}"]`);
 
-  if (el && el instanceof HTMLAnchorElement && el.href) {
+  if (el && el.href) {
     const a = doc.createElement('A');
     a.setAttribute('href', `${el.getAttribute('href')}#${urlFragment}`);
     a.setAttribute('rel', rel);
