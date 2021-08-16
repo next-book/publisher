@@ -1,5 +1,6 @@
-/* global self, caches, fetch */
 /* eslint-disable no-restricted-globals */
+
+/* global self, caches, fetch */
 
 const CACHE = 'cache-%revision%';
 

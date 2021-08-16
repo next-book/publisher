@@ -1,7 +1,9 @@
 import fs from 'fs';
 import glob from 'recursive-readdir';
 
-export function build(dir, revision) {
+type PathLike = string;
+
+export async function build(dir: PathLike, revision: string): Promise<string> {
   const code = fs.readFileSync(`${__dirname}/code.tpl.js`, 'utf8');
 
   return glob(dir).then(paths => {
@@ -10,10 +12,10 @@ export function build(dir, revision) {
   });
 }
 
-function listAssets(dir, paths) {
+function listAssets(dir: PathLike, paths: string[]) {
   return ['./', ...shiftRelative(dir, paths)];
 }
 
-function shiftRelative(dir, assets) {
+function shiftRelative(dir: PathLike, assets: string[]) {
   return assets.map(path => path.replace(new RegExp(`^\\.?\\/?${dir}`), '.'));
 }
