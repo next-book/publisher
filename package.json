@@ -13,7 +13,7 @@
     "transpile": "babel dist/browser.js --out-file dist/browser.js",
     "updateExample": "cp dist/browser.js docs/browser.js",
     "updateDocs": "typedoc --out docs/api src/**.ts",
-    "build": "tsc && npm run bundle && npm run transpile && npm run updateExample",
+    "build": "tsc && npm run bundle && npm run transpile && npm run updateExample && npm run updateDocs",
     "build:watch": "onchange 'src/*.js' -v -- npm run build",
     "test": "jest"
   },
