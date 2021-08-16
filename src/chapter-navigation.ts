@@ -1,8 +1,16 @@
 import i18n from "./i18n";
 
-export function addChapterInPageNavigation(documents, root) {
-  documents.forEach(doc => {
-    if (!doc.querySelector(root)) return;
+/**
+ * Adds navigation between chapters (prev chapter link at the beggining and 
+ * next chapter link at the end) to a provided list of documents (chapters).
+ * 
+ * @param chapters - Array of Documents each representing a chapter 
+ * @param root - DOMString for selecting content root 
+ */
+export function addChapterInPageNavigation(chapters: Document[], root: string): void {
+  chapters.forEach(doc => {
+    const content = doc.querySelector(root);
+    if (!content) return;
 
     const beginNav = createNavFragment(doc, 'begin-nav');
     const endNav = createNavFragment(doc, 'end-nav');
@@ -20,13 +28,12 @@ export function addChapterInPageNavigation(documents, root) {
       appendLinkToNav(doc, endNav, anchor);
     });
 
-    const content = doc.querySelector(root);
     content.insertBefore(beginNav, content.firstChild);
     content.appendChild(endNav);
   });
 }
 
-function createNavFragment(doc, className) {
+function createNavFragment(doc: Document, className: string): DocumentFragment {
   const nav = doc.createElement('NAV');
   nav.classList.add(className);
 
@@ -36,26 +43,28 @@ function createNavFragment(doc, className) {
   return fragment;
 }
 
-function appendLinkToNav(doc, navFragment, link) {
+function appendLinkToNav(doc: Document, navFragment: DocumentFragment, link: Node) {
   const nav = navFragment.firstChild;
+  if (!nav) return;
 
   const li = doc.createElement('LI');
   li.appendChild(link);
 
-  if (nav.firstChild && nav.firstChild.tagName === 'UL') {
+  if (nav.firstChild 
+    && nav.firstChild instanceof HTMLUListElement 
+    && nav.firstChild.tagName === 'UL') {
     nav.firstChild.appendChild(li);
   } else {
     const ul = doc.createElement('UL');
     ul.appendChild(li);
-
     nav.appendChild(ul);
   }
 }
 
-function createLink(doc, rel, urlFragment, text, callback) {
+function createLink(doc: Document, rel: string, urlFragment: string, text: string, callback: (anchor: Node) => void) {
   const el = doc.querySelector(`link[rel="${rel}"]`);
 
-  if (el && el.href) {
+  if (el && el instanceof HTMLAnchorElement && el.href) {
     const a = doc.createElement('A');
     a.setAttribute('href', `${el.getAttribute('href')}#${urlFragment}`);
     a.setAttribute('rel', rel);
@@ -65,45 +74,47 @@ function createLink(doc, rel, urlFragment, text, callback) {
   }
 }
 
-export function addChapterStartAnchor(documents, root) {
+export function addChapterStartAnchor(documents: Document[], root: string): void {
   documents.forEach(doc => {
-    if (!doc.querySelector(root)) return;
+    const content = doc.querySelector(root);
+    if (!content) return;
 
     const anchor = doc.createElement('A');
     anchor.setAttribute('id', 'chapter-start');
 
-    doc.querySelector(root).insertBefore(anchor, doc.querySelector(root).firstChild);
+    doc.querySelector(root)?.insertBefore(anchor, content.firstChild);
   });
 }
 
-export function addChapterEndAnchor(documents, root) {
+export function addChapterEndAnchor(documents: Document[], root: string): void {
   documents.forEach(doc => {
-    if (!doc.querySelector(root)) return;
+    const content = doc.querySelector(root);
+    if (!content) return;
 
     const anchor = doc.createElement('A');
     anchor.setAttribute('id', 'chapter-end');
 
-    doc.querySelector(root).appendChild(anchor);
+    content.appendChild(anchor);
   });
 }
 
-export function addFullTextUrl(documents, url, root) {
+export function addFullTextUrl(documents: Document[], url: string, root: string): void {
   documents.forEach(doc => {
-    if (!doc.querySelector(root)) return;
+    const content = doc.querySelector(root);
+    if (!content) return;
 
     const p = doc.createElement('P');
     p.setAttribute('id', 'full-text-link');
 
     const anchor = doc.createElement('A');
     anchor.setAttribute('href', url);
-    anchor.innerHTML = `Toto je ukázka. Pro zobrazení plné verze knihy následujte tento odkaz.`;
+    anchor.innerHTML = `Toto je ukázka. Pro zobrazení plné verze knihy následujte tento odkaz.`; // todo: translate
     p.appendChild(anchor);
 
-    if (doc.querySelector('body').getAttribute('class') === 'home') {
-      const content = doc.querySelector(root);
+    if (doc.querySelector('body')?.getAttribute('class') === 'home') {
       content.insertBefore(p, content.firstChild);
     } else {
-      doc.querySelector(root).appendChild(p);
+      content.appendChild(p);
     }
   });
 }
