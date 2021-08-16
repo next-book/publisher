@@ -21,47 +21,47 @@ export default function getToc(doc: Document): HeadingAttributes[] {
   return headings
     .map(fetchHeadingAttributes)
     .map(nestChildren)
-    .filter(header => header.level === 1);
+    .filter(heading => heading.level === 1);
 }
 
-function fetchHeadingAttributes(header: HTMLHeadingElement, index: number): HeadingAttributes {
+function fetchHeadingAttributes(heading: HTMLHeadingElement, index: number): HeadingAttributes {
   return {
     index,
     /**
      * In getToc, we query only heading elements, hence we can assert
      * the HeadingLevel type.  
      */ 
-    level: parseInt(header.tagName.charAt(1), 10) as HeadingLevel,
-    name: header.textContent ? header.textContent.trim() : null,
-    id: header.getAttribute('id'),
+    level: parseInt(heading.tagName.charAt(1), 10) as HeadingLevel,
+    name: heading.textContent ? heading.textContent.trim() : null,
+    id: heading.getAttribute('id'),
     children: [],
   };
 }
 
-function nestChildren(header: HeadingAttributes, _index: number, list: HeadingAttributes[]): HeadingAttributes {
-  header.children = getChildren(list, header);
-  return header;
+function nestChildren(heading: HeadingAttributes, _index: number, list: HeadingAttributes[]): HeadingAttributes {
+  heading.children = getChildren(list, heading);
+  return heading;
 }
 
 function getChildren(list: HeadingAttributes[], currentRoot: HeadingAttributes): HeadingAttributes[] {
   let returnedToLevel = false;
 
   return list
-    .filter(header => {
-      if (returnedToLevel || isTheNextHeaderOnSameLevel(header, currentRoot)) {
+    .filter(heading => {
+      if (returnedToLevel || isTheNextHeadingOnSameLevel(heading, currentRoot)) {
         returnedToLevel = true;
         return false;
       }
 
       return true;
     })
-    .filter(header => isOneLevelLower(header, currentRoot));
+    .filter(heading => isOneLevelLower(heading, currentRoot));
 }
 
-function isOneLevelLower(header: HeadingAttributes, currentRoot: HeadingAttributes): boolean {
-  return header.level === currentRoot.level + 1 && header.index > currentRoot.index;
+function isOneLevelLower(heading: HeadingAttributes, currentRoot: HeadingAttributes): boolean {
+  return heading.level === currentRoot.level + 1 && heading.index > currentRoot.index;
 }
 
-function isTheNextHeaderOnSameLevel(header: HeadingAttributes, currentRoot: HeadingAttributes): boolean {
-  return header.index > currentRoot.index && currentRoot.level === header.level;
+function isTheNextHeadingOnSameLevel(heading: HeadingAttributes, currentRoot: HeadingAttributes): boolean {
+  return heading.index > currentRoot.index && currentRoot.level === heading.level;
 }
