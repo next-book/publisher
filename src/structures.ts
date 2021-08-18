@@ -105,32 +105,51 @@ export class Ideas {
   }
 
   /**
+   * Splits whitespace from IdeasItemPieces’s strings into separate strings.
    * 
-   * @param piece - 
-   * @returns 
+   * @param piece - IdeasItem
+   * @returns Array of pieces, in which non-whitespace strings do not contain opening or trailing whitespace.
    */
-  private separateWhitespace(piece: any):any {
+  private separateWhitespace(piece: IdeasItem):IdeasItemPiece[] {
     if (piece.length > 1) {
-      const [before, firstItem] =
-        typeof piece[0] === 'string' ? piece[0].match(/^(\s*)([\s\S]+)$/)!.slice(1) : [[], piece[0]];
-      const [lastItem, after] =
-        typeof piece[piece.length - 1] === 'string'
-          ? piece[piece.length - 1].match(/^([\s\S]+?)(\s*)$/).slice(1)
-          : [piece[piece.length - 1], []];
+      // splits left whitespace from the content  
+      let before, firstItem;
+      if (typeof piece[0] !== 'string') {
+        [before, firstItem] = [[], piece[0]];
+      } else {
+        const leftMatch = piece[0].match(leftWhitespace);
+        [before, firstItem] = leftMatch ? leftMatch.slice(1) : [[], piece[0]];
+      }
+      
+      // splits right whitespace from the content
+      const lastPiece = piece[piece.length - 1];
+      let lastItem, after;
+      if (typeof lastPiece !== 'string') {
+        [lastItem, after] = [lastPiece, []];
+      } else {
+        const rightMatch = lastPiece.match(rightWhitespace);
+        [lastItem, after] = rightMatch ? rightMatch.slice(1) : [lastPiece, []];
+      }
+
+      // use middle pieces as they are
       const mid = piece.slice(1, piece.length - 1);
+
       return [before, [firstItem, ...mid, lastItem], after];
-    }
-    
-    // single string
-    if (piece.length === 1 && typeof piece[0] === 'string' && /^\s+$/.test(piece[0])) {
-      return [piece[0]];
     }
   
     if (piece.length === 1) {
-      const [before, text, after] =
-        typeof piece[0] === 'string'
-          ? piece[0].match(/^(\s*)([\s\S]+?)(\s*)$/)!.slice(1)
-          : [[], piece[0], []];
+      if (typeof piece[0] === 'string' && onlyWhitespace.test(piece[0]))
+        return [piece[0]];
+      
+      let before, text, after;
+      if (typeof piece[0] !== 'string') {
+        [before, text, after] = [[], piece[0], []];
+      } else {
+        const leftAndRightMatch = piece[0].match(leftAndRightWhitespace);
+        [before, text, after] = leftAndRightMatch
+            ? leftAndRightMatch.slice(1)
+            : [[], piece[0], []];
+      }
       return [before, [text], after];
     }
   
@@ -197,7 +216,7 @@ export class ParsedObj {
     // todo: parse, don’t validate could be applied 
     return ideas.filter(idea => {
       if (idea instanceof ParsedObj) return false;
-      if (typeof idea === 'string' && /^\s+$/.test(idea)) return false;
+      if (typeof idea === 'string' && onlyWhitespace.test(idea)) return false;
       if (Array.isArray(idea) && this.ideaItemsAreValid(idea)) return false;
       return true;
     });
@@ -221,3 +240,113 @@ export class ParsedObj {
 }
 
 
+/**
+ * Capture whitespace at the beggining of a string (group 1) and the rest of a string (group 2).
+ * 
+ * @internal 
+ * 
+ * @example One space string:
+ * 
+ * input: ` `
+ * group 1: empty
+ * group 2: ` `
+ * 
+ * @example One char string:
+ * 
+ * input: `a`
+ * group 1: empty
+ * group 2: `a`
+ * 
+ * @example Multiple whitespaces string:
+ * 
+ * input: `   `
+ * group 1: `  `
+ * group 2: ` `
+ * 
+ * @example Multiple whitespaces at the beggining of a sentence:
+ * 
+ * input: `     lorem ipsum`
+ * group 1: `     `
+ * group 2: `lorem ipsum`
+ */
+ const leftWhitespace = /^(\s*)([\s\S]+)$/;
+
+/**
+* Capture string content (group 1) and the whitespace at the end of a string (group 2).
+* 
+* @internal 
+* 
+* @example One space string:
+* 
+* input: ` `
+* group 1: ` `
+* group 2: empty
+* 
+* @example One char string:
+* 
+* input: `a`
+* group 1: `a`
+* group 2: empty
+* 
+* @example Multiple whitespaces string:
+* 
+* input: `   `
+* group 1: ` `
+* group 2: `  `
+* 
+* @example Whitespaces at the end of a sentence:
+* 
+* input: `lorem     `
+* group 1: `lorem`
+* group 2: `     `
+* 
+*/
+const rightWhitespace = /^([\s\S]+?)(\s*)$/;
+
+/**
+* Matches only whitespace string.  
+* @internal
+*/
+const onlyWhitespace = /^\s+$/;
+
+/**
+* Matches whitespace at the begginng (group 1) and end (group 3), and the content in between (group 2).  
+* @internal
+*
+* @example No space around sentence:
+* 
+* input: `a`
+* group 1: empty
+* group 2: `a`
+* group 3: empty
+*
+* @example Whitespaces around sentence:
+* 
+* input: ` a `
+* group 1: ` `
+* group 2: `a`
+* group 3: ` `
+* 
+* @example One space:
+* 
+* input: ` `
+* group 1: empty
+* group 2: `a`
+* group 3: empty
+* 
+* @example Multiple spaces:
+* 
+* input: `   `
+* group 1: `  `
+* group 2: ` `
+* group 3: empty
+* 
+* @example Only space at the end of a sentence:
+* 
+* input: `a `
+* group 1: empty
+* group 2: `a`
+* group 3: ` `
+* 
+*/
+const leftAndRightWhitespace = /^(\s*)([\s\S]+?)(\s*)$/;
