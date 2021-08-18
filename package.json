@@ -15,7 +15,8 @@
     "updateDocs": "typedoc --out docs/api src/**.ts",
     "build": "tsc && npm run bundle && npm run transpile && npm run updateExample && npm run updateDocs",
     "build:watch": "onchange 'src/*.js' -v -- npm run build",
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "clearJest": "jest --clearCache"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "next-book",
     "web books"
   ],
+  "type": "module",
   "author": "Jan Martinek",
   "license": "MIT",
   "bugs": {
