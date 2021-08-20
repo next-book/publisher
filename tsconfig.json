@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*", "tests/**/*"],
+  "include": ["src/**/*", "src/**/*", "tests/**/*"],
   "exclude": ["src/service-worker/"],
   "compilerOptions": {
     "outDir": "dist",
@@ -10,6 +10,7 @@
     "checkJs": false,
     "allowJs": true,
     "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "lib": [

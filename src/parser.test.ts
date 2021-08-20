@@ -1,7 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 import { ParsedObj } from './structures';
 import { JSDOM as Jsdom } from 'jsdom';
-import parse from './parser.js';
+import parse from './parser';
 
 const dom = new Jsdom(`<main><p><q>Vidíš,</q> radoval se trochu nuceně, <q>je to náhoda!
 Mně totiž dnes ráno napadlo, že už jsme se dvacet let neviděli!
@@ -25,7 +25,7 @@ Nyní pan Bondy začal zdola a konečně od pravé strany.
 Protivný NÁLEZ byl ten tam.</p></main>`);
 
 test('parser works', () => {
-  expect(parse(dom.window.document.querySelector('main'), '\n') instanceof ParsedObj).toBe(
-    true
-  );
+  expect(parse(dom.window.document.querySelector('main')!, '\n') instanceof ParsedObj).toBe(
+      true
+    );
 });

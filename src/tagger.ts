@@ -1,6 +1,6 @@
-import { Config, SelectorFn, Delimiter } from './config';
-import produce from './producer'; // ts: todo
-import parse from './parser'; // ts: todo
+import { Config, Delimiter, Selectors } from './config';
+import produce from './producer';
+import parse from './parser';
 
 const IDEA_NAME = 'idea';
 const CHUNK_NAME = 'chunk';
@@ -17,6 +17,7 @@ const refNumAttr = 'data-nb-ref-number';
 export default function tagDocument(document: Document, options: Config): void {
   tagChunks(document, options.root, options.selectors);
   tagIdeas(document, options.delimiter);
+
   numberEls(document, `.${CHUNK_NAME}`, CHUNK_NAME);
   numberEls(document, `.${IDEA_NAME}`, IDEA_NAME);
 }
@@ -32,28 +33,28 @@ export default function tagDocument(document: Document, options: Config): void {
  * @param selectors - Array of selectors or a {@link SelectorFn}
  * @returns Modifies DOM document
  */
-function tagChunks(document: Document, root: string, selectors: Array<keyof HTMLElementTagNameMap> | SelectorFn): void {
+function tagChunks(document: Document, root: string, selectors: Selectors): void {
   const rootElement = root ? document.querySelector(root) : document;
   if (!rootElement) {
     console.error(
-      `No root element found in document titled "${document?.querySelector('title')?.innerHTML}".`
+      `No root "${root}" element found in document titled "${document?.querySelector('title')?.innerHTML}".`
     );
     return;
   }
 
   const elements =
     typeof selectors === 'function'
-      ? selectors(rootElement)
-      : rootElement.querySelectorAll(selectors.join(', '));
-
-  elements.forEach(el => {
-    if (
-      !(el.closest(`.${SKIP_NAME}`) || el.classList.contains(SKIP_NAME)) &&
-      !hasAncestorChunk(el, elements)
-    ) {
-      el.classList.add(CHUNK_NAME);
-    }
-  });
+      ? selectors(rootElement) // modifies the document, returns void
+      : rootElement.querySelectorAll(selectors.join(', ')); // beware: there is no join in the code before typescript
+  if (elements)
+    elements.forEach(el => {
+      if (
+        !(el.closest(`.${SKIP_NAME}`) || el.classList.contains(SKIP_NAME)) &&
+        !hasAncestorChunk(el, elements)
+      ) {
+        el.classList.add(CHUNK_NAME);
+      }
+    });
 }
 
 /**
@@ -82,7 +83,7 @@ function hasAncestorChunk(testedEl: Element, elements: NodeListOf<Element>): boo
  */
 function tagIdeas(document: Document, delimiter: Delimiter): void {
   document.querySelectorAll(`.${CHUNK_NAME}`).forEach(chunk => {
-    const tagged = produce(document, parse(chunk, delimiter)); // ts: todo parse
+    const tagged = produce(document, parse(chunk, delimiter));
     chunk.parentNode?.replaceChild(tagged, chunk);
   });
 }

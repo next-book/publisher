@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-const cmd = require('commander');
-const express = require('express');
-const path = require('path');
-const app = require('../dist/app.js');
-const data = require('../dist/data-helper.js');
-const revision = require('../dist/revision.js');
+import cmd from 'commander';
+import express from 'express';
+import path from 'path';
+import map from '../app';
+import { prepPreviewConfig, prepConfig, writeOutput, copyFolders, buildServiceWorker, prepContent } from '../data-helper';
+import { getRevision } from '../revision';
 
 cmd
   .option('-v, --verbose', 'More verbose output')
@@ -17,16 +17,19 @@ cmd
   .parse(process.argv);
 
 const config = cmd.preview
-  ? data.prepPreviewConfig(cmd.src, cmd.preview)
-  : data.prepConfig(cmd.src);
+  ? prepPreviewConfig(cmd.src, cmd.preview)
+  : prepConfig(cmd.src);
 
-const revisionIdentifier = cmd.preview ? `${revision.getRevision()}-preview` : revision.getRevision();
-const { content, filenames } = data.prepContent(cmd.src, cmd.filter, config.removeChapters);
-const { documents, manifest } = app.map(content, filenames, config, revisionIdentifier);
+if (!config) throw new Error('No config set');
 
-data.writeOutput(cmd.out, filenames, documents, manifest);
-data.copyFolders('\nCopying static folders…', cmd.src, cmd.out, config.static, () => {
-  if (!cmd.dev) data.buildServiceWorker(cmd.out, revisionIdentifier, config);
+const revisionId = cmd.preview ? `${getRevision()}-preview` : getRevision();
+const { content, filenames } = prepContent(cmd.src, cmd.filter, config.removeChapters);
+const { documents, manifest } = map(content, filenames, config, revisionId);
+
+writeOutput(cmd.out, filenames, documents, manifest);
+if (config.static)
+  copyFolders('\nCopying static folders…', cmd.src, cmd.out, config.static, () => {
+  if (!cmd.dev && revisionId) buildServiceWorker(cmd.out, revisionId);
 });
 
 if (cmd.server) {

@@ -16,7 +16,12 @@ const attrNames = {
  * @returns Sum of values stored in attribute
  */
 const sumAttr = (attr: string) => (ideas: NodeListOf<Element>):number =>
-(ideas as unknown as HTMLElement[]).reduce((acc: number, idea: Element) => acc + parseInt(idea.getAttribute(attr) as string, 10), 0);
+  Array.from(ideas).reduce((acc, idea: Element) => {
+    const iattr = idea.getAttribute(attr);
+    if (!iattr)
+      return acc;
+    return acc + parseInt(iattr, 10);
+  }, 0)
 
 /**
  * Sets sum of values stored in atribute to a same-called attribute 
@@ -25,7 +30,7 @@ const sumAttr = (attr: string) => (ideas: NodeListOf<Element>):number =>
  * @param attr - The attribute name
  * @returns Mutates DOM. Sets the sum in the provided attribute of the element.
  */
-const setSumAttr = (attr: string) => (el: HTMLElement):void => {
+const setSumAttr = (attr: string) => (el: Element):void => {
   el.setAttribute(attr, sumAttr(attr)(el.querySelectorAll('.idea')).toString());
 }
 
@@ -72,13 +77,13 @@ export function gaugeDocument(document: Document): void {
   gaugeContent(document, attrNames.chars, countChars);
 }
 
-type DocumentStats = {
+export type DocumentStats = {
   words: number;
   chars: number;
   ideas: number
 }
 
-type PublicationStats = DocumentStats[];
+export type PublicationStats = DocumentStats[];
 
 /**
  * Gauges words and characters in a publication. Relies on previous gauging of

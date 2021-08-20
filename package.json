@@ -4,7 +4,7 @@
   "description": "Publish web books with next-book",
   "main": "dist/app.js",
   "bin": {
-    "publish-nb": "./bin/cli.js"
+    "publish-nb": "./dist/bin/cli.js"
   },
   "scripts": {
     "tscRun": "tsc && node dist/app.js",
@@ -13,7 +13,7 @@
     "transpile": "babel dist/browser.js --out-file dist/browser.js",
     "updateExample": "cp dist/browser.js docs/browser.js",
     "updateDocs": "typedoc --out docs/api src/**.ts src/**/*.ts",
-    "build": "tsc && npm run bundle && npm run transpile && npm run updateExample && npm run updateDocs",
+    "build": "tsc && chmod u+x dist/bin/cli.js && npm run bundle && npm run transpile && npm run updateExample && npm run updateDocs",
     "build:watch": "onchange 'src/*.js' -v -- npm run build",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "clearJest": "jest --clearCache"
@@ -27,7 +27,6 @@
     "next-book",
     "web books"
   ],
-  "type": "module",
   "author": "Jan Martinek",
   "license": "MIT",
   "bugs": {
@@ -55,9 +54,12 @@
     "@babel/core": "^7.7.5",
     "@babel/preset-env": "^7.7.6",
     "@babel/preset-typescript": "^7.15.0",
+    "@types/cli-progress": "^3.9.2",
+    "@types/express": "^4.17.13",
     "@types/jest": "^26.0.24",
     "@types/jsdom": "^16.2.13",
     "@types/node": "^16.4.13",
+    "@types/pretty": "^2.0.0",
     "@types/recursive-readdir": "^2.2.0",
     "@types/rimraf": "^3.0.1",
     "@types/slug": "^5.0.2",

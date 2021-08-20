@@ -1,6 +1,8 @@
 import { spawnSync } from 'child_process';
 
-let revision: string | null;
+export type Revision = string | null;
+
+let revision: Revision;
 
 function getGitRev(): string | null {
   try {
@@ -27,6 +29,6 @@ export function getRevision(): string | null {
   if (revision) return revision;
 
   revision = getGitRev();
-  // todo: parse, dont validate
+  // todo: Avoid returning null. Follow parse, dont validate philosophy instead.
   return revision;
 }

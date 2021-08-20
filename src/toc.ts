@@ -1,6 +1,6 @@
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-interface HeadingAttributes {
+export interface HeadingAttributes {
   index: number;
   level: HeadingLevel;
   name: string | null;

@@ -1,9 +1,12 @@
 
 import fs from 'fs';
+import { JSDOM } from 'jsdom';
 import path from 'path';
 import rimraf from 'rimraf';
+import { Manifest } from './app';
 import copy from 'recursive-copy';
 import * as sw from './service-worker/builder';
+import { Config } from './config';
 
 type PathLike = string;
 
@@ -13,28 +16,29 @@ type PrepContent = {
 }
 
 interface BookConfigMetaData {
-  title: string;
+  title?: string;
   subtitle: string;
   author: string;
   published: number;
   keywords: string[];
 }
 
-interface BookConfig {
+interface BookConfig extends Config {
   meta: BookConfigMetaData;
   chapters: string[];
+  removeChapters: string[];
   static: string[];
 }
 
-type PreviewConfig = {
+interface PreviewConfig extends Config {
   chapters: string[];
   removeChapters: string[];
   fullTextUrl: string;
-} | null;
+}
 
 type Pair = {from: string, to: string};
 
-function prepContent(srcDir: PathLike, filter: string, previewRemovals: string[]): PrepContent {
+export function prepContent(srcDir: PathLike, filter: string, previewRemovals: string[]): PrepContent {
   console.log(`Looking up files in "${srcDir}" (using filename filter \\${filter}\\).`);
 
   const content = fs
@@ -54,7 +58,7 @@ function prepContent(srcDir: PathLike, filter: string, previewRemovals: string[]
   return { content: content.map(file => file.data), filenames: content.map(file => file.name) };
 }
 
-function prepConfig(srcDir: PathLike): BookConfig | null {
+export function prepConfig(srcDir: PathLike): BookConfig | null {
   const configPath = path.join(srcDir, '/book.json');
   console.log(`Looking up a custom book config in "${configPath}/".`);
 
@@ -66,11 +70,10 @@ function prepConfig(srcDir: PathLike): BookConfig | null {
   return bookConfig;
 }
 
-function prepPreviewConfig(srcDir: PathLike, fullTextUrl: string): PreviewConfig {
+export function prepPreviewConfig(srcDir: PathLike, fullTextUrl: string): PreviewConfig {
   console.log('Preparing preview version of the book.');
 
   const config = prepConfig(srcDir);
-  if (!config) return null;
   return Object.assign({}, config, {
     chapters: config?.chapters?.slice(0, 3),
     removeChapters: config?.chapters?.slice(3),
@@ -78,18 +81,22 @@ function prepPreviewConfig(srcDir: PathLike, fullTextUrl: string): PreviewConfig
   });
 }
 
-function writeOutput(dir: PathLike, filenames: string[], documents: string[], metadata: BookConfigMetaData): void {
+export function writeOutput(dir: PathLike, filenames: string[], documents: (string | JSDOM)[], manifest: Manifest): void {
   if (fs.existsSync(dir)) rimraf.sync(dir);
   fs.mkdirSync(dir);
 
   filenames.forEach((filename, index) => {
-    fs.writeFileSync(path.join(dir, filename), documents[index]);
+    if (typeof documents[index] === 'string') {
+      fs.writeFileSync(path.join(dir, filename), documents[index] as string);
+    } else {
+      fs.writeFileSync(path.join(dir, filename),documents[index].toString());
+    }
   });
 
-  fs.writeFileSync(path.join(dir, 'manifest.json'), JSON.stringify(metadata, null, 2));
+  fs.writeFileSync(path.join(dir, 'manifest.json'), JSON.stringify(manifest, null, 2));
 }
 
-function copyFolders(message: string, src: string, out: string, folders: string[], callback: () => void): void {
+export function copyFolders(message: string, src: string, out: string, folders: string[], callback: () => void): void {
   console.log(message);
 
   if (folders && Array.isArray(folders)) {
@@ -102,7 +109,7 @@ function copyFolders(message: string, src: string, out: string, folders: string[
   }
 }
 
-function copyFolder(pairs: Pair[], finalCallback: () => void) {
+export function copyFolder(pairs: Pair[], finalCallback: () => void):void {
   if (pairs.length === 0) return;
   /**
    * pairs array will never be empty at this point, since we check its length,
@@ -116,19 +123,10 @@ function copyFolder(pairs: Pair[], finalCallback: () => void) {
   });
 }
 
-async function buildServiceWorker(dir: PathLike, revision: string): Promise<void> {
+export async function buildServiceWorker(dir: PathLike, revision: string): Promise<void> {
   console.log('Building service worker…');
 
   await sw.build(dir, revision).then(code => {
     fs.writeFileSync(path.join(dir, 'service-worker.js'), code, 'utf8');
   });
-}
-
-export {
-  prepContent,
-  prepConfig,
-  prepPreviewConfig,
-  writeOutput,
-  copyFolders,
-  buildServiceWorker,
 }
