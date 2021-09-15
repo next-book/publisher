@@ -1,6 +1,7 @@
 import { Config, Delimiter, Selectors } from './config';
 import produce from './producer';
 import parse from './parser';
+import { DOMStringLike } from './utils/dom';
 
 const IDEA_NAME = 'idea';
 const CHUNK_NAME = 'chunk';
@@ -97,7 +98,7 @@ function tagIdeas(document: Document, delimiter: Delimiter): void {
  * @param name - Name used in creating id attributes (<name>#)
  * @returns Modifies DOM document
  */
-function numberEls(document: Document, selector: string, name: string):void {
+function numberEls(document: Document, selector: DOMStringLike, name: string):void {
   Array.prototype.forEach.call(document.querySelectorAll(selector), (el, index) => {
     const nonZeroId = index + 1;
     el.setAttribute(refNumAttr, nonZeroId);

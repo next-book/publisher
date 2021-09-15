@@ -1,6 +1,6 @@
 import i18n from "./i18n";
+import { DOMStringLike } from './utils/dom'; 
 
-type DOMStringLike = string; 
 
 /**
  * Adds navigation between chapters (prev chapter link at the beggining and 
