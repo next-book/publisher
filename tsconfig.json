@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*", "src/**/*", "tests/**/*"],
+  "include": ["src/**/*", "tests/**/*"],
   "exclude": ["src/service-worker/"],
   "compilerOptions": {
     "outDir": "dist",

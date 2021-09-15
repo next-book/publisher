@@ -1,5 +1,5 @@
-import { ParsedObj, IdeasItem, IdeasItemPiece } from "./structures";
-
+import { ParsedObj, IdeasItem, IdeasItemPiece } from './structures';
+import { isNode } from './utils/dom';
 /**
  * Produces ideas from a parsedObj
  * 
@@ -16,7 +16,7 @@ export default function produce(document: Document, parsedObj: ParsedObj): Node 
    */
   const { node, ideas, delimiter } = parsedObj;
 
-  ideas.forEach((idea, index) => {
+  ideas.forEach((idea: IdeasItem, index: number) => {
     if (Array.isArray(idea)) {
       if (containsParsedObj(idea)) {
         fragment.appendChild(anchorObject(idea, document));
@@ -27,7 +27,7 @@ export default function produce(document: Document, parsedObj: ParsedObj): Node 
       fragment.appendChild(document.createTextNode(idea));
     }
 
-    if (!Object.is(ideas.length - 1, index)) {
+    if (!Object.is(ideas.length - 1, index) && typeof delimiter === 'string') {
       fragment.appendChild(document.createTextNode(delimiter));
     }
   });
@@ -51,27 +51,12 @@ function produceHTMLSpanIdea(idea: IdeasItemPiece[], document: Document):HTMLEle
   idea.forEach(item => {
     if (typeof item === 'string') {
       span.appendChild(document.createTextNode(item));
-    } else if (isNode(item)) {
+    } else if (isNode(item as Node)) {
       span.appendChild(item as Node);
     }
   });
 
   return span;
-}
-
-/**
- * Determines if an object is a DOM Node, works outside of browsers.
- * 
- * @param obj - The object 
- * @returns True if node, False otherwise
- */
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-unused-vars, @typescript-eslint/ban-types
-function isNode(obj:Object): boolean {
-  return obj 
-    && typeof obj === 'object' 
-    && 'nodeType' in obj 
-    && Object.prototype.hasOwnProperty.call(obj, "nodeType") 
-    && Object.prototype.hasOwnProperty.call(obj, "cloneNode");
 }
 
 /**
@@ -91,10 +76,10 @@ function anchorObject(idea: IdeasItem, document: Document) {
   idea.forEach(item => {
     if (item instanceof ParsedObj) {
       fragment.appendChild(produce(document, item));
-    } else if (item instanceof Node) {
-      fragment.appendChild(item);
-    } else if (typeof item === 'string') {
-      fragment.appendChild(document.createTextNode(item));
+    } else if (isNode(item as Node)) {
+      fragment.appendChild(item as Node);
+    } else {
+      fragment.appendChild(document.createTextNode(item as string));
     }
   });
   return fragment;

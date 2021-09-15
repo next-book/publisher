@@ -1,18 +1,10 @@
 import ParsedObj from './parsedobj';
 import { Separator } from '../parser';
 import { onlyWhitespace, leftWhitespace, rightWhitespace, leftAndRightWhitespace } from '../utils/regexp';
+import { isNode } from '../utils/dom';
 
-// What counts as whitespace varies by spec: https://gist.github.com/dd8/8a8149c2ec7093dcf8caae6b9645ac0b
-type WhiteSpaceCharacter = '\0x09' | '\0x0a' | '\0x0b' | '\0x0c' | '\0x0d' |' \0x20';
 export type IdeasItemPiece = ParsedObj | string | Node | Separator;
-// todo: Should WhiteSpaceCharacter and empty string be part of IdeasItem?
-export type IdeasItem = WhiteSpaceCharacter | IdeasItemPiece[];
-
-// todo: write better annotation:
-// - how exactly is Ideas class different from ideas produced?
-// - why do we use same terminilogy?
-// - for what is Ideas and ParsedObj exactly?
-
+export type IdeasItem = Node | string | IdeasItemPiece[];
 
 /**
  * todo: proper annotation
@@ -39,7 +31,7 @@ export type IdeasItem = WhiteSpaceCharacter | IdeasItemPiece[];
  * }
  * ```
  */
- export default class Ideas {
+export default class Ideas {
   private arr: IdeasItem[];
 
   constructor() {
@@ -96,7 +88,8 @@ export type IdeasItem = WhiteSpaceCharacter | IdeasItemPiece[];
    */
    private isNotEmpty(piece: IdeasItemPiece):boolean {
     if (Array.isArray(piece) && piece.length === 0) return false;
-    if (typeof piece === 'string') return false;
+    if (typeof piece !== 'string') return true;
+    if (piece === '') return false;
     return true;
   }
 
@@ -107,6 +100,9 @@ export type IdeasItem = WhiteSpaceCharacter | IdeasItemPiece[];
    * @returns Array of pieces, in which non-whitespace strings do not contain opening or trailing whitespace.
    */
   private separateWhitespace(piece: IdeasItem):IdeasItemPiece[] {
+    if (isNode(piece)) {
+      return []
+    }
     if (piece.length > 1) {
       // splits left whitespace from the content  
       let before, firstItem;
@@ -153,13 +149,15 @@ export type IdeasItem = WhiteSpaceCharacter | IdeasItemPiece[];
   }
 
   /**
-   * todo: Returns filtered (non-empty) and whitespace-separated ideas.
+   * Returns filtered (non-empty) and whitespace-separated ideas. 
+   * 
+   * @remarks
+   * This function is used to produce array that is assigned 
+   * to {@link ParsedObj} ideas public param. 
    *  
    * @returns 
    */
   fetch():IdeasItem[] {    
-    // todo: the function does not work with typeof idea === 'string'.
-    // what happens with non array ideas?
     return this.arr
       .map(idea => {
         if (Array.isArray(idea))

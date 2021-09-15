@@ -1,7 +1,5 @@
-import { Ideas, ParsedObj } from './structures';
+import {ParsedObj, Ideas} from './structures';
 import { Delimiter } from './config';
-
-const DEBUG = true;
 
 export class Separator {}
 
@@ -21,16 +19,21 @@ export default function parse(node: Node|HTMLElement, delimiter: Delimiter): Par
   // first create a flat list of strings, HTML Elements, ParsedObjs, and Separators
   // this needs to be properly
   node.childNodes.forEach((child) => {
-    if (child.nodeType === child.TEXT_NODE && child.textContent) {
-      const texts = child.textContent.split(delimiter);
+    if (child.nodeType === child.TEXT_NODE) {
+      let texts: string[] = [];
+      if (child.textContent) {
+        texts = child.textContent.split(delimiter);
+      }
       texts.forEach((text, index) => {
         pieces.push(text);
         // if last, push separator
         if (texts.length - 1 !== index) pieces.push(new Separator());
       });
-    } else if (child.nodeType === child.ELEMENT_NODE && child.textContent) {
-      if (nodeBreaksInside(child.textContent, delimiter)) pieces.push(parse(child, delimiter));
-      else pieces.push(child);
+    } else if (child.nodeType === child.ELEMENT_NODE) {
+      if (child.textContent && nodeBreaksInside(child.textContent, delimiter))
+        pieces.push(parse(child, delimiter));
+      else
+        pieces.push(child);
     }
   });
 
@@ -41,13 +44,13 @@ export default function parse(node: Node|HTMLElement, delimiter: Delimiter): Par
     const isSeparator = piece instanceof Separator;
     const isParsedObj = piece instanceof ParsedObj;
     
-    if (DEBUG) {
-      let message = isSeparator ? 'separator' : ''; 
-      message = isParsedObj ? 'parsedObj' : ''; 
-      message = (!isParsedObj && !isSeparator) ? 'Node|string' : ''; 
-      console.log(piece, message);
-    }
-    
+    // if (DEBUG) {
+    //   let message = isSeparator ? 'separator' : ''; 
+    //   message = isParsedObj ? 'parsedObj' : ''; 
+    //   message = (!isParsedObj && !isSeparator) ? 'Node|string' : ''; 
+    //   console.log(piece, message);
+    // }
+   
     if (isSeparator) ideas.addIdea(); // appends empty array
     if (isParsedObj) ideas.addObj(<ParsedObj>piece); // appends parsedObj 
     else ideas.appendToIdea(piece); // appends Node|string
