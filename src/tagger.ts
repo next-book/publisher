@@ -13,11 +13,11 @@ const refNumAttr = 'data-nb-ref-number';
  * @param document - DOM document
  * @param options - config options
  * @returns mutates DOM document
- */
+with marked chunks by {@link markElementsToBeTagged}. */
 export default function tagDocument(document: Document, options: Config): void {
-  tagChunks(document, options.root, options.selectors);
+  markElementsToBeTagged(document, options.root, options.selectors);
   tagIdeas(document, options.delimiter);
-
+  
   numberEls(document, `.${CHUNK_NAME}`, CHUNK_NAME);
   numberEls(document, `.${IDEA_NAME}`, IDEA_NAME);
 }
@@ -33,7 +33,7 @@ export default function tagDocument(document: Document, options: Config): void {
  * @param selectors - Array of selectors or a {@link SelectorFn}
  * @returns Modifies DOM document
  */
-function tagChunks(document: Document, root: string, selectors: Selectors): void {
+function markElementsToBeTagged(document: Document, root: string, selectors: Selectors): void {
   const rootElement = root ? document.querySelector(root) : document;
   if (!rootElement) {
     console.error(
@@ -44,8 +44,8 @@ function tagChunks(document: Document, root: string, selectors: Selectors): void
 
   const elements =
     typeof selectors === 'function'
-      ? selectors(rootElement) // modifies the document, returns void
-      : rootElement.querySelectorAll(selectors.join(', ')); // beware: there is no join in the code before typescript
+      ? selectors(rootElement)
+      : rootElement.querySelectorAll(selectors.join(', ')); // beware: there was no join in the code before typescript
   if (elements)
     elements.forEach(el => {
       if (
@@ -77,7 +77,7 @@ function hasAncestorChunk(testedEl: Element, elements: NodeListOf<Element>): boo
 /**
  * Map ideas in specific DOM context.
  * 
- * @param document - DOM document 
+ * @param document - DOM document with marked chunks by {@link markElementsToBeTagged}.
  * @param delimiter - Delimiter of ideas.
  * @returns Modifies the Document
  */

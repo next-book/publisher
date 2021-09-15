@@ -3,13 +3,10 @@ import { Separator } from '../parser';
 import { onlyWhitespace, leftWhitespace, rightWhitespace, leftAndRightWhitespace } from '../utils/regexp';
 import { isNode } from '../utils/dom';
 
-export type IdeasItemPiece = ParsedObj | string | Node | Separator;
-export type IdeasItem = Node | string | IdeasItemPiece[];
+export type IdeaPiece = ParsedObj | string | Node | Separator;
+export type Idea = Node | string | IdeaPiece[];
 
 /**
- * todo: proper annotation
- * 
- * @remarks
  * Ideas contains an array of items in which every
  * item is an array of strings and HTML elements,
  * a whitespace-only string or a {@link ParsedObj}.
@@ -32,7 +29,7 @@ export type IdeasItem = Node | string | IdeasItemPiece[];
  * ```
  */
 export default class Ideas {
-  private arr: IdeasItem[];
+  private arr: Idea[];
 
   constructor() {
     this.arr = [];
@@ -54,7 +51,7 @@ export default class Ideas {
    * @remarks
    * Mutates the internal state of the object
    * 
-   * @param obj - Parsed Object todo
+   * @param obj - Parsed Object
    */
   addObj(obj: ParsedObj):void {
     // not sure why theres not just this.arr.push([obj]);
@@ -71,7 +68,7 @@ export default class Ideas {
    * 
    * @param piece - 
    */
-  appendToIdea(piece: IdeasItemPiece):void {
+  appendToIdea(piece: IdeaPiece):void {
     if (this.arr.length === 0) this.arr.push([]);
     const lastItem = this.arr[this.arr.length - 1];
     if (Array.isArray(lastItem)) {
@@ -86,7 +83,7 @@ export default class Ideas {
    * @param piece - IdeasItemPiece
    * @returns False if piece is empty array or empty string, otherwise true
    */
-   private isNotEmpty(piece: IdeasItemPiece):boolean {
+   private isNotEmpty(piece: IdeaPiece):boolean {
     if (Array.isArray(piece) && piece.length === 0) return false;
     if (typeof piece !== 'string') return true;
     if (piece === '') return false;
@@ -99,7 +96,7 @@ export default class Ideas {
    * @param piece - IdeasItem
    * @returns Array of pieces, in which non-whitespace strings do not contain opening or trailing whitespace.
    */
-  private separateWhitespace(piece: IdeasItem):IdeasItemPiece[] {
+  private separateWhitespace(piece: Idea):IdeaPiece[] {
     if (isNode(piece)) {
       return []
     }
@@ -157,17 +154,17 @@ export default class Ideas {
    *  
    * @returns 
    */
-  fetch():IdeasItem[] {    
+  fetch():Idea[] {    
     return this.arr
       .map(idea => {
         if (Array.isArray(idea))
           return idea.filter(piece => this.isNotEmpty(piece))
         return idea
       })
-      .reduce<IdeasItem[]>((acc, idea) => {
+      .reduce<Idea[]>((acc, idea) => {
         // typeof idea === 'string' is changed to empty array
         const pieces = this.separateWhitespace(idea);
-        pieces.forEach(sep => acc.push(sep as IdeasItem));
+        pieces.forEach(sep => acc.push(sep as Idea));
         return acc;
       }, [])
       .filter((idea) => Array.isArray(idea) && idea.length !== 0);

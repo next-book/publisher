@@ -1,4 +1,4 @@
-import { ParsedObj, IdeasItem, IdeasItemPiece } from './structures';
+import { ParsedObj, Idea, IdeaPiece } from './structures';
 import { isNode } from './utils/dom';
 /**
  * Produces ideas from a parsedObj
@@ -16,7 +16,7 @@ export default function produce(document: Document, parsedObj: ParsedObj): Node 
    */
   const { node, ideas, delimiter } = parsedObj;
 
-  ideas.forEach((idea: IdeasItem, index: number) => {
+  ideas.forEach((idea: Idea, index: number) => {
     if (Array.isArray(idea)) {
       if (containsParsedObj(idea)) {
         fragment.appendChild(anchorObject(idea, document));
@@ -44,7 +44,7 @@ export default function produce(document: Document, parsedObj: ParsedObj): Node 
  * @param document - DOM document
  * @returns HTML Element span
  */
-function produceHTMLSpanIdea(idea: IdeasItemPiece[], document: Document):HTMLElement {
+function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document):HTMLElement {
   const span = document.createElement('SPAN');
   span.classList.add('idea');
 
@@ -65,11 +65,11 @@ function produceHTMLSpanIdea(idea: IdeasItemPiece[], document: Document):HTMLEle
  * @param idea - The idea 
  * @returns True if contains parsed object, False otherwise.
  */
-function containsParsedObj(idea: IdeasItemPiece[]) {
+function containsParsedObj(idea: IdeaPiece[]) {
   return idea.reduce((acc, item) => acc || item instanceof ParsedObj, false);
 }
 
-function anchorObject(idea: IdeasItem, document: Document) {
+function anchorObject(idea: Idea, document: Document) {
   const fragment = document.createDocumentFragment();
   if (!Array.isArray(idea)) throw new Error("Idea is not an array.");
   

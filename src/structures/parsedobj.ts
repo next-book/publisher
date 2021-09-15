@@ -1,12 +1,12 @@
 import { Delimiter } from '../config';
-import { IdeasItem, IdeasItemPiece } from './ideas';
+import { Idea, IdeaPiece } from './ideas';
 import { onlyWhitespace } from '../utils/regexp';
 
 /**
- * todo: annotation
+ * ParsedObj represents Node (respectively the DOM Element) and its subtree.
  * 
  * @remarks
- * arsedObj contains original node and an array of ideas. 
+ * ParsedObj contains original node and an array of ideas. 
  * Every item is an array of strings and HTML elements,
  * a full-whitespace string or another ParsedObj.
  * 
@@ -31,8 +31,7 @@ import { onlyWhitespace } from '../utils/regexp';
  export default class ParsedObj {
   /** Original Node */
   node: Node;
-  /**  */
-  ideas: IdeasItem[];
+  ideas: Idea[];
   delimiter: Delimiter;
 
   /**
@@ -41,7 +40,7 @@ import { onlyWhitespace } from '../utils/regexp';
    * a full-whitespace string or another ParsedObj.
    * @param delimiter - Delimiter
    */
-  constructor(node: Node, ideas: IdeasItem[], delimiter: Delimiter) {
+  constructor(node: Node, ideas: Idea[], delimiter: Delimiter) {
     const ideaProblems = this.listProblemParsedObjIdeas(ideas);
   
     if (ideaProblems.length > 0)
@@ -59,8 +58,7 @@ import { onlyWhitespace } from '../utils/regexp';
    * @param ideas - 
    * @returns 
    */
-  private listProblemParsedObjIdeas(ideas: IdeasItem[]) {
-    // todo: parse, don’t validate could be applied 
+  private listProblemParsedObjIdeas(ideas: Idea[]) { 
     return ideas.filter(idea => {
       if (idea instanceof ParsedObj) return false;
       if (typeof idea === 'string' && onlyWhitespace.test(idea)) return false;
@@ -75,7 +73,7 @@ import { onlyWhitespace } from '../utils/regexp';
    * @param items - Array of strings and Elements
    * @returns Boolean
    */
-  private ideaItemsAreValid(items: IdeasItemPiece[]) {
+  private ideaItemsAreValid(items: IdeaPiece[]) {
     // This function seems like tautology from the types perspective.
     return (
       items.filter(item => {

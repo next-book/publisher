@@ -3,12 +3,12 @@
  * @module
  */
 
-import Ideas, { IdeasItem, IdeasItemPiece } from "./ideas";
+import Ideas, { Idea, IdeaPiece } from "./ideas";
 import ParsedObj from "./parsedobj";
 
 export {
   Ideas,
   ParsedObj,
-  IdeasItem,
-  IdeasItemPiece,
+  Idea,
+  IdeaPiece,
 }

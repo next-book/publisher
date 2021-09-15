@@ -14,10 +14,7 @@ export class Separator {}
  */
 export default function parse(node: Node|HTMLElement, delimiter: Delimiter): ParsedObj {
   const pieces: (Node | string | Separator)[] = [];
-
-  // todo: this function needs to be properly annotated
   // first create a flat list of strings, HTML Elements, ParsedObjs, and Separators
-  // this needs to be properly
   node.childNodes.forEach((child) => {
     if (child.nodeType === child.TEXT_NODE) {
       let texts: string[] = [];
