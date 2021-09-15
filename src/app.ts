@@ -64,17 +64,17 @@ interface MappedPublication {
 /**
  * Maps HTML for *next-book* use.
  * 
- * @param content - Array of Jsdom objects or strings
+ * @param content - Array of file contents
  * @param filenames - Names of files form which content was read
  * @param options - The config options
  * @param revision - Revision identifier string
  * @returns Array of mapped documents in specified format
  */
-export default function map(content: string[]|Jsdom[], filenames: string[], options: Config, revision: Revision): MappedPublication {
+export default function map(content: string[], filenames: string[], options: Config, revision: Revision): MappedPublication {
   const conf = loadConfig(options);
   console.log(`\nUsing mapper config:\n${dumpArray(conf)}\n`);
 
-  const doms = content.map(doc => getJsdomObj(doc));
+  const doms = content.map(doc => new Jsdom(doc));
   const documents = doms.map(dom => dom.window.document);
   const { chapters } = conf;
 
@@ -331,21 +331,6 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
 function getColophon(metadata: DocumentMetadata[]) {
   const files = metadata.filter(item => item.role === DocRole.Colophon);
   return files.length ? files[0].file : null;
-}
-
-
-/**
- * Converts HTML string into jsdom object if needed.
- *
- * @param doc - The document
- * @returns A new Jsdom object.
- */
-function getJsdomObj(doc: string|Jsdom):Jsdom {
-  if (typeof doc !== 'string' && !(doc instanceof Jsdom))
-      throw new Error('Input document format not recognized.');
-    if (typeof doc === 'string')
-      return new Jsdom(doc);
-    return doc;
 }
 
 /**
