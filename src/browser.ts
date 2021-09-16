@@ -1,5 +1,6 @@
 /**
- * Browser module is entry point for browser, bundled and transpiled into dist * directory.
+ * Browser: is entry point for browser, bundled and transpiled into dist * directory.
+ * @module
  */
 /* eslint-env browser */
 import tagDocument from './tagger';

@@ -1,4 +1,9 @@
 /**
+ * Config module
+ * @module
+ */
+
+/**
  * A callback used to split chunk contents into ideas.
  */
 export type TokenizerFn = (node: Node, text: string) => string;

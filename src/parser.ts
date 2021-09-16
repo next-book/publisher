@@ -1,3 +1,8 @@
+/**
+ * Parser: parses a DOM Node (resp HTML Element) to be later used in producer
+ * to update HTML for next-book specific use cases.
+ * @module
+ */
 import {ParsedObj, Ideas} from './structures';
 import { Delimiter } from './config';
 

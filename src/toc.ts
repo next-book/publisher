@@ -1,3 +1,7 @@
+/**
+ * Toc: generates a table of contents by searching for headers in documents
+ * @module
+ */
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 export interface HeadingAttributes {

@@ -1,3 +1,7 @@
+/**
+ * Tagger: parses, produces and numbers chunks and ideas.
+ * @module
+ */
 import { Config, Delimiter, Selectors } from './config';
 import produce from './producer';
 import parse from './parser';

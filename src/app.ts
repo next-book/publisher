@@ -1,3 +1,7 @@
+/**
+ * App module used in node.js env.
+ * @module
+ */
 import { JSDOM as Jsdom } from 'jsdom';
 import Progress from 'cli-progress';
 import pretty from 'pretty';

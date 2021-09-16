@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 
 /**
  * Names of attributes used to store gauge data.

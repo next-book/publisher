@@ -1,7 +1,6 @@
 import i18n from "./i18n";
 import { DOMStringLike } from './utils/dom'; 
 
-
 /**
  * Adds navigation between chapters (prev chapter link at the beggining and 
  * next chapter link at the end) to a provided list of documents (chapters).

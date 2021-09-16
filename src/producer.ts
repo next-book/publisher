@@ -1,3 +1,8 @@
+/**
+ * Producer: takes {@link ParsedObj} and updates the HTML of document with
+ * the enhancement for next-book specific use-case.
+ * @module
+ */
 import { ParsedObj, Idea, IdeaPiece } from './structures';
 import { isNode } from './utils/dom';
 /**
