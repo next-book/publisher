@@ -5,6 +5,7 @@
  */
 import { ParsedObj, Idea, IdeaPiece } from './structures';
 import { isNode } from './utils/dom';
+
 /**
  * Produces ideas from a parsedObj
  * 
@@ -14,11 +15,6 @@ import { isNode } from './utils/dom';
  */
 export default function produce(document: Document, parsedObj: ParsedObj): Node {
   const fragment = document.createDocumentFragment();
-  /**
-   * node - original node
-   * ideas - array of arrays of strings, HTML elements, whitespace etc
-   * delimiter - delimiter string
-   */
   const { node, ideas, delimiter } = parsedObj;
 
   ideas.forEach((idea: Idea, index: number) => {

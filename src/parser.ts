@@ -41,21 +41,11 @@ export default function parse(node: Node|HTMLElement, delimiter: Delimiter): Par
 
   // cluster pieces into ideas based on
   const ideas = new Ideas();
-
+  
   pieces.forEach(piece => {
-    const isSeparator = piece instanceof Separator;
-    const isParsedObj = piece instanceof ParsedObj;
-    
-    // if (DEBUG) {
-    //   let message = isSeparator ? 'separator' : ''; 
-    //   message = isParsedObj ? 'parsedObj' : ''; 
-    //   message = (!isParsedObj && !isSeparator) ? 'Node|string' : ''; 
-    //   console.log(piece, message);
-    // }
-   
-    if (isSeparator) ideas.addIdea(); // appends empty array
-    if (isParsedObj) ideas.addObj(<ParsedObj>piece); // appends parsedObj 
-    else ideas.appendToIdea(piece); // appends Node|string
+    if (piece instanceof Separator) ideas.addIdea();
+    else if (piece instanceof ParsedObj) ideas.addObj(piece); 
+    else ideas.appendToIdea(piece);
   });
 
   return new ParsedObj(node, ideas.fetch(), delimiter);
