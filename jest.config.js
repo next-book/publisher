@@ -1,8 +1,8 @@
 /** @type {import('@ts-jest/dist/types').InitialOptionsTsJest} */
-exports.default = {
-  preset: 'ts-jest/presets/default-esm',
-  testEnvironment: 'node',
+module.exports = {
+  preset: 'ts-jest',
   testPathIgnorePatterns: ["dist"],
+  testEnvironment: 'node',
   globals: {
     'ts-jest': {
       useESM: true

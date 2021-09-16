@@ -24,8 +24,9 @@ Honil je sloupec za sloupcem; ukrylo se s rozčilující schválností.
 Nyní pan Bondy začal zdola a konečně od pravé strany.
 Protivný NÁLEZ byl ten tam.</p></main>`);
 
-test('parser works', () => {
+test('Parser returns ParsedObj', () => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   expect(parse(dom.window.document.querySelector('main')!, '\n') instanceof ParsedObj).toBe(
-      true
-    );
+    true
+  );
 });

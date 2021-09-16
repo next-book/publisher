@@ -16,7 +16,7 @@
     "build": "tsc && chmod u+x dist/bin/cli.js && npm run bundle && npm run transpile && npm run updateExample && npm run updateDocs",
     "build:watch": "onchange 'src/*.js' -v -- npm run build",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "clearJest": "jest --clearCache"
+    "clearJestCache": "jest --clearCache"
   },
   "repository": {
     "type": "git",
