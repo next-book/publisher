@@ -10,7 +10,7 @@ import loadConfig, { Config } from './config';
 declare global {
   interface Window {
     NbMapper: {
-      mapHtml: (options: Config) => void
+      mapHtml: (options: Config) => void;
     };
   }
 }
@@ -22,7 +22,7 @@ declare global {
  *
  * @param options - Config options overrides
  */
-function mapHtml(options: Config):void {
+function mapHtml(options: Config): void {
   tagDocument(document, loadConfig(options));
   gaugeDocument(document);
 }

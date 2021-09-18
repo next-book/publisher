@@ -22,17 +22,17 @@ with marked chunks by {@link markElementsToBeTagged}. */
 export default function tagDocument(document: Document, options: Config): void {
   markElementsToBeTagged(document, options.root, options.selectors);
   tagIdeas(document, options.delimiter);
-  
+
   numberEls(document, `.${CHUNK_NAME}`, CHUNK_NAME);
   numberEls(document, `.${IDEA_NAME}`, IDEA_NAME);
 }
 
 /**
  * Mark DOM Elements to be tagged
- * 
+ *
  * @remarks
  * Skips nested nodes and nodes with SKIP_NAME class (and their child * nodes).
- * 
+ *
  * @param document - DOM document
  * @param root - Root element
  * @param selectors - Array of selectors or a {@link SelectorFn}
@@ -42,7 +42,9 @@ function markElementsToBeTagged(document: Document, root: string, selectors: Sel
   const rootElement = root ? document.querySelector(root) : document;
   if (!rootElement) {
     console.error(
-      `No root "${root}" element found in document titled "${document?.querySelector('title')?.innerHTML}".`
+      `No root "${root}" element found in document titled "${
+        document?.querySelector('title')?.innerHTML
+      }".`
     );
     return;
   }
@@ -64,9 +66,9 @@ function markElementsToBeTagged(document: Document, root: string, selectors: Sel
 
 /**
  * Determines whether the tested element has an inclusive descendant in the list of elements.
- * 
+ *
  * @param testedEl - Element to be tested
- * @param elements - List of elements 
+ * @param elements - List of elements
  * @returns Returns the boolean value of the assertion
  */
 function hasAncestorChunk(testedEl: Element, elements: NodeListOf<Element>): boolean {
@@ -81,7 +83,7 @@ function hasAncestorChunk(testedEl: Element, elements: NodeListOf<Element>): boo
 
 /**
  * Map ideas in specific DOM context.
- * 
+ *
  * @param document - DOM document with marked chunks by {@link markElementsToBeTagged}.
  * @param delimiter - Delimiter of ideas.
  * @returns Modifies the Document
@@ -96,13 +98,13 @@ function tagIdeas(document: Document, delimiter: Delimiter): void {
 /**
  * Numbers selected elements (\<1…n\>), adding a data attribute and an numbered
  * id attribute (\<name\>#).
- * 
+ *
  * @param document - DOM document
  * @param selector - DOMString
  * @param name - Name used in creating id attributes (<name>#)
  * @returns Modifies DOM document
  */
-function numberEls(document: Document, selector: DOMStringLike, name: string):void {
+function numberEls(document: Document, selector: DOMStringLike, name: string): void {
   Array.prototype.forEach.call(document.querySelectorAll(selector), (el, index) => {
     const nonZeroId = index + 1;
     el.setAttribute(refNumAttr, nonZeroId);

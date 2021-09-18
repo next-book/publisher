@@ -3,12 +3,7 @@
  * @module
  */
 
-import Ideas, { Idea, IdeaPiece } from "./ideas";
-import ParsedObj from "./parsedobj";
+import Ideas, { Idea, IdeaPiece } from './ideas';
+import ParsedObj from './parsedobj';
 
-export {
-  Ideas,
-  ParsedObj,
-  Idea,
-  IdeaPiece,
-}
+export { Ideas, ParsedObj, Idea, IdeaPiece };

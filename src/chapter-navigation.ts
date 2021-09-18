@@ -1,12 +1,12 @@
-import i18n from "./i18n";
-import { DOMStringLike } from './utils/dom'; 
+import i18n from './i18n';
+import { DOMStringLike } from './utils/dom';
 
 /**
- * Adds navigation between chapters (prev chapter link at the beggining and 
+ * Adds navigation between chapters (prev chapter link at the beggining and
  * next chapter link at the end) to a provided list of documents (chapters).
- * 
- * @param chapters - Array of Documents each representing a chapter 
- * @param root - DOMString for selecting content root 
+ *
+ * @param chapters - Array of Documents each representing a chapter
+ * @param root - DOMString for selecting content root
  */
 export function addChapterInPageNavigation(chapters: Document[], root: DOMStringLike): void {
   chapters.forEach(doc => {
@@ -47,7 +47,7 @@ function createNavFragment(doc: Document, className: string): DocumentFragment {
 function appendLinkToNav(doc: Document, navFragment: DocumentFragment, link: Node) {
   const nav = navFragment.firstChild;
   if (!nav) return;
-  const navFirstChild =  <HTMLElement| null>nav.firstChild;
+  const navFirstChild = <HTMLElement | null>nav.firstChild;
   const li = doc.createElement('LI');
   li.appendChild(link);
 
@@ -60,7 +60,13 @@ function appendLinkToNav(doc: Document, navFragment: DocumentFragment, link: Nod
   }
 }
 
-function createLink(doc: Document, rel: string, urlFragment: string, text: string, callback: (anchor: Node) => void) {
+function createLink(
+  doc: Document,
+  rel: string,
+  urlFragment: string,
+  text: string,
+  callback: (anchor: Node) => void
+) {
   const el: HTMLAnchorElement | null = doc.querySelector(`link[rel="${rel}"]`);
 
   if (el && el.href) {

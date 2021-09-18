@@ -8,7 +8,7 @@ import { isNode } from './utils/dom';
 
 /**
  * Produces ideas from a parsedObj
- * 
+ *
  * @param document - DOM Document
  * @param parsedObj - A parsed object
  * @returns HTML node
@@ -40,12 +40,12 @@ export default function produce(document: Document, parsedObj: ParsedObj): Node 
 
 /**
  * Produces HTML span idea from an array of parts.
- * 
- * @param idea - The idea 
+ *
+ * @param idea - The idea
  * @param document - DOM document
  * @returns HTML Element span
  */
-function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document):HTMLElement {
+function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document): HTMLElement {
   const span = document.createElement('SPAN');
   span.classList.add('idea');
 
@@ -62,8 +62,8 @@ function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document):HTMLElement 
 
 /**
  * Determines if array contains parsed object. See {@link ParsedObj}.
- * 
- * @param idea - The idea 
+ *
+ * @param idea - The idea
  * @returns True if contains parsed object, False otherwise.
  */
 function containsParsedObj(idea: IdeaPiece[]) {
@@ -72,8 +72,8 @@ function containsParsedObj(idea: IdeaPiece[]) {
 
 function anchorObject(idea: Idea, document: Document) {
   const fragment = document.createDocumentFragment();
-  if (!Array.isArray(idea)) throw new Error("Idea is not an array.");
-  
+  if (!Array.isArray(idea)) throw new Error('Idea is not an array.');
+
   idea.forEach(item => {
     if (item instanceof ParsedObj) {
       fragment.appendChild(produce(document, item));

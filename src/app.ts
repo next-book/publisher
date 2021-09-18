@@ -10,7 +10,7 @@ import tagDocument from './tagger';
 import i18n from './i18n';
 import loadConfig, { Config, Metadata as ConfigMetadata } from './config';
 import { gaugeDocument, gaugePublication, PublicationStats } from './gauge';
-import getToc, { HeadingAttributes} from './toc';
+import getToc, { HeadingAttributes } from './toc';
 import * as chapterNav from './chapter-navigation';
 import { Revision } from './revision';
 
@@ -24,14 +24,14 @@ enum DocRole {
 
 interface PublicationSum {
   all: {
-      words: number;
-      chars: number;
-      ideas: number;
+    words: number;
+    chars: number;
+    ideas: number;
   };
   chapters: {
-      words: number;
-      chars: number;
-      ideas: number;
+    words: number;
+    chars: number;
+    ideas: number;
   };
 }
 
@@ -52,29 +52,34 @@ export interface Manifest extends ConfigMetadata {
   identifier: string;
   revision: Revision;
   generatedAt: {
-      date: string;
-      unix: number;
+    date: string;
+    unix: number;
   };
   documents: DocumentMetadata[];
-  totals: PublicationSum
+  totals: PublicationSum;
   keywords?: string[] | undefined;
 }
 
 interface MappedPublication {
-  manifest: Manifest; 
+  manifest: Manifest;
   documents: (string | Jsdom)[];
 }
 
 /**
  * Maps HTML for *next-book* use.
- * 
+ *
  * @param content - Array of file contents
  * @param filenames - Names of files form which content was read
  * @param options - The config options
  * @param revision - Revision identifier string
  * @returns Array of mapped documents in specified format
  */
-export default function map(content: string[], filenames: string[], options: Config, revision: Revision): MappedPublication {
+export default function map(
+  content: string[],
+  filenames: string[],
+  options: Config,
+  revision: Revision
+): MappedPublication {
   const conf = loadConfig(options);
   console.log(`\nUsing mapper config:\n${dumpArray(conf)}\n`);
 
@@ -100,7 +105,7 @@ export default function map(content: string[], filenames: string[], options: Con
   const lengths = gaugePublication(documents);
   if (!chapters) throw new Error('Chapters not defined in config.');
   const pubMetadata = gatherMetadata(documents, filenames, chapters, lengths);
-  if (!conf.meta) throw new Error('Metadata not defined in config.')
+  if (!conf.meta) throw new Error('Metadata not defined in config.');
   const manifest = composeManifest(conf.meta, pubMetadata, sumPublication(pubMetadata), revision);
 
   //preview
@@ -124,7 +129,12 @@ export default function map(content: string[], filenames: string[], options: Con
   return { manifest, documents: exportDoms(doms, conf.output) };
 }
 
-function composeManifest(meta: ConfigMetadata, documents: DocumentMetadata[], totals: PublicationSum, revision: Revision):Manifest {
+function composeManifest(
+  meta: ConfigMetadata,
+  documents: DocumentMetadata[],
+  totals: PublicationSum,
+  revision: Revision
+): Manifest {
   const id = [meta?.author?.split(' ').pop(), meta.title, meta.published, revision]
     .filter(str => str)
     .join(' ');
@@ -165,7 +175,12 @@ function sumPublication(metadata: DocumentMetadata[]): PublicationSum {
   );
 }
 
-function gatherMetadata(documents: Document[], filenames: string[], chapters: string[], lengths: PublicationStats):DocumentMetadata[] {
+function gatherMetadata(
+  documents: Document[],
+  filenames: string[],
+  chapters: string[],
+  lengths: PublicationStats
+): DocumentMetadata[] {
   console.log('\nGathering metadata…');
 
   return documents.map((document, index) => {
@@ -209,7 +224,7 @@ function gatherMetadata(documents: Document[], filenames: string[], chapters: st
 }
 
 function addDefaultBodyClasses(documents: Document[]) {
-  documents.forEach((document) => {
+  documents.forEach(document => {
     document.querySelector('body')?.classList.add('nb-custom-style');
   });
 }
@@ -217,26 +232,26 @@ function addDefaultBodyClasses(documents: Document[]) {
 function addDocRoles(documents: Document[], metadata: DocumentMetadata[]) {
   documents.forEach((document, index) => {
     const headElement = document.querySelector('head');
-    if (!headElement) throw new Error("Missing <head> HTML element.");
+    if (!headElement) throw new Error('Missing <head> HTML element.');
 
-    const originalEl = headElement.querySelector('meta[name="nb-role"]');
-    if (originalEl) originalEl.remove();
+    headElement.querySelector('meta[name="nb-role"]')?.remove();
 
     const role = metadata[index].role;
     const el = document.createElement('META');
     el.setAttribute('name', 'nb-role');
     el.setAttribute('content', role);
     headElement.appendChild(el);
+
     document.body.classList.add(`nb-role-${role}`);
   });
 }
 
-function addLanguageCode(documents: Document[], code: string):void {
+function addLanguageCode(documents: Document[], code: string): void {
   console.log('\nAdding language code…');
   if (code)
     documents.forEach(document => {
       const htmlElement = document.querySelector('html');
-      if (!htmlElement) throw new Error("Missing <html> HTML element.");
+      if (!htmlElement) throw new Error('Missing <html> HTML element.');
       htmlElement.setAttribute('lang', code);
     });
 }
@@ -247,7 +262,7 @@ function addIdentifier(documents: Document[], identifier: string) {
     el.setAttribute('name', 'nb-identifier');
     el.setAttribute('content', identifier);
     const head = document.querySelector('head');
-    if (!head) throw new Error("Missing head element.");
+    if (!head) throw new Error('Missing head element.');
     head.appendChild(el);
   });
 }
@@ -255,24 +270,24 @@ function addIdentifier(documents: Document[], identifier: string) {
 /**
  * Adds meta navigation links e.g. to next/prev, license, manifest, homepage
  * to the <head> of documents.
- * 
+ *
  * @param documents - A list of DOM Documents to add meta navigation to
  * @param metadata - Document metadata used for meta navigation links
- * @returns Mutates documents by adding and appending navigation links 
+ * @returns Mutates documents by adding and appending navigation links
  * to `<head>` HTML element.
  */
-function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):void {
+function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]): void {
   console.log('\nAdding meta navigation…');
 
   type NavItem = {
-    tagName: string,
-    rel?: string,
-    href?: string,
-    id?: string,
-    content?: string,
-    name?: string,
-    [key: string]: string | undefined
-  } | null
+    tagName: string;
+    rel?: string;
+    href?: string;
+    id?: string;
+    content?: string;
+    name?: string;
+    [key: string]: string | undefined;
+  } | null;
 
   const base: NavItem[] = [
     { tagName: 'link', rel: 'index', href: './index.html' },
@@ -293,45 +308,37 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
   documents.forEach((document, index) => {
     const headElement = document.querySelector('head');
     if (!headElement) throw Error('HTML <head> element missing');
-  
+
     const docMeta = metadata[index];
     const extra: NavItem[] = [];
 
     if (docMeta['prev'])
-      extra.push(
-        { tagName: 'link', rel: 'nb-prev', href: `./${docMeta['prev']}` }
-      )
+      extra.push({ tagName: 'link', rel: 'nb-prev', href: `./${docMeta['prev']}` });
     if (docMeta['next'])
-      extra.push(
-        { tagName: 'link', rel: 'nb-next', href: `./${docMeta['next']}` }
-      )
+      extra.push({ tagName: 'link', rel: 'nb-next', href: `./${docMeta['next']}` });
     if (docMeta['order'])
-      extra.push(
-        {
-          tagName: 'meta',
-          name: 'nb-order',
-          content: docMeta['order']?.toString()
-        }
-      )
+      extra.push({
+        tagName: 'meta',
+        name: 'nb-order',
+        content: docMeta['order']?.toString(),
+      });
 
     const self = [{ tagName: 'link', rel: 'self', href: docMeta.file }];
-    
+
     base
       .concat(extra)
       .concat(self)
       .filter(meta => meta !== null)
       .forEach(meta => {
-        if (!meta)
-          return;
+        if (!meta) return;
         const el = document.createElement(meta.tagName);
         Object.keys(meta)
           .filter(key => ['name', 'content', 'rel', 'href', 'id'].includes(key))
           .forEach(key => {
             const val = meta[key as keyof NavItem];
-            if (val && typeof val === 'string')
-              el.setAttribute(key, val);
+            if (val && typeof val === 'string') el.setAttribute(key, val);
           });
-          headElement.appendChild(el);
+        headElement.appendChild(el);
       });
   });
 }
@@ -343,12 +350,12 @@ function getColophon(metadata: DocumentMetadata[]) {
 
 /**
  * Export DOM objects in a specified format
- * 
+ *
  * @param doms - DOM objects
  * @param format - Output format
  * @returns Array of Jsdom Objects or HTML strings
  */
-function exportDoms(doms: Jsdom[], format: 'jsdom'|'html'): (Jsdom|string)[] {
+function exportDoms(doms: Jsdom[], format: 'jsdom' | 'html'): (Jsdom | string)[] {
   console.log('\nExporting HTML…');
 
   const routines = {
@@ -361,9 +368,9 @@ function exportDoms(doms: Jsdom[], format: 'jsdom'|'html'): (Jsdom|string)[] {
 
 /**
  * Dumps array
- * 
+ *
  * @param arr - Array to dump
- * @returns 
+ * @returns
  */
 function dumpArray(arr: unknown) {
   return JSON.stringify(arr, null, 2)

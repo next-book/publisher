@@ -14,64 +14,56 @@ const attrNames = {
 
 /**
  * Sum of values stored in attribute of provided elements.
- *  
+ *
  * @param attr - The attribute name
  * @returns Sum of values stored in attribute
  */
-const sumAttr = (attr: string) => (ideas: NodeListOf<Element>):number =>
+const sumAttr = (attr: string) => (ideas: NodeListOf<Element>): number =>
   Array.from(ideas).reduce((acc, idea: Element) => {
     const iattr = idea.getAttribute(attr);
-    if (!iattr)
-      return acc;
+    if (!iattr) return acc;
     return acc + parseInt(iattr, 10);
-  }, 0)
+  }, 0);
 
 /**
- * Sets sum of values stored in atribute to a same-called attribute 
+ * Sets sum of values stored in atribute to a same-called attribute
  * of provided element.
- * 
+ *
  * @param attr - The attribute name
  * @returns Mutates DOM. Sets the sum in the provided attribute of the element.
  */
-const setSumAttr = (attr: string) => (el: Element):void => {
+const setSumAttr = (attr: string) => (el: Element): void => {
   el.setAttribute(attr, sumAttr(attr)(el.querySelectorAll('.idea')).toString());
-}
+};
 
 /**
  * Counts number of characters of each `.idea` element and stores the value
  * idea’s attribute.
- *  
+ *
  * @param document - DOM Document
  * @returns Mutates DOM. Sets number of characters in the idea’s attribute.
  */
-function countChars(document: Document):void {
+function countChars(document: Document): void {
   Array.prototype.map.call(document.querySelectorAll('.idea'), idea => {
     idea.setAttribute(attrNames.chars, idea.textContent.length);
   });
 }
 
-function countWords(document: Document):void {
+function countWords(document: Document): void {
   Array.prototype.map.call(document.querySelectorAll('.idea'), idea => {
     idea.setAttribute(attrNames.words, idea.textContent.split(/\s+/g).length);
   });
 }
 
-function gaugeContent(
-    document: Document,
-    attr: string,
-    gaugeFn: (doc: Document) => void
-  ):void {
-    gaugeFn(document);
-    setSumAttr(attr)(document.body);
-    Array.prototype.forEach.call(
-      document.querySelectorAll('.chunk'),
-      setSumAttr(attr)
-    );
+function gaugeContent(document: Document, attr: string, gaugeFn: (doc: Document) => void): void {
+  gaugeFn(document);
+  setSumAttr(attr)(document.body);
+  Array.prototype.forEach.call(document.querySelectorAll('.chunk'), setSumAttr(attr));
 }
 
 /**
  * Gauges words and characters in a document.
- * 
+ *
  * @param document - DOM Document
  * @returns Modifies DOM document
  */
@@ -83,15 +75,15 @@ export function gaugeDocument(document: Document): void {
 export type DocumentStats = {
   words: number;
   chars: number;
-  ideas: number
-}
+  ideas: number;
+};
 
 export type PublicationStats = DocumentStats[];
 
 /**
  * Gauges words and characters in a publication. Relies on previous gauging of
  * individual chunks using {@link gaugeDocument}.
- * 
+ *
  * @param documents - DOM Documents
  * @returns Array of objects representing each document statistics.
  */

@@ -4,12 +4,12 @@ import { onlyWhitespace } from '../utils/regexp';
 
 /**
  * ParsedObj represents Node (respectively the DOM Element) and its subtree.
- * 
+ *
  * @remarks
- * ParsedObj contains original node and an array of ideas. 
+ * ParsedObj contains original node and an array of ideas.
  * Every item is an array of strings and HTML elements,
  * a full-whitespace string or another ParsedObj.
- * 
+ *
  * @example Example ParsedObj contents
  * ```ts
  * {
@@ -28,7 +28,7 @@ import { onlyWhitespace } from '../utils/regexp';
  * }
  * ```
  */
- export default class ParsedObj {
+export default class ParsedObj {
   /** Original Node */
   node: Node;
   ideas: Idea[];
@@ -36,13 +36,13 @@ import { onlyWhitespace } from '../utils/regexp';
 
   /**
    * @param node - Original Node
-   * @param ideas - Every item is an array of strings and HTML elements, 
+   * @param ideas - Every item is an array of strings and HTML elements,
    * a full-whitespace string or another ParsedObj.
    * @param delimiter - Delimiter
    */
   constructor(node: Node, ideas: Idea[], delimiter: Delimiter) {
     const ideaProblems = this.listProblemParsedObjIdeas(ideas);
-  
+
     if (ideaProblems.length > 0)
       throw new Error(
         `Invalid ideas at node ${JSON.stringify(node)}, problems: ${JSON.stringify(ideaProblems)}.`
@@ -54,11 +54,11 @@ import { onlyWhitespace } from '../utils/regexp';
 
   /**
    * Returns array filtered ideas, leaving only ideas that are not valid.
-   *  
-   * @param ideas - 
-   * @returns 
+   *
+   * @param ideas -
+   * @returns
    */
-  private listProblemParsedObjIdeas(ideas: Idea[]) { 
+  private listProblemParsedObjIdeas(ideas: Idea[]) {
     return ideas.filter(idea => {
       if (idea instanceof ParsedObj) return false;
       if (typeof idea === 'string' && onlyWhitespace.test(idea)) return false;
@@ -69,7 +69,7 @@ import { onlyWhitespace } from '../utils/regexp';
 
   /**
    * Determine whether array only
-   *  
+   *
    * @param items - Array of strings and Elements
    * @returns Boolean
    */
@@ -83,6 +83,3 @@ import { onlyWhitespace } from '../utils/regexp';
     );
   }
 }
-
-
-

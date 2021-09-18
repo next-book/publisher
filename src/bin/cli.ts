@@ -3,7 +3,14 @@ import cmd from 'commander';
 import express from 'express';
 import path from 'path';
 import map from '../app';
-import { prepPreviewConfig, prepConfig, writeOutput, copyFolders, buildServiceWorker, prepContent } from '../data-helper';
+import {
+  prepPreviewConfig,
+  prepConfig,
+  writeOutput,
+  copyFolders,
+  buildServiceWorker,
+  prepContent,
+} from '../data-helper';
 import { getRevision } from '../revision';
 
 cmd
@@ -16,9 +23,7 @@ cmd
   .option('-p, --preview [url]', 'Generate a preview (three chapters only)')
   .parse(process.argv);
 
-const config = cmd.preview
-  ? prepPreviewConfig(cmd.src, cmd.preview)
-  : prepConfig(cmd.src);
+const config = cmd.preview ? prepPreviewConfig(cmd.src, cmd.preview) : prepConfig(cmd.src);
 
 if (!config) throw new Error('No config set');
 
@@ -29,8 +34,8 @@ const { documents, manifest } = map(content, filenames, config, revisionId);
 writeOutput(cmd.out, filenames, documents, manifest);
 if (config.static)
   copyFolders('\nCopying static folders…', cmd.src, cmd.out, config.static, () => {
-  if (!cmd.dev && revisionId) buildServiceWorker(cmd.out, revisionId);
-});
+    if (!cmd.dev && revisionId) buildServiceWorker(cmd.out, revisionId);
+  });
 
 if (cmd.server) {
   const server = express();

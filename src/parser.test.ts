@@ -26,7 +26,5 @@ Protivný NÁLEZ byl ten tam.</p></main>`);
 
 test('Parser returns ParsedObj', () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  expect(parse(dom.window.document.querySelector('main')!, '\n') instanceof ParsedObj).toBe(
-    true
-  );
+  expect(parse(dom.window.document.querySelector('main')!, '\n') instanceof ParsedObj).toBe(true);
 });

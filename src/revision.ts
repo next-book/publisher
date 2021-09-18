@@ -16,10 +16,7 @@ function getGitRev(): string | null {
       console.log(`Specific git error: ${errorText}`);
     }
 
-    return spawn.stdout
-      .toString()
-      .trim()
-      .substr(0, 7);
+    return spawn.stdout.toString().trim().substr(0, 7);
   } catch (err) {
     return null;
   }
