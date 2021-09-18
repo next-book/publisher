@@ -1,8 +1,10 @@
-const { spawnSync } = require('child_process');
+import { spawnSync } from 'child_process';
 
-let revision;
+export type Revision = string | null;
 
-function getGitRev() {
+let revision: Revision;
+
+function getGitRev(): string | null {
   try {
     const spawn = spawnSync('git', ['rev-parse', '--short', 'HEAD']);
 
@@ -14,20 +16,16 @@ function getGitRev() {
       console.log(`Specific git error: ${errorText}`);
     }
 
-    return spawn.stdout
-      .toString()
-      .trim()
-      .substr(0, 7);
+    return spawn.stdout.toString().trim().substr(0, 7);
   } catch (err) {
     return null;
   }
 }
 
-function get() {
+export function getRevision(): string | null {
   if (revision) return revision;
 
   revision = getGitRev();
+  // todo: Avoid returning null. Follow parse, dont validate philosophy instead.
   return revision;
 }
-
-module.exports = { get };

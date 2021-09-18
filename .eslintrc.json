@@ -1,18 +1,26 @@
-{ 
-  "extends": [
-    "airbnb",
-    "prettier"
-  ],
+{
   "env": {
     "node": true,
     "jest": true
   },
+  "root": true,
+  "plugins": [
+    "@typescript-eslint",
+    "eslint-plugin-tsdoc"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-      "ecmaVersion": 9,
-      "sourceType": "module"
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": ".",
+    "ecmaVersion": 2020,
+    "sourceType": "module"
   },
   "rules": {
-    "valid-jsdoc": "error",
+    "tsdoc/syntax": "warn",
     "no-nested-ternary": "off",
     "no-use-before-define": "off",
     "no-console": ["error", { "allow": ["log", "warn", "error"] }]

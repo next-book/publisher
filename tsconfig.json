@@ -1,0 +1,23 @@
+{
+  "include": ["src/**/*", "tests/**/*"],
+  "exclude": ["src/service-worker/"],
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "checkJs": false,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "lib": [
+      "DOM", "DOM.Iterable"
+    ],
+    "forceConsistentCasingInFileNames": false,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "$schema": "https://json.schemastore.org/tsconfig"
+}

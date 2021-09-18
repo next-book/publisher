@@ -1,0 +1,4 @@
+dist/*
+bin/*
+src/service-worker/code.tpl.js
+jest.config.js

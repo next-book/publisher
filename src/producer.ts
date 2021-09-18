@@ -1,27 +1,28 @@
 /**
+ * Producer: takes {@link ParsedObj} and updates the HTML of document with
+ * the enhancement for next-book specific use-case.
  * @module
- * @ignore
  */
-
-const { ParsedObj } = require('./structures');
+import { ParsedObj, Idea, IdeaPiece } from './structures';
+import { isNode } from './utils/dom';
 
 /**
  * Produces ideas from a parsedObj
  *
- * @param      {Object}           document          DOM document
- * @param      {ParsedObj}        parsedObj         A parsed object
- * @return     {Node}             HTML node
+ * @param document - DOM Document
+ * @param parsedObj - A parsed object
+ * @returns HTML node
  */
-function produce(document, parsedObj) {
+export default function produce(document: Document, parsedObj: ParsedObj): Node {
   const fragment = document.createDocumentFragment();
   const { node, ideas, delimiter } = parsedObj;
 
-  ideas.forEach((idea, index) => {
+  ideas.forEach((idea: Idea, index: number) => {
     if (Array.isArray(idea)) {
       if (containsParsedObj(idea)) {
         fragment.appendChild(anchorObject(idea, document));
       } else {
-        fragment.appendChild(produceIdea(idea, document));
+        fragment.appendChild(produceHTMLSpanIdea(idea, document));
       }
     } else if (typeof idea === 'string') {
       fragment.appendChild(document.createTextNode(idea));
@@ -38,22 +39,21 @@ function produce(document, parsedObj) {
 }
 
 /**
- * Produces idea from an array of parts
+ * Produces HTML span idea from an array of parts.
  *
- * @param      {array}   idea      The idea
- * @param      {Object}  document  DOM document
- * @return     {Object}  HTML Element span
- * @private
+ * @param idea - The idea
+ * @param document - DOM document
+ * @returns HTML Element span
  */
-function produceIdea(idea, document) {
+function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document): HTMLElement {
   const span = document.createElement('SPAN');
   span.classList.add('idea');
 
   idea.forEach(item => {
     if (typeof item === 'string') {
       span.appendChild(document.createTextNode(item));
-    } else if (isNode(item)) {
-      span.appendChild(item);
+    } else if (isNode(item as Node)) {
+      span.appendChild(item as Node);
     }
   });
 
@@ -61,49 +61,35 @@ function produceIdea(idea, document) {
 }
 
 /**
- * Determines if an object is a DOM Node, works outside of browsers.
- *
- * @param      {Object}   obj     The object
- * @return     {boolean}  True if node, False otherwise.
- * @private
- */
-function isNode(obj) {
-  return typeof obj === 'object' && 'nodeType' in obj && obj.nodeType === 1 && obj.cloneNode;
-}
-
-/**
  * Determines if array contains parsed object. See {@link ParsedObj}.
  *
- * @param      {array}  idea    The idea
- * @return     {bool}   True if contains parsed object, False otherwise.
- * @private
+ * @param idea - The idea
+ * @returns True if contains parsed object, False otherwise.
  */
-function containsParsedObj(idea) {
+function containsParsedObj(idea: IdeaPiece[]) {
   return idea.reduce((acc, item) => acc || item instanceof ParsedObj, false);
 }
 
-function anchorObject(idea, document) {
+function anchorObject(idea: Idea, document: Document) {
   const fragment = document.createDocumentFragment();
+  if (!Array.isArray(idea)) throw new Error('Idea is not an array.');
 
   idea.forEach(item => {
     if (item instanceof ParsedObj) {
       fragment.appendChild(produce(document, item));
-    } else if (isNode(item)) {
-      fragment.appendChild(item);
+    } else if (isNode(item as Node)) {
+      fragment.appendChild(item as Node);
     } else {
-      fragment.appendChild(document.createTextNode(item));
+      fragment.appendChild(document.createTextNode(item as string));
     }
   });
-
   return fragment;
 }
 
-function emptyNode(node) {
+function emptyNode(node: Node) {
   while (node.firstChild) {
     node.removeChild(node.firstChild);
   }
 
   return node;
 }
-
-module.exports = { produce };

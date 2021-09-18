@@ -63,3 +63,8 @@ typings/
 # Build
 dist
 
+# Editor config
+.vscode
+
+# Mac folder custom attributes
+.DS_Store
