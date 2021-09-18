@@ -12,11 +12,11 @@ jobs:
       INPUT_TOKEN: '' # https://github.com/JS-DevTools/npm-publish/issues/15
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 15
 
       - run: npm install
 
