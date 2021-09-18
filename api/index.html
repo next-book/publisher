@@ -1,1601 +1,225 @@
 <!doctype html>
-<html lang="en">
+<html class="default no-js">
 <head>
-  <meta charset='utf-8'>
-  <title>@next-book/publisher 0.2.24 | Documentation</title>
-  <meta name='description' content='Publish web books with next-book'>
-  <meta name='viewport' content='width=device-width,initial-scale=1'>
-  <link href='assets/bass.css' rel='stylesheet'>
-  <link href='assets/style.css' rel='stylesheet'>
-  <link href='assets/github.css' rel='stylesheet'>
-  <link href='assets/split.css' rel='stylesheet'>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@next-book/publisher</title>
+	<meta name="description" content="Documentation for @next-book/publisher">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
 </head>
-<body class='documentation m0'>
-    <div class='flex'>
-      <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
-        <div class='py1 px2'>
-          <h3 class='mb0 no-anchor'>@next-book/publisher</h3>
-          <div class='mb1'><code>0.2.24</code></div>
-          <input
-            placeholder='Filter'
-            id='filter-input'
-            class='col12 block input'
-            spellcheck='false'
-            autocapitalize='off'
-            autocorrect='off'
-            type='text' />
-          <div id='toc'>
-            <ul class='list-reset h5 py1-ul'>
-              
-                
-                <li><a
-                  href='#app'
-                  class="h5 bold black caps">
-                  app
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#map'
-                  class="">
-                  map
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#browser'
-                  class="h5 bold black caps toggle-sibling">
-                  browser
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  <ul class='list-reset py1-ul pl1'>
-                    <li class='h5'><span>Static members</span></li>
-                    
-                      <li><a
-                        href='#maphtml'
-                        class='regular pre-open'>
-                        .mapHtml
-                      </a></li>
-                    
-                    </ul>
-                  
-                  
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#config'
-                  class="h5 bold black caps">
-                  config
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#options'
-                  class="">
-                  Options
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#load'
-                  class="">
-                  load
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#tagger'
-                  class="h5 bold black caps">
-                  tagger
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#tagdocument'
-                  class="">
-                  tagDocument
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#selectorfn'
-                  class="">
-                  selectorFn
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#tokenizerfn'
-                  class="">
-                  tokenizerFn
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#parser'
-                  class="h5 bold black caps">
-                  parser
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#parse'
-                  class="">
-                  parse
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#producer'
-                  class="h5 bold black caps">
-                  producer
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#produce'
-                  class="">
-                  produce
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#gauge'
-                  class="h5 bold black caps">
-                  gauge
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#gaugedocument'
-                  class="">
-                  gaugeDocument
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#gaugepublication'
-                  class="">
-                  gaugePublication
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#structures'
-                  class="h5 bold black caps">
-                  structures
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#parsedobj'
-                  class="">
-                  ParsedObj
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#a-note-about-these-docs'
-                  class="h5 bold black caps">
-                  A note about these docs
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#ideas'
-                  class="">
-                  Ideas
-                  
-                </a>
-                
-                </li>
-              
-            </ul>
-          </div>
-          <div class='mt1 h6 quiet'>
-            <a href='https://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
-          </div>
-        </div>
-      </div>
-      <div id='split-right' class='relative overflow-auto height-viewport-100'>
-        
-          
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='app' class='mt0'>
-    app
-  </h2>
-
-  
-    <p>Mapper for server env, mapping strings or jsdom objects.</p>
-
-  
-</section></div>
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='map'>
-      map
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/app.js#L29-L75'>
-      <span>src/app.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Maps HTML for <em>next-book</em> use.</p>
-
-    <div class='pre p1 fill-light mt0'>map(content: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;JSDOM>), filenames: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>, options: config~Options, revision: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>content</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;JSDOM>))</code>
-	    Array of 
-<em>jsdom</em>
- objects or strings
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>filenames</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>)</code>
-	    Names of files from which content was read
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(config~Options)</code>
-	    The options
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>revision</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    Revision identifier string
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a></code>:
-        Array of mapped documents in specified format
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='browser'>
-      browser
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Mapper for browser env, mapping DOM contents. Accessible at <code>window.NbMapper</code>.</p>
-
-    <div class='pre p1 fill-light mt0'>browser</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Static Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='maphtml'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>mapHtml(options)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/browser.js#L18-L22'>
-      <span>src/browser.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Maps document contents — to be used in browser env.</p>
-
-    <div class='pre p1 fill-light mt0'>mapHtml(options: <a href="#options">Options</a>): void</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#options">Options</a>)</code>
-	    The options
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>void</code>:
-        Modifies document
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@next-book/publisher</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>@next-book/publisher</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#next-book-publishing-tool" id="next-book-publishing-tool" style="color: inherit; text-decoration: none;">
+					<h1>Next-book publishing tool</h1>
+				</a>
+				<p>@next-book/publisher is a tool for mapping HTML files for use with next-book tools. See <a href="http://next-book.github.io/publisher/">an example</a>, <a href="http://next-book.github.io/publisher/api">API documentations</a> or a <a href="https://github.com/next-book/free-culture/">example book created with publisher</a>, that builds functionalityon top of its markup: displaying and remembering position, tracing reader&#39;s journey through a book etc.</p>
+				<a href="#use-with-nodejs" id="use-with-nodejs" style="color: inherit; text-decoration: none;">
+					<h2>Use with node.js</h2>
+				</a>
+				<p>Install in a book&#39;s repository (global installation is discouraged as publisher is in its early development and API changes are expected):</p>
+				<pre><code class="language-sh"><span style="color: #000000">npm i @next-book/publisher</span>
+</code></pre>
+				<a href="#cli-use" id="cli-use" style="color: inherit; text-decoration: none;">
+					<h2>CLI use</h2>
+				</a>
+				<p>Use publish-nb command, e. g.</p>
+				<pre><code class="language-sh"><span style="color: #000000">publish-nb --src text --out book</span>
+</code></pre>
+				<p>Mapper reads all <code>\*.html</code> files in the source directory (<code>--src</code>, by default <code>./src</code>), sorts them by filename, maps them and outputs the result into the <code>output</code> directory (<code>--out</code>, by default <code>./book</code>).</p>
+				<p>It also creates a <code>spine.json</code> file that collects metadata about the book and adds several structural meta tags into files (prev, next, license, spine) that allow book traversal (with Javascript or native browser affordances).</p>
+				<p>It&#39;s required to include a <code>book.json</code> file in the source directory that adds metadata and a list of chapters. It&#39;s possible to specify static folders that will be copied from source to output as they are.</p>
+				<pre><code class="language-json"><span style="color: #000000">{</span>
+<span style="color: #000000">    </span><span style="color: #0451A5">&quot;meta&quot;</span><span style="color: #000000">: {</span>
+<span style="color: #000000">        </span><span style="color: #0451A5">&quot;title&quot;</span><span style="color: #000000">: </span><span style="color: #A31515">&quot;Free Culture&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #0451A5">&quot;author&quot;</span><span style="color: #000000">: </span><span style="color: #A31515">&quot;Lawrence Lessig&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #0451A5">&quot;subtitle&quot;</span><span style="color: #000000">: </span><span style="color: #A31515">&quot;How big media uses technology and the law to lock down culture and control creativity&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #0451A5">&quot;published&quot;</span><span style="color: #000000">: </span><span style="color: #098658">2004</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #0451A5">&quot;keywords&quot;</span><span style="color: #000000">: [</span><span style="color: #A31515">&quot;copyright law&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;intellectual property&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;public domain&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;web&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;Napster&quot;</span><span style="color: #000000">]</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">    </span><span style="color: #0451A5">&quot;chapters&quot;</span><span style="color: #000000">: [</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&quot;01-preface.html&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&quot;02-introduction.html&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&quot;03-piracy.html&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&quot;04-property.html&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&quot;05-puzzles.html&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&quot;06-balances.html&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&quot;07-conclusion.html&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&quot;08-afterword.html&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&quot;09-acknowledgments.html&quot;</span>
+<span style="color: #000000">    ],</span>
+<span style="color: #000000">    </span><span style="color: #0451A5">&quot;static&quot;</span><span style="color: #000000">: [</span><span style="color: #A31515">&quot;style&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;scripts&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;images&quot;</span><span style="color: #000000">]</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<p>You can preview the book on a local web server by running the <code>publish-nb</code> with <code>-w</code> flag (or with <code>--server</code> param).</p>
+				<pre><code class="language-sh"><span style="color: #000000">publish-nb --src text --out book --server</span>
+</code></pre>
+				<a href="#use-in-browser" id="use-in-browser" style="color: inherit; text-decoration: none;">
+					<h2>Use in browser</h2>
+				</a>
+				<p>Download @next-book/publisher from npm or github and include it in your project files. Check <a href="http://next-book.github.io/publisher/">the example with extensive highlighting</a> to see how the result looks like.</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">type</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;text/javascript&quot;</span><span style="color: #000000FF"> </span><span style="color: #FF0000">src</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;./publisher/dist/browser.js&quot;</span><span style="color: #800000">&gt;&lt;/script&gt;</span>
+<span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">type</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;text/javascript&quot;</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000FF">    </span><span style="color: #001080">window</span><span style="color: #000000FF">.</span><span style="color: #795E26">addEventListener</span><span style="color: #000000FF">(</span><span style="color: #A31515">&#039;load&#039;</span><span style="color: #000000FF">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000FF"> </span><span style="color: #001080">NbMapper</span><span style="color: #000000FF">.</span><span style="color: #795E26">mapHtml</span><span style="color: #000000FF">());</span>
+<span style="color: #800000">&lt;/script&gt;</span>
+</code></pre>
+				<p>Browser use is currently primarily for quick try-outs, not intended for production use.</p>
+				<a href="#use-in-a-nodejs-script" id="use-in-a-nodejs-script" style="color: inherit; text-decoration: none;">
+					<h2>Use in a Node.js script</h2>
+				</a>
+				<p>Map HTML string or JSDOM objects in a script:</p>
+				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">html</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;...&#039;</span><span style="color: #000000">;</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">publisher</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;@next-book/publisher&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">publisher</span><span style="color: #000000">.</span><span style="color: #795E26">map</span><span style="color: #000000">(</span><span style="color: #001080">html</span><span style="color: #000000">);</span>
+</code></pre>
+				<p>Config the publisher with an options object <code>publisher.map(html, conf)</code>, see <a href="http://next-book.github.io/publisher/api/#options">API docs for Options</a>.</p>
+				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+					<h2>Contributing</h2>
+				</a>
+				<p>Clone repository and install devDependencies. Build a complete project with <code>npm run build</code>. Limit PRs only to changed source files.</p>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
+				<p>@next-book/publisher &copy; 2016–2020 next-book</p>
+				<p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Modules</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/app.html">app</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/chapter_navigation.html">chapter-<wbr>navigation</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/config.html">config</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/data_helper.html">data-<wbr>helper</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/gauge.html">gauge</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/i18n.html">i18n</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/parser.html">parser</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/producer.html">producer</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/revision.html">revision</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/service_worker_builder.html">service-<wbr>worker/builder</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/structures.html">structures</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/structures_ideas.html">structures/ideas</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/structures_parsedobj.html">structures/parsedobj</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/tagger.html">tagger</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/toc.html">toc</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/utils_dom.html">utils/dom</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/utils_regexp.html">utils/regexp</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
 </div>
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='config' class='mt0'>
-    config
-  </h2>
-
-  
-    
-  
-</section></div>
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='options'>
-      Options
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/config.js#L7-L22'>
-      <span>src/config.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Set of config options. See default values in <a href="defaults">defaults</a>.</p>
-
-    <div class='pre p1 fill-light mt0'>Options</div>
-  
-    <p>
-      Type:
-      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Properties</div>
-    <div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>output</span> <code class='quiet'>((<code>"jsdom"</code> | <code>"html"</code>))</code>
-          : Output format (jsdom object or
-HTML strings).
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>delimiter</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a> | <a href="#tokenizerfn">tokenizerFn</a>))</code>
-          : Delimiter used to split chunks into
-ideas or a callback used to split
-chunks into ideas.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>restoreDelimiter</span> <code class='quiet'>((bool))</code>
-          : Determines whether to append
-delimiter after each idea when
-assembling. Cannot be used when
-delimiter is a RegExp.
-
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <span class='code bold'>selectors</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a> | <a href="#selectorfn">selectorFn</a>))</code>
-          : Array of selectors of mappable
-chunks of a document or a callback
-that marks chunks.
-
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='load'>
-      load
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/config.js#L43-L43'>
-      <span>src/config.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Merges defaults with provided overrides.</p>
-
-    <div class='pre p1 fill-light mt0'>load</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    Config overrides
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
-        Complete configuration
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='tagger' class='mt0'>
-    tagger
-  </h2>
-
-  
-    <p>Tagger parses, produces and numbers chunks and ideas.</p>
-
-  
-</section></div>
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='tagdocument'>
-      tagDocument
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/tagger.js#L23-L29'>
-      <span>src/tagger.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Recognizes and tags chunks and ideas in a document</p>
-
-    <div class='pre p1 fill-light mt0'>tagDocument(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, options: <a href="#options">Options</a>): void</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>document</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    DOM document
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="#options">Options</a>)</code>
-	    Config
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>void</code>:
-        Modifies DOM document
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='selectorfn'>
-      selectorFn
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/tagger.js#L74-L79'>
-      <span>src/tagger.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Callback that marks elements as chunks of ideas. Those are then used for idea mapping.</p>
-
-    <div class='pre p1 fill-light mt0'>selectorFn(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): void</div>
-  
-    <p>
-      Type:
-      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>document</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    DOM document
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>void</code>:
-        Modifies DOM document
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='tokenizerfn'>
-      tokenizerFn
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/tagger.js#L97-L104'>
-      <span>src/tagger.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Callback used to split chunk contents into ideas.</p>
-
-    <div class='pre p1 fill-light mt0'>tokenizerFn(node: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></div>
-  
-    <p>
-      Type:
-      <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>
-    </p>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>node</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    DOM node
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    Text content.
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></code>:
-        Text split into 1-n parts (string, Node or ParsedObj) used for idea
-construction.
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='parser' class='mt0'>
-    parser
-  </h2>
-
-  
-    <p>Parser produces instances of <a href="#parsedobj">ParsedObj</a> from Element contents.</p>
-
-  
-</section></div>
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='parse'>
-      parse
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/parser.js#L20-L48'>
-      <span>src/parser.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Returns ParsedObj which contains original node and an array of arrays in which every array
-represents one idea or ParsedObj. Ideas are delimited with a delimiter that is searched for in
-text nodes.</p>
-
-    <div class='pre p1 fill-light mt0'>parse(node: <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">Node</a>, delimiter: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a> | <a href="#tokenizerfn">tokenizerFn</a>)): <a href="#parsedobj">ParsedObj</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>node</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">Node</a>)</code>
-	    DOM node
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>delimiter</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a> | <a href="#tokenizerfn">tokenizerFn</a>))</code>
-	    The delimiter
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#parsedobj">ParsedObj</a></code>:
-        An instance of 
-<a href="#parsedobj">ParsedObj</a>
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='producer' class='mt0'>
-    producer
-  </h2>
-
-  
-    <p>Producer assembles ideas back into HTML where ideas are represented with
-annotated span elements.</p>
-
-  
-</section></div>
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='produce'>
-      produce
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/producer.js#L15-L38'>
-      <span>src/producer.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Produces ideas from a parsedObj</p>
-
-    <div class='pre p1 fill-light mt0'>produce(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, parsedObj: <a href="#parsedobj">ParsedObj</a>): <a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">Node</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>document</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    DOM document
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>parsedObj</span> <code class='quiet'>(<a href="#parsedobj">ParsedObj</a>)</code>
-	    A parsed object
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/API/Node/nextSibling">Node</a></code>:
-        HTML node
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='gauge' class='mt0'>
-    gauge
-  </h2>
-
-  
-    <p>Gauge counts words and characters in a document and sums those in a publication.</p>
-
-  
-</section></div>
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='gaugedocument'>
-      gaugeDocument
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/gauge.js#L42-L45'>
-      <span>src/gauge.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Gauges words and characters in a document.</p>
-
-    <div class='pre p1 fill-light mt0'>gaugeDocument(document: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): void</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>document</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    DOM document
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>void</code>:
-        Modifies DOM document
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='gaugepublication'>
-      gaugePublication
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/gauge.js#L54-L60'>
-      <span>src/gauge.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Gauges words and characters in a publication. Relies on previous gauging of individual chunks
-using <a href="#gaugedocument">gaugeDocument</a>.</p>
-
-    <div class='pre p1 fill-light mt0'>gaugePublication(documents: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>>): void</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>documents</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>>)</code>
-	    DOM documents
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>void</code>:
-        Modifies DOM documents
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='structures' class='mt0'>
-    structures
-  </h2>
-
-  
-    <p>Data structures used in the other parts.</p>
-
-  
-</section></div>
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='parsedobj'>
-      ParsedObj
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/structures.js#L116-L127'>
-      <span>src/structures.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>ParsedObj contains original node and an array
-in which every item is an array of strings and HTML elements,
-a full-whitespace string or another ParsedObj.</p>
-
-    <div class='pre p1 fill-light mt0'>new ParsedObj(node: window.Node, ideas: <a href="#ideas">Ideas</a>, delimiter: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>node</span> <code class='quiet'>(window.Node)</code>
-	    DOM node
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>ideas</span> <code class='quiet'>(<a href="#ideas">Ideas</a>)</code>
-	    Ideas object
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>delimiter</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    Delimiter
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'>{
- <span class="hljs-attr">node</span>: &lt;p class=&quot;chunk&quot;&gt;,
- ideas: [
-   [&quot;Integer nec odio.&quot;],
-   &quot; &quot;,
-   [&quot;Praesent &quot;, &lt;strong&gt;, &quot;, nibh elementum imperdiet.&quot;],
-   &quot; &quot;,
-   [&quot;Sed cursus ante dapibus diam.&quot;],
-   &quot; &quot;,
-   [ParsedObj],
-   &quot; &quot;,
-   …
- ]
-}</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <div class='keyline-top-not py2'><section class='py2 clearfix'>
-
-  <h2 id='a-note-about-these-docs' class='mt0'>
-    A note about these docs
-  </h2>
-
-  
-    <p>See <a href="http://github.com/next-book/publisher/">project's README</a>.</p>
-<p>With current versions of JSDoc, ESDoc and documentation.js it is hard to work<br>
-with ES6 modules that do not use classes internally. Any tips for tools that do not require
-hacks are welcome!</p>
-
-  
-</section></div>
-          
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='ideas'>
-      Ideas
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/next-book/publisher/blob/a8a72ee41ada4d2192a1cc160220acaa9cc71f79/src/structures.js#L29-L56'>
-      <span>src/structures.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Ideas contains an array of items in which every
-item is an array of strings and HTML elements,
-a whitespace-only string or a ParsedObj.</p>
-
-    <div class='pre p1 fill-light mt0'>new Ideas(node: window.Node, ideas: <a href="#ideas">Ideas</a>, delimiter: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>node</span> <code class='quiet'>(window.Node)</code>
-	    DOM node
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>ideas</span> <code class='quiet'>(<a href="#ideas">Ideas</a>)</code>
-	    Ideas object
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>delimiter</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    Delimiter
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'>{
- <span class="hljs-attr">arr</span>: [
-   [<span class="hljs-string">&quot;Integer nec odio.&quot;</span>],
-   <span class="hljs-string">&quot; &quot;</span>,
-   [<span class="hljs-string">&quot;Praesent &quot;</span>, &lt;strong&gt;, <span class="hljs-string">&quot;, nibh elementum imperdiet.&quot;</span>],
-   <span class="hljs-string">&quot; &quot;</span>,
-   [<span class="hljs-string">&quot;Sed cursus ante dapibus diam.&quot;</span>],
-   <span class="hljs-string">&quot; &quot;</span>,
-   [ParsedObj],
-   <span class="hljs-string">&quot; &quot;</span>,
-   …
- ]
-}</pre>
-    
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-      </div>
-    </div>
-  <script src='assets/anchor.js'></script>
-  <script src='assets/split.js'></script>
-  <script src='assets/site.js'></script>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
