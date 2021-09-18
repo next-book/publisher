@@ -218,6 +218,10 @@ function addDocRoles(documents: Document[], metadata: DocumentMetadata[]) {
   documents.forEach((document, index) => {
     const headElement = document.querySelector('head');
     if (!headElement) throw new Error("Missing <head> HTML element.");
+
+    const originalEl = headElement.querySelector('meta[name="nb-role"]');
+    if (originalEl) originalEl.remove();
+
     const role = metadata[index].role;
     const el = document.createElement('META');
     el.setAttribute('name', 'nb-role');
