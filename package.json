@@ -12,8 +12,9 @@
     "bundle": "browserify src/browser.ts -p [ tsify --noImplicitAny ] > dist/browser.js",
     "transpile": "babel dist/browser.js --out-file dist/browser.js",
     "updateExample": "cp dist/browser.js docs/browser.js",
+    "copyServiceWorkerTemplate": "cp src/service-worker/code.tpl.js dist/service-worker/code.tpl.js",
     "updateDocs": "typedoc --out docs/api src/**.ts src/**/*.ts",
-    "build": "tsc && chmod u+x dist/bin/cli.js && npm run bundle && npm run transpile && npm run updateExample && npm run updateDocs",
+    "build": "tsc && chmod u+x dist/bin/cli.js && npm run bundle && npm run transpile && npm run copyServiceWorkerTemplate && npm run updateExample && npm run updateDocs",
     "build:watch": "onchange 'src/*.js' -v -- npm run build",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "clearJestCache": "jest --clearCache"
