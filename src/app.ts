@@ -173,11 +173,11 @@ function gatherMetadata(documents: Document[], filenames: string[], chapters: st
     const file = filenames[index];
     const { words, chars, ideas } = lengths[index];
     const toc = getToc(document);
-    const content = document.querySelector('meta[name="nb-role"]')?.getAttribute('content');
-    
+    const docRoleMeta = document.querySelector('meta[name="nb-role"]')?.getAttribute('content');
+
     const role =
-      content && content in DocRole
-        ? content
+      docRoleMeta && Object.values(DocRole).includes(docRoleMeta as DocRole)
+        ? docRoleMeta
         : chapters.includes(file)
         ? DocRole.Chapter
         : file === 'index.html'
