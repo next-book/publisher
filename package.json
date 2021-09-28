@@ -15,7 +15,7 @@
     "copyServiceWorkerTemplate": "cp src/service-worker/code.tpl.js dist/service-worker/code.tpl.js",
     "updateDocs": "typedoc --out docs/api src/**.ts src/**/*.ts",
     "build": "tsc && chmod u+x dist/bin/cli.js && npm run bundle && npm run transpile && npm run copyServiceWorkerTemplate && npm run updateExample && npm run updateDocs",
-    "build:watch": "onchange 'src/*.js' -v -- npm run build",
+    "build:watch": "tsc --watch",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "clearJestCache": "jest --clearCache"
   },
