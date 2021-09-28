@@ -6,6 +6,7 @@ import { Manifest } from './app';
 import copy from 'recursive-copy';
 import * as sw from './service-worker/builder';
 import { Config } from './config';
+import { TocBase } from './toc';
 
 type PathLike = string;
 
@@ -26,6 +27,7 @@ interface BookConfig extends Config {
   meta: BookConfigMetaData;
   chapters: string[];
   removeChapters: string[];
+  tocBase: TocBase;
   static: string[];
 }
 

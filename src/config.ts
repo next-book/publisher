@@ -2,6 +2,7 @@
  * Config module
  * @module
  */
+import { TocBase } from './toc';
 
 /**
  * A callback used to split chunk contents into ideas.
@@ -65,6 +66,11 @@ export interface Config {
    * Chapters as list of `.html` files
    */
   chapters?: string[];
+
+  /**
+   * TOC structure without in-document headings
+   */
+  tocBase?: TocBase;
 
   /**
    * Static files folders to be published as a list of folder names.

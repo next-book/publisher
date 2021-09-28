@@ -10,7 +10,7 @@ import tagDocument from './tagger';
 import i18n from './i18n';
 import loadConfig, { Config, Metadata as ConfigMetadata } from './config';
 import { gaugeDocument, gaugePublication, PublicationStats } from './gauge';
-import getToc, { HeadingAttributes } from './toc';
+import getDocumentToc, { getToc, Heading } from './toc';
 import * as chapterNav from './chapter-navigation';
 import { Revision } from './revision';
 
@@ -35,7 +35,7 @@ interface PublicationSum {
   };
 }
 
-interface DocumentMetadata {
+export interface DocumentMetadata {
   title: string | null | undefined;
   file: string;
   words: number;
@@ -45,7 +45,7 @@ interface DocumentMetadata {
   order: number | null;
   prev: string | null;
   next: string | null;
-  toc: HeadingAttributes[];
+  toc: Heading[];
 }
 
 export interface Manifest extends ConfigMetadata {
@@ -125,6 +125,7 @@ export default function map(
   addIdentifier(documents, manifest.identifier);
   addDocRoles(documents, pubMetadata);
   addDefaultBodyClasses(documents);
+  addToc(documents, getToc(pubMetadata, conf.tocBase));
 
   return { manifest, documents: exportDoms(doms, conf.output) };
 }
@@ -187,7 +188,7 @@ function gatherMetadata(
     const title = document.querySelector('title')?.textContent;
     const file = filenames[index];
     const { words, chars, ideas } = lengths[index];
-    const toc = getToc(document);
+    const toc = getDocumentToc(document);
     const docRoleMeta = document.querySelector('meta[name="nb-role"]')?.getAttribute('content');
 
     const role =
@@ -226,6 +227,12 @@ function gatherMetadata(
 function addDefaultBodyClasses(documents: Document[]) {
   documents.forEach(document => {
     document.querySelector('body')?.classList.add('nb-custom-style');
+  });
+}
+
+function addToc(documents: Document[], toc: DocumentFragment) {
+  documents.forEach(document => {
+    document.querySelector('body')?.prepend(toc.cloneNode(true));
   });
 }
 
