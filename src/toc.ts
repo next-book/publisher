@@ -148,7 +148,7 @@ function renderChildren(
 }
 
 function renderDocumentToc(headings: Heading[], file: string): DocumentFragment {
-  const root = Jsdom.fragment('<ol></ol>');
+  const root = Jsdom.fragment('<ol class="headings-toc"></ol>');
   const ol = root.querySelector('ol') as HTMLElement;
 
   headings.map(h => {
