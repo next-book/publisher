@@ -96,12 +96,16 @@ export function getToc(meta: DocumentMetadata[], tocBase?: TocBase): DocumentFra
   const root = Jsdom.fragment('<nav role="doc-toc"></nav>');
   const nav = root.querySelector('nav') as HTMLElement;
 
-  tocBase?.map(item => renderTocItem(item, meta)).forEach(el => el && nav.appendChild(el));
+  tocBase?.map(item => renderTocItem(item, meta, true)).forEach(el => el && nav.appendChild(el));
 
   return root;
 }
 
-function renderTocItem(item: TocBaseItem, meta: DocumentMetadata[]): DocumentFragment {
+function renderTocItem(
+  item: TocBaseItem,
+  meta: DocumentMetadata[],
+  topLevel: boolean = false
+): DocumentFragment {
   const childrenWrapper = renderChildren(item.children, item.numberedChildren ? 'OL' : 'UL', meta);
 
   if (item.isSection) {
@@ -124,6 +128,14 @@ function renderTocItem(item: TocBaseItem, meta: DocumentMetadata[]): DocumentFra
   const docMeta = meta.find(doc => doc.file === item.link);
   if (docMeta && docMeta.toc && docMeta.toc[0].children) {
     li.appendChild(renderDocumentToc(docMeta.toc[0].children, docMeta.file));
+  }
+
+  if (topLevel) {
+    const topLevelWrapper = Jsdom.fragment('<ul></ul>');
+    const ul = topLevelWrapper.querySelector('ul') as HTMLElement;
+    ul.appendChild(root);
+
+    return topLevelWrapper;
   }
 
   return root;
