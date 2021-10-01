@@ -126,7 +126,7 @@ function renderTocItem(
   }
 
   const docMeta = meta.find(doc => doc.file === item.link);
-  if (docMeta && docMeta.toc && docMeta.toc[0].children) {
+  if (docMeta && docMeta.toc && docMeta.toc[0] && docMeta.toc[0].children) {
     li.appendChild(renderDocumentToc(docMeta.toc[0].children, docMeta.file));
   }
 
