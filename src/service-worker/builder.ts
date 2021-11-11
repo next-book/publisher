@@ -8,7 +8,7 @@ export async function build(dir: PathLike, revision: string): Promise<string> {
 
   return glob(dir).then(paths => {
     const assets = listAssets(dir, paths);
-    return code.replace('%assets%', JSON.stringify(assets)).replace('%revision%', revision);
+    return code.replace('\'%assets%\'', JSON.stringify(assets)).replace('%revision%', revision);
   });
 }
 
