@@ -7,6 +7,7 @@ const CACHE = 'cache-%revision%';
 
 type iso = string;
 
+// IndexedDB keyval schema
 type Schema =
   | {
       key: 'cacheDeletedAt';
@@ -19,21 +20,33 @@ type Schema =
 
 // followed messages are supported by service worker
 // usage: navigator.serviceWorker.controller.postMessage(message);
-export type Message = 'getServiceWorkerMetadata' | 'getCacheDeletedAt' | 'getActivatedAt';
 
-type ResultData =
-  | {
-      activatedAt?: iso;
-      cacheDeletedAt?: iso;
-    }
-  | iso
-  | undefined;
-
-type ResultSuccess<ResultData> = { success: true; data?: ResultData };
+type ResultSuccess<T> = { success: true; data?: T };
 type ResultError = { success: false; error: Error };
+type Result<T> = ResultSuccess<T> | ResultError;
+type SwAPI<Request, ResultData> = {
+  req: Request;
+  res: Result<ResultData>;
+};
 
-// type that may be used in interface, it can be modified later
-export type Result<ResultData> = ResultSuccess<ResultData> | ResultError;
+type Metadata = {
+  activatedAt?: iso;
+  cacheDeletedAt?: iso;
+};
+export type MetadataAPI = SwAPI<'getMetadata', Metadata>;
+
+type CacheDeleteAt = {
+  cacheDeletedAt?: iso;
+};
+export type CacheDeleteAtAPI = SwAPI<'getCacheDeletedAt', CacheDeleteAt>;
+
+type ActivatedAt = {
+  activatedAt?: iso;
+};
+export type ActivatedAtAPI = SwAPI<'getActivatedAt', ActivatedAt>;
+
+type APIs = MetadataAPI | CacheDeleteAtAPI | ActivatedAtAPI;
+type Message = APIs['req'];
 
 // IndexedDB singleton wrapper
 const idb = (() => {
@@ -172,44 +185,46 @@ async function handleMessage(e: MessageEvent) {
   console.log('[message router] Recieved message:', e.data);
   // check event.origin for added security
   switch (e.data) {
-    case 'getServiceWorkerMetadata':
-      postMessage({
-        activatedAt: await idb.get('activatedAt'),
+    case 'getMetadata':
+      postRes<Metadata>({
+        activatedAt: await idb.get('cacheDeletedAt'),
         cacheDeletedAt: await idb.get('cacheDeletedAt'),
       });
       break;
     case 'getCacheDeletedAt':
-      postMessage({
+      postRes<CacheDeleteAt>({
         cacheDeletedAt: await idb.get('cacheDeletedAt'),
       });
       break;
     case 'getActivatedAt':
-      postMessage({
-        activatedAt: await idb.get('activatedAt'),
+      postRes<ActivatedAt>({
+        activatedAt: await idb.get('cacheDeletedAt'),
       });
       break;
     default:
-      postMessage();
+      postRes();
   }
 }
 
-function postMessage(data?: ResultData) {
+function postRes<T>(data?: T) {
+  let result: Result<T>;
+  if (!data)
+    result = {
+      success: false,
+      error: new Error('Message not allowed.'),
+    };
+  else
+    result = {
+      success: true,
+      data: data,
+    };
   sw.clients
     .matchAll({
       includeUncontrolled: true,
     })
     .then(clientList => {
       clientList.forEach(function (client) {
-        if (!data)
-          client.postMessage({
-            success: false,
-            error: new Error('Message not allowed.'),
-          });
-        else
-          client.postMessage({
-            success: true,
-            data: data,
-          });
+        client.postMessage(result);
       });
     });
 }
