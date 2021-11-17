@@ -85,7 +85,8 @@ function isTheNextHeadingOnSameLevel(heading: Heading, currentRoot: Heading): bo
 }
 
 /**
- * Generates a table of contents for the whole book.
+ * Generates a table of contents for the whole book. If there’s no tocBase,
+ * uses the metadata based on readingOrder filelist.
  *
  * @param meta - Metadata collected from all documents, including document TOCs
  * @param tocBase - Basic TOC structure (without document TOCs)
@@ -96,7 +97,24 @@ export function getToc(meta: DocumentMetadata[], tocBase?: TocBase): DocumentFra
   const root = Jsdom.fragment('<nav role="doc-toc"></nav>');
   const nav = root.querySelector('nav') as HTMLElement;
 
-  tocBase?.map(item => renderTocItem(item, meta, true)).forEach(el => el && nav.appendChild(el));
+  if (tocBase)
+    tocBase.map(item => renderTocItem(item, meta, true)).forEach(el => el && nav.appendChild(el));
+  else {
+    const ul = Jsdom.fragment('<ul></ul>');
+    const items = meta.map(renderTocItemFromMeta).forEach(el => el && ul.appendChild(el));
+
+    nav.appendChild(ul);
+  }
+
+  return root;
+}
+
+function renderTocItemFromMeta(meta: DocumentMetadata): DocumentFragment {
+  const root = Jsdom.fragment('<li><a href=""></a></li>');
+  const link = root.querySelector('a') as HTMLAnchorElement;
+
+  link.setAttribute('href', meta.file);
+  link.innerHTML = meta.title || '—';
 
   return root;
 }
