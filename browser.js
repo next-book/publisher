@@ -109,10 +109,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   }],
   2: [function (require, module, exports) {
     "use strict";
-    /**
-     * Config module
-     * @module
-     */
 
     Object.defineProperty(exports, "__esModule", {
       value: true
