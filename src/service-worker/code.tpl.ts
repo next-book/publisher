@@ -34,14 +34,13 @@ type Schema =
 type ResultSuccess<T> = { success: true; data?: T };
 type ResultError = { success: false; error: Error };
 type Result<T> = ResultSuccess<T> | ResultError;
+interface ResultData {
+  error?: string;
+}
 type SwAPI<Request, ResultData> = {
   req: Request;
   res: Result<ResultData>;
 };
-
-interface ResultData {
-  error?: string;
-}
 
 interface Metadata extends ResultData {
   activatedAt?: iso;
@@ -78,38 +77,79 @@ interface CacheExists extends ResultData {
   cacheExists: boolean;
 }
 
-export type MetadataAPI = SwAPI<{ message: 'getMetadata' }, Metadata>;
-export type ActivatedAtAPI = SwAPI<{ message: 'getActivatedAt' }, ActivatedAt>;
+enum Messages {
+  getMetadata = 'getMetadata',
+  getActivatedAt = 'getActivatedAt',
+  getOldCacheDeletedAt = 'getOldCacheDeletedAt',
+  deleteOldCache = 'deleteOldCache',
+  getCacheDeletedAt = 'getCacheDeletedAt',
+  getCacheExists = 'getCacheExists',
+  deleteCache = 'deleteCache',
+  updateCache = 'updateCache',
+  getCacheUpdatedAt = 'getCacheUpdatedAt',
+  getIgnoreCache = 'getIgnoreCache',
+  setIgnoreCache = 'setIgnoreCache',
+}
 
-export type OldCacheDeletedAtAPI = SwAPI<{ message: 'getOldCacheDeletedAt' }, OldCacheDeletedAt>;
-export type DeleteOldCacheAPI = SwAPI<{ message: 'deleteOldCache' }, OldCacheDeletedAt>;
+export type GetMetadataAPI = SwAPI<{ message: Messages.getMetadata }, Metadata>;
+export type GetActivatedAtAPI = SwAPI<{ message: Messages.getActivatedAt }, ActivatedAt>;
 
-export type CacheDeletedAtAPI = SwAPI<{ message: 'getCacheDeletedAt' }, CacheDeletedAt>;
-export type GetCacheExists = SwAPI<{ message: 'getCacheExists' }, CacheExists>;
-export type DeleteCacheAPI = SwAPI<{ message: 'deleteCache' }, CacheDeletedAt>;
+export type GetOldCacheDeletedAtAPI = SwAPI<
+  { message: Messages.getOldCacheDeletedAt },
+  OldCacheDeletedAt
+>;
+export type DeleteOldCacheAPI = SwAPI<{ message: Messages.deleteOldCache }, OldCacheDeletedAt>;
 
-export type UpdateCacheAPI = SwAPI<{ message: 'updateCache' }, CacheDeletedAndUpdatedAt>;
-export type CacheUpdatedAtAPI = SwAPI<{ message: 'getCacheUpdatedAt' }, CacheUpdatedAt>;
+export type GetCacheDeletedAtAPI = SwAPI<{ message: Messages.getCacheDeletedAt }, CacheDeletedAt>;
+export type GetCacheExistsAPI = SwAPI<{ message: Messages.getCacheExists }, CacheExists>;
+export type DeleteCacheAPI = SwAPI<{ message: Messages.deleteCache }, CacheDeletedAt>;
 
-export type GetIgnoredCacheAPI = SwAPI<{ message: 'getIgnoreCache' }, IgnoreCache>;
-export type SetIgnoreCacheAPI = SwAPI<{ message: 'setIgnoreCache'; value: boolean }, IgnoreCache>;
+export type UpdateCacheAPI = SwAPI<{ message: Messages.updateCache }, CacheDeletedAndUpdatedAt>;
+export type GetCacheUpdatedAtAPI = SwAPI<{ message: Messages.getCacheUpdatedAt }, CacheUpdatedAt>;
+
+export type GetIgnoredCacheAPI = SwAPI<{ message: Messages.getIgnoreCache }, IgnoreCache>;
+export type SetIgnoreCacheAPI = SwAPI<
+  { message: Messages.setIgnoreCache; payload: { value: boolean } },
+  IgnoreCache
+>;
+
+// just for
+interface APIstructure {
+  req: any;
+  res: any;
+}
+type Resolver<A extends APIstructure> = (e: A['req']) => Promise<A['res']>;
+
+interface Resolvers {
+  getMetadata: Resolver<GetMetadataAPI>;
+  getActivatedAt: Resolver<GetActivatedAtAPI>;
+  getOldCacheDeletedAt: Resolver<GetOldCacheDeletedAtAPI>;
+  deleteOldCache: Resolver<DeleteOldCacheAPI>;
+  getCacheDeletedAt: Resolver<GetCacheDeletedAtAPI>;
+  getCacheExists: Resolver<GetCacheExistsAPI>;
+  deleteCache: Resolver<DeleteCacheAPI>;
+  updateCache: Resolver<UpdateCacheAPI>;
+  getCacheUpdatedAt: Resolver<GetCacheUpdatedAtAPI>;
+  getIgnoreCache: Resolver<GetIgnoredCacheAPI>;
+  setIgnoreCache: Resolver<SetIgnoreCacheAPI>;
+}
 
 type APIs =
-  | MetadataAPI
-  | ActivatedAtAPI
-  | OldCacheDeletedAtAPI
+  | GetMetadataAPI
+  | GetActivatedAtAPI
+  | GetOldCacheDeletedAtAPI
   | DeleteOldCacheAPI
-  | CacheDeletedAtAPI
-  | GetCacheExists
+  | GetCacheDeletedAtAPI
+  | GetCacheExistsAPI
   | DeleteCacheAPI
   | UpdateCacheAPI
-  | CacheUpdatedAtAPI
+  | GetCacheUpdatedAtAPI
   | GetIgnoredCacheAPI
   | SetIgnoreCacheAPI;
 
-// supported messages by service worker
-// usage: navigator.serviceWorker.controller.postMessage(message);
-type IncomingData = APIs['req'];
+interface MessageEvent extends ExtendableMessageEvent {
+  data: APIs['req'];
+}
 
 // IndexedDB singleton wrapper
 const idb = (() => {
@@ -213,17 +253,30 @@ function handleFetch(e: FetchEvent) {
   );
 }
 
-interface MessageEvent extends ExtendableMessageEvent {
-  data: IncomingData;
-}
+const success = <T>(
+  data: T
+): {
+  success: true;
+  data: T;
+} => ({
+  success: true,
+  data: data,
+});
 
-async function handleMessage(e: MessageEvent) {
-  console.log('[message router] Recieved message:', e.data);
-  // check event.origin for added security
+const error = (
+  error: string
+): {
+  success: false;
+  error: Error;
+} => ({
+  success: false,
+  error: new Error(error),
+});
 
-  switch (e.data?.message) {
-    case 'getMetadata':
-      postRes<Metadata>({
+const resolvers: Resolvers = {
+  getMetadata: async () => {
+    try {
+      return success({
         activatedAt: await idb.get<IdbActivatedAt>('activatedAt'),
         cacheDeletedAt: await idb.get<IdbCacheDeletedAt>('cacheDeletedAt'),
         cacheUpdatedAt: await idb.get<IdbCacheUpdatedAt>('cacheUpdatedAt'),
@@ -231,91 +284,137 @@ async function handleMessage(e: MessageEvent) {
         ignoreCache: (await idb.get<IdbIgnoreCache>('ignoreCache')) || false,
         cacheExists: await caches.has(CACHE),
       });
-      break;
-    case 'getOldCacheDeletedAt':
-      postRes<OldCacheDeletedAt>({
+    } catch (e) {
+      return error(e.message);
+    }
+  },
+  getOldCacheDeletedAt: async () => {
+    try {
+      return success({
         oldCacheDeletedAt: await idb.get<IdbOldCacheDeletedAt>('oldCacheDeletedAt'),
       });
-      break;
-    case 'getCacheDeletedAt':
-      postCacheDeleteAt();
-      break;
-    case 'setIgnoreCache':
-      await idb
-        .set({ key: 'ignoreCache', value: e.data?.value })
-        .catch(_e => postRes({ error: 'Setting ignoreCache failed.' }));
-      postRes<IgnoreCache>({
-        ignoreCache: e.data.value,
+    } catch (e) {
+      return error(e.message);
+    }
+  },
+  getCacheDeletedAt: async () => {
+    try {
+      return success({
+        cacheDeletedAt: await idb.get<IdbCacheDeletedAt>('cacheDeletedAt'),
       });
-      break;
-    case 'getIgnoreCache':
-      postRes<IgnoreCache>({
+    } catch (e) {
+      return error(e.message);
+    }
+  },
+  setIgnoreCache: async e => {
+    try {
+      await idb.set({ key: 'ignoreCache', value: e.payload.value });
+      return success({
+        ignoreCache: e.payload.value,
+      });
+    } catch (e) {
+      return error(e.message);
+    }
+  },
+  getIgnoreCache: async () => {
+    try {
+      return success({
         ignoreCache: (await idb.get<IdbIgnoreCache>('ignoreCache')) || false,
       });
-      break;
-    case 'getActivatedAt':
-      postRes<ActivatedAt>({
+    } catch (e) {
+      return error(e.message);
+    }
+  },
+  getActivatedAt: async () => {
+    try {
+      return success({
         activatedAt: await idb.get<IdbActivatedAt>('activatedAt'),
       });
-      break;
-    case 'deleteOldCache':
+    } catch (e) {
+      return error(e.message);
+    }
+  },
+  deleteOldCache: async () => {
+    try {
       await deleteOldCache('deleteOldCache');
-      postRes<OldCacheDeletedAt>({
+      return success({
         oldCacheDeletedAt: await idb.get<IdbOldCacheDeletedAt>('oldCacheDeletedAt'),
       });
-      break;
-    case 'deleteCache':
+    } catch (e) {
+      return error(e.message);
+    }
+  },
+  deleteCache: async () => {
+    try {
       if (!(await caches.delete(CACHE))) {
-        postRes({ error: 'Cache does not exist.' });
-        break;
+        throw Error('Cache does not exist.');
       }
       await setCacheDeletedAt();
-      postCacheDeleteAt();
-      break;
-    case 'updateCache':
+      return success({
+        cacheDeletedAt: await idb.get<IdbCacheDeletedAt>('cacheDeletedAt'),
+      });
+    } catch (e) {
+      return error(e.message);
+    }
+  },
+  updateCache: async () => {
+    try {
       if (await caches.delete(CACHE)) {
         await setCacheDeletedAt();
       }
       await cache('updateCache');
-      postRes<CacheDeletedAndUpdatedAt>({
+      return success({
         cacheDeletedAt: await idb.get<IdbCacheDeletedAt>('cacheDeletedAt'),
         cacheUpdatedAt: await idb.get<IdbCacheUpdatedAt>('cacheUpdatedAt'),
       });
-      break;
-    case 'getCacheUpdatedAt':
-      postRes<CacheUpdatedAt>({
+    } catch (e) {
+      return error(e.message);
+    }
+  },
+  getCacheUpdatedAt: async () => {
+    try {
+      return success({
         cacheUpdatedAt: await idb.get<IdbCacheUpdatedAt>('cacheUpdatedAt'),
       });
-      break;
-    case 'getCacheExists':
-      postRes<CacheExists>({
+    } catch (e) {
+      return error(e.message);
+    }
+  },
+  getCacheExists: async () => {
+    try {
+      return success({
         cacheExists: await caches.has(CACHE),
       });
-      break;
-    default:
-      postRes({ error: 'Message not allowed.' });
+    } catch (e) {
+      return error(e.message);
+    }
+  },
+};
+
+async function handleMessage(e: MessageEvent) {
+  console.log('[message router] Recieved message:', e.data.message);
+  // check event.origin for added security
+  if (!e.data?.message) {
+    postMessage({ success: false, error: 'Message not provided.' });
+    return;
   }
+  if (resolvers.hasOwnProperty(e.data.message)) {
+    let data = await resolvers[e.data.message](e.data as never);
+    postMessage(data);
+    return;
+  }
+  postMessage({ success: false, error: 'Resolver does not exist.' });
+  return;
 }
 
-function postRes<T extends ResultData>(data?: T) {
-  let result: Result<T>;
-  if (data?.error)
-    result = {
-      success: false,
-      error: new Error(data.error),
-    };
-  else
-    result = {
-      success: true,
-      data: data,
-    };
+function postMessage(data: any) {
   sw.clients
     .matchAll({
       includeUncontrolled: true,
     })
     .then(clientList => {
       clientList.forEach(function (client) {
-        client.postMessage(result);
+        client.postMessage(data);
       });
     });
 }
@@ -355,12 +454,6 @@ async function deleteOldCache(context: 'activate' | 'deleteOldCache') {
 
 async function setCacheDeletedAt() {
   await idb.set({ key: 'cacheDeletedAt', value: new Date().toISOString() });
-}
-
-async function postCacheDeleteAt() {
-  postRes<CacheDeletedAt>({
-    cacheDeletedAt: await idb.get<IdbCacheDeletedAt>('cacheDeletedAt'),
-  });
 }
 
 sw.addEventListener('install', handleInstall);
