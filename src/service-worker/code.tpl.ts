@@ -1,3 +1,7 @@
+/**
+ * Service worker
+ * @module
+ */
 /// <reference lib="WebWorker" />
 import 'regenerator-runtime';
 
