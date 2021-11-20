@@ -22,7 +22,9 @@ type IdbCacheUpdatedAt = Keyval<'cacheUpdatedAt', iso>;
 type IdbActivatedAt = Keyval<'activatedAt', iso>;
 type IdbIgnoreCache = Keyval<'ignoreCache', boolean>;
 
-// IndexedDB keyval schema
+/**
+ * A keyval schema used in {@link idb} IndexedDB wrapper
+ */
 type Schema =
   | IdbOldCacheDeletedAt
   | IdbCacheDeletedAt
@@ -77,49 +79,121 @@ interface CacheExists extends ResultData {
   cacheExists: boolean;
 }
 
+/**
+ * Allowed service worker API messages
+ */
 enum Messages {
   getMetadata = 'getMetadata',
   getActivatedAt = 'getActivatedAt',
+
   getOldCacheDeletedAt = 'getOldCacheDeletedAt',
   deleteOldCache = 'deleteOldCache',
+
   getCacheDeletedAt = 'getCacheDeletedAt',
   getCacheExists = 'getCacheExists',
   deleteCache = 'deleteCache',
+
   updateCache = 'updateCache',
   getCacheUpdatedAt = 'getCacheUpdatedAt',
+
   getIgnoreCache = 'getIgnoreCache',
   setIgnoreCache = 'setIgnoreCache',
 }
 
+/**
+ * Returns service worker metadata.
+ */
 export type GetMetadataAPI = SwAPI<{ message: Messages.getMetadata }, Metadata>;
+/**
+ * Returns iso timestamp of last service worker activation.
+ */
 export type GetActivatedAtAPI = SwAPI<{ message: Messages.getActivatedAt }, ActivatedAt>;
 
+/**
+ * Returns iso timestamp of last deletion of cache that corresponds to the outdated git revision id.
+ * @remarks
+ * Does not reflect the cache deletion via browser api e.g. developer tools.
+ * The value is updated only via {@link DeleteOldCacheAPI} and {@link handleActivate} deletion.
+ */
 export type GetOldCacheDeletedAtAPI = SwAPI<
   { message: Messages.getOldCacheDeletedAt },
   OldCacheDeletedAt
 >;
+/**
+ * Deletes the cache that corresponds to the outdated git revision id.
+ * @remarks
+ * Do not confuse with {@link DeleteCacheAPI} which deletes the cache that corresponds to the current git revision id.
+ */
 export type DeleteOldCacheAPI = SwAPI<{ message: Messages.deleteOldCache }, OldCacheDeletedAt>;
 
+/**
+ * Returns iso timestamp of last deletion of cache that corresponds to the current git revision id.
+ * @remarks
+ * Does not reflect the cache deletion via browser api e.g. developer tools.
+ * The value is updated only via {@link DeleteCacheAPI} deletion.
+ */
 export type GetCacheDeletedAtAPI = SwAPI<{ message: Messages.getCacheDeletedAt }, CacheDeletedAt>;
+/**
+ * Returns boolean indicating existance of cache that corresponds to the current git revision id.
+ */
 export type GetCacheExistsAPI = SwAPI<{ message: Messages.getCacheExists }, CacheExists>;
+/**
+ * Deletes the cache that corresponds to the current git revision id.
+ * @remarks
+ * Do not confuse with {@link DeleteOldCacheAPI} which deletes the cache that corresponds to outdated git revision id.
+ */
 export type DeleteCacheAPI = SwAPI<{ message: Messages.deleteCache }, CacheDeletedAt>;
 
-export type UpdateCacheAPI = SwAPI<{ message: Messages.updateCache }, CacheDeletedAndUpdatedAt>;
+/**
+ * Returns iso timestamp of last update of cache that corresponds to the current git revision id.
+ * @remarks
+ * The value is updated only via invoking {@link UpdateCacheAPI}.
+ */
 export type GetCacheUpdatedAtAPI = SwAPI<{ message: Messages.getCacheUpdatedAt }, CacheUpdatedAt>;
+/**
+ * Completely updates the cache that corresponds to the current git revision id.
+ * @remarks
+ * Returns timestamps for both last cache deletion and update.
+ */
+export type UpdateCacheAPI = SwAPI<{ message: Messages.updateCache }, CacheDeletedAndUpdatedAt>;
 
+/**
+ * Returns boolean that represents whether hitting cache is being prevented.
+ */
 export type GetIgnoredCacheAPI = SwAPI<{ message: Messages.getIgnoreCache }, IgnoreCache>;
+/**
+ * Sets whether hitting cache is being prevented.
+ *
+ * @remarks
+ * When set to true, the cache may still exist and be updated but the any request
+ * of file will proceed to fetch the file as if there is no cache.
+ * When set to false, the cached requests will be served as usual.
+ */
 export type SetIgnoreCacheAPI = SwAPI<
   { message: Messages.setIgnoreCache; payload: { value: boolean } },
   IgnoreCache
 >;
 
-// just for
+/**
+ * Helper structure to access type parameters
+ */
 interface APIstructure {
   req: any;
   res: any;
 }
+
+/**
+ * A function used to resolve custom service worker API message.
+ *
+ * @remarks
+ * A resolver takes request and result types, which are then
+ * used to typecheck resolver implementation.
+ */
 type Resolver<A extends APIstructure> = (e: A['req']) => Promise<A['res']>;
 
+/**
+ * An service worker API resolver map
+ */
 interface Resolvers {
   getMetadata: Resolver<GetMetadataAPI>;
   getActivatedAt: Resolver<GetActivatedAtAPI>;
@@ -147,11 +221,16 @@ type APIs =
   | GetIgnoredCacheAPI
   | SetIgnoreCacheAPI;
 
+/**
+ * Service worker message event with supported requests
+ */
 interface MessageEvent extends ExtendableMessageEvent {
   data: APIs['req'];
 }
 
-// IndexedDB singleton wrapper
+/**
+ * IndexedDB singleton wrapper used to store persistent information with an predefined {@link Schema}
+ */
 const idb = (() => {
   let dbInstance: Promise<IDBDatabase>;
 
