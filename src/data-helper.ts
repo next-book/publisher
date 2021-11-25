@@ -25,14 +25,14 @@ interface BookConfigMetaData {
 
 interface BookConfig extends Config {
   meta: BookConfigMetaData;
-  chapters: string[];
+  readingOrder: string[];
   removeChapters: string[];
   tocBase: TocBase;
   static: string[];
 }
 
 interface PreviewConfig extends Config {
-  chapters: string[];
+  readingOrder: string[];
   removeChapters: string[];
   fullTextUrl: string;
 }
@@ -80,8 +80,8 @@ export function prepPreviewConfig(srcDir: PathLike, fullTextUrl: string): Previe
 
   const config = prepConfig(srcDir);
   return Object.assign({}, config, {
-    chapters: config?.chapters?.slice(0, 3),
-    removeChapters: config?.chapters?.slice(3),
+    readingOrder: config?.readingOrder?.slice(0, 3),
+    removeChapters: config?.readingOrder?.slice(3),
     fullTextUrl,
   });
 }

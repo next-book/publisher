@@ -65,7 +65,7 @@ export interface Config {
   /**
    * Chapters as list of `.html` files
    */
-  chapters?: string[];
+  readingOrder?: string[];
 
   /**
    * TOC structure without in-document headings

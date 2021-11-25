@@ -85,7 +85,7 @@ export default function map(
 
   const doms = content.map(doc => new Jsdom(doc));
   const documents = doms.map(dom => dom.window.document);
-  const { chapters } = conf;
+  const { readingOrder } = conf;
 
   // map
   console.log('Mapping documents:');
@@ -103,10 +103,17 @@ export default function map(
 
   // gauge
   const lengths = gaugePublication(documents);
-  if (!chapters) throw new Error('Chapters not defined in config.');
-  const pubMetadata = gatherMetadata(documents, filenames, chapters, lengths);
+  if (!readingOrder) throw new Error('Reading order not defined in config.');
+  const pubMetadata = gatherMetadata(documents, filenames, readingOrder, lengths);
+
   if (!conf.meta) throw new Error('Metadata not defined in config.');
-  const manifest = composeManifest(conf.meta, pubMetadata, sumPublication(pubMetadata), revision);
+  const manifest = composeManifest(
+    conf.meta,
+    pubMetadata,
+    readingOrder,
+    sumPublication(pubMetadata),
+    revision
+  );
 
   //preview
   if (conf.fullTextUrl) chapterNav.addFullTextUrl(documents, conf.fullTextUrl, conf.root);
@@ -133,6 +140,7 @@ export default function map(
 function composeManifest(
   meta: ConfigMetadata,
   documents: DocumentMetadata[],
+  readingOrder: string[],
   totals: PublicationSum,
   revision: Revision
 ): Manifest {
@@ -150,9 +158,15 @@ function composeManifest(
       date: String(time),
       unix: time.getTime(),
     },
-    documents: documents,
+    documents: orderDocuments(documents, readingOrder),
     totals,
   };
+}
+
+function orderDocuments(unordered: DocumentMetadata[], readingOrder: string[]): DocumentMetadata[] {
+  return readingOrder
+    .map(filename => unordered.find((doc: DocumentMetadata) => filename === doc.file))
+    .filter(doc => doc !== undefined && doc !== null) as DocumentMetadata[];
 }
 
 function sumPublication(metadata: DocumentMetadata[]): PublicationSum {
@@ -179,7 +193,7 @@ function sumPublication(metadata: DocumentMetadata[]): PublicationSum {
 function gatherMetadata(
   documents: Document[],
   filenames: string[],
-  chapters: string[],
+  readingOrder: string[],
   lengths: PublicationStats
 ): DocumentMetadata[] {
   console.log('\nGathering metadata…');
@@ -194,7 +208,7 @@ function gatherMetadata(
     const role =
       docRoleMeta && Object.values(DocRole).includes(docRoleMeta as DocRole)
         ? docRoleMeta
-        : chapters.includes(file)
+        : readingOrder.includes(file)
         ? DocRole.Chapter
         : file === 'index.html'
         ? DocRole.Cover
@@ -202,12 +216,16 @@ function gatherMetadata(
         ? DocRole.Colophon
         : DocRole.Other;
 
-    const pos = chapters.indexOf(file);
+    const pos = readingOrder.indexOf(file);
     const order = role === DocRole.Chapter || role === DocRole.Break ? pos : null;
 
-    const prev = pos !== 0 ? chapters[pos - 1] : null;
+    const prev = pos !== 0 ? readingOrder[pos - 1] : null;
     const next =
-      file === 'index.html' ? chapters[0] : pos < chapters.length - 1 ? chapters[pos + 1] : null;
+      file === 'index.html'
+        ? readingOrder[0]
+        : pos < readingOrder.length - 1
+        ? readingOrder[pos + 1]
+        : null;
 
     return {
       title,
