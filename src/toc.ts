@@ -7,12 +7,14 @@ import { DocumentMetadata } from './app';
 
 export type TocBase = TocBaseItem[];
 
+type ListType = 'plain' | 'numbered' | 'bulleted';
+
 export type TocBaseItem = {
   isSection?: boolean;
   title?: string;
   link?: string;
   children?: TocBase;
-  numberedChildren?: boolean;
+  listType?: ListType;
 };
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
@@ -124,7 +126,7 @@ function renderTocItem(
   meta: DocumentMetadata[],
   topLevel: boolean = false
 ): DocumentFragment {
-  const childrenWrapper = renderChildren(item.children, item.numberedChildren ? 'OL' : 'UL', meta);
+  const childrenWrapper = renderChildren(item.children, item.listType || 'bulleted', meta);
 
   if (item.isSection) {
     return childrenWrapper;
@@ -161,10 +163,15 @@ function renderTocItem(
 
 function renderChildren(
   children: TocBaseItem[] | undefined,
-  tagName: 'UL' | 'OL',
+  listType: ListType,
   meta: DocumentMetadata[]
 ): DocumentFragment {
-  const childrenWrapper = Jsdom.fragment(`<${tagName}></${tagName}>`);
+  const childrenWrapper =
+    listType === 'plain'
+      ? Jsdom.fragment(`<ul class="plain"></ul>`)
+      : listType === 'numbered'
+      ? Jsdom.fragment('<ol></ol>')
+      : Jsdom.fragment('<ul></uk');
 
   if (children && children.length) {
     const childrenWrapperEl = childrenWrapper.querySelector('ol, ul') as HTMLElement;
