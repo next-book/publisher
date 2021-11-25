@@ -11,15 +11,17 @@ import { DOMStringLike } from './utils/dom';
 export function addChapterInPageNavigation(chapters: Document[], root: DOMStringLike): void {
   chapters.forEach(doc => {
     const content = doc.querySelector(root);
+    const self = doc.querySelector('[rel="self"]')?.getAttribute('href');
     if (!content) return;
 
     const beginNav = createNavFragment(doc, 'begin-nav');
     const endNav = createNavFragment(doc, 'end-nav');
 
-    createLink(doc, 'index', '', i18n.t('navigation:title-page'), anchor => {
-      appendLinkToNav(doc, beginNav, anchor.cloneNode(true));
-      appendLinkToNav(doc, endNav, anchor.cloneNode(true));
-    });
+    if (self !== 'index.html')
+      createLink(doc, 'index', '', i18n.t('navigation:title-page'), anchor => {
+        appendLinkToNav(doc, beginNav, anchor.cloneNode(true));
+        appendLinkToNav(doc, endNav, anchor.cloneNode(true));
+      });
 
     createLink(doc, 'prev', 'chapter-end', `← ${i18n.t('navigation:prev-chapter')}`, anchor => {
       appendLinkToNav(doc, beginNav, anchor);

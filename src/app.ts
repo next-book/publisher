@@ -319,10 +319,16 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
     const docMeta = metadata[index];
     const extra: NavItem[] = [];
 
-    if (docMeta['prev'])
-      extra.push({ tagName: 'link', rel: 'nb-prev', href: `./${docMeta['prev']}` });
-    if (docMeta['next'])
-      extra.push({ tagName: 'link', rel: 'nb-next', href: `./${docMeta['next']}` });
+    extra.push({
+      tagName: 'link',
+      rel: 'prev',
+      href: docMeta['prev'] ? `./${docMeta['prev']}` : './index.html',
+    });
+    extra.push({
+      tagName: 'link',
+      rel: 'next',
+      href: docMeta['next'] ? `./${docMeta['next']}` : './index.html',
+    });
     if (docMeta['order'])
       extra.push({
         tagName: 'meta',
