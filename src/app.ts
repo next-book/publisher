@@ -208,12 +208,12 @@ function gatherMetadata(
     const role =
       docRoleMeta && Object.values(DocRole).includes(docRoleMeta as DocRole)
         ? docRoleMeta
-        : readingOrder.includes(file)
-        ? DocRole.Chapter
         : file === 'index.html'
         ? DocRole.Cover
         : file === 'colophon.html'
         ? DocRole.Colophon
+        : readingOrder.includes(file)
+        ? DocRole.Chapter
         : DocRole.Other;
 
     const pos = readingOrder.indexOf(file);
