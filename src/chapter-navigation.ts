@@ -17,11 +17,10 @@ export function addChapterInPageNavigation(chapters: Document[], root: DOMString
     const beginNav = createNavFragment(doc, 'begin-nav');
     const endNav = createNavFragment(doc, 'end-nav');
 
-    if (self !== 'index.html')
-      createLink(doc, 'index', '', i18n.t('navigation:title-page'), anchor => {
-        appendLinkToNav(doc, beginNav, anchor.cloneNode(true));
-        appendLinkToNav(doc, endNav, anchor.cloneNode(true));
-      });
+    createLink(doc, 'index', '', i18n.t('navigation:title-page'), anchor => {
+      appendLinkToNav(doc, beginNav, anchor.cloneNode(true));
+      appendLinkToNav(doc, endNav, anchor.cloneNode(true));
+    });
 
     createLink(doc, 'prev', 'chapter-end', `← ${i18n.t('navigation:prev-chapter')}`, anchor => {
       appendLinkToNav(doc, beginNav, anchor);
@@ -31,7 +30,7 @@ export function addChapterInPageNavigation(chapters: Document[], root: DOMString
       appendLinkToNav(doc, endNav, anchor);
     });
 
-    content.insertBefore(beginNav, content.firstChild);
+    if (self !== 'index.html') content.insertBefore(beginNav, content.firstChild);
     content.appendChild(endNav);
   });
 }
