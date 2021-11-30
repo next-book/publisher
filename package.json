@@ -1,6 +1,6 @@
 {
   "name": "@next-book/publisher",
-  "version": "0.2.25",
+  "version": "0.2.26",
   "description": "Publish web books with next-book",
   "main": "dist/app.js",
   "bin": {
@@ -48,7 +48,7 @@
     "slug": "^0.9.4"
   },
   "peerDependencies": {
-    "@next-book/interface": "^0.1.30"
+    "@next-book/interface": "^0.1.31"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
