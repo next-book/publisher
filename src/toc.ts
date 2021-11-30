@@ -126,11 +126,8 @@ function renderTocItem(
   meta: DocumentMetadata[],
   topLevel: boolean = false
 ): DocumentFragment {
-  const childrenWrapper = renderChildren(item.children, item.listType || 'bulleted', meta);
-
-  if (item.isSection) {
-    return childrenWrapper;
-  }
+  const childrenWrapper = renderChildren(item, meta);
+  if (item.isSection) return childrenWrapper;
 
   const root = Jsdom.fragment('<li><a href=""></a></li>');
   const li = root.querySelector('li') as HTMLElement;
@@ -141,13 +138,13 @@ function renderTocItem(
     link.innerHTML = item.title;
   }
 
-  if (item.children && item.children.length) {
-    li.appendChild(childrenWrapper);
+  const docMeta = meta.find(doc => doc.file === item.link);
+  if (docMeta?.toc[0]?.children?.length && docMeta?.toc[0]?.children?.length > 0) {
+    li.appendChild(renderDocumentToc(docMeta.toc[0].children, docMeta.file));
   }
 
-  const docMeta = meta.find(doc => doc.file === item.link);
-  if (docMeta && docMeta.toc && docMeta.toc[0] && docMeta.toc[0].children) {
-    li.appendChild(renderDocumentToc(docMeta.toc[0].children, docMeta.file));
+  if (item.children && item.children.length) {
+    li.appendChild(childrenWrapper);
   }
 
   if (topLevel) {
@@ -161,17 +158,15 @@ function renderTocItem(
   return root;
 }
 
-function renderChildren(
-  children: TocBaseItem[] | undefined,
-  listType: ListType,
-  meta: DocumentMetadata[]
-): DocumentFragment {
+function renderChildren(item: TocBaseItem, meta: DocumentMetadata[]): DocumentFragment {
+  const { children, isSection, listType } = item;
+
   const childrenWrapper =
-    listType === 'plain'
+    isSection === true || listType === 'plain'
       ? Jsdom.fragment(`<ul class="plain"></ul>`)
       : listType === 'numbered'
       ? Jsdom.fragment('<ol></ol>')
-      : Jsdom.fragment('<ul></uk');
+      : Jsdom.fragment('<ul></ul>');
 
   if (children && children.length) {
     const childrenWrapperEl = childrenWrapper.querySelector('ol, ul') as HTMLElement;
