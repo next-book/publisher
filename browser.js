@@ -1,32 +1,16 @@
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 (function () {
   function r(e, n, t) {
@@ -259,7 +243,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var structures_1 = require("./structures");
 
     var Separator = function Separator() {
-      _classCallCheck(this, Separator);
+      (0, _classCallCheck2.default)(this, Separator);
     };
 
     exports.Separator = Separator;
@@ -455,8 +439,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     var Ideas = /*#__PURE__*/function () {
       function Ideas() {
-        _classCallCheck(this, Ideas);
-
+        (0, _classCallCheck2.default)(this, Ideas);
         this.arr = [];
       }
       /**
@@ -467,7 +450,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
        */
 
 
-      _createClass(Ideas, [{
+      (0, _createClass2.default)(Ideas, [{
         key: "addIdea",
         value: function addIdea() {
           this.arr.push([]);
@@ -550,7 +533,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
               var _ref2 = leftMatch ? leftMatch.slice(1) : [[], piece[0]];
 
-              var _ref3 = _slicedToArray(_ref2, 2);
+              var _ref3 = (0, _slicedToArray2.default)(_ref2, 2);
 
               before = _ref3[0];
               firstItem = _ref3[1];
@@ -568,7 +551,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
               var _ref4 = rightMatch ? rightMatch.slice(1) : [lastPiece, []];
 
-              var _ref5 = _slicedToArray(_ref4, 2);
+              var _ref5 = (0, _slicedToArray2.default)(_ref4, 2);
 
               lastItem = _ref5[0];
               after = _ref5[1];
@@ -576,7 +559,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
             var mid = piece.slice(1, piece.length - 1);
-            return [before, [firstItem].concat(_toConsumableArray(mid), [lastItem]), after];
+            return [before, [firstItem].concat((0, _toConsumableArray2.default)(mid), [lastItem]), after];
           }
 
           if (piece.length === 1) {
@@ -594,7 +577,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
               var _ref7 = leftAndRightMatch ? leftAndRightMatch.slice(1) : [[], piece[0], []];
 
-              var _ref8 = _slicedToArray(_ref7, 3);
+              var _ref8 = (0, _slicedToArray2.default)(_ref7, 3);
 
               _before = _ref8[0];
               text = _ref8[1];
@@ -639,7 +622,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           });
         }
       }]);
-
       return Ideas;
     }();
 
@@ -721,8 +703,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
        * @param delimiter - Delimiter
        */
       function ParsedObj(node, ideas, delimiter) {
-        _classCallCheck(this, ParsedObj);
-
+        (0, _classCallCheck2.default)(this, ParsedObj);
         var ideaProblems = this.listProblemParsedObjIdeas(ideas);
         if (ideaProblems.length > 0) throw new Error("Invalid ideas at node ".concat(JSON.stringify(node), ", problems: ").concat(JSON.stringify(ideaProblems), "."));
         this.node = node;
@@ -737,7 +718,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
        */
 
 
-      _createClass(ParsedObj, [{
+      (0, _createClass2.default)(ParsedObj, [{
         key: "listProblemParsedObjIdeas",
         value: function listProblemParsedObjIdeas(ideas) {
           var _this2 = this;
@@ -766,7 +747,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }).length === 0;
         }
       }]);
-
       return ParsedObj;
     }();
 
@@ -851,7 +831,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
     function hasAncestorChunk(testedEl, elements) {
-      return _toConsumableArray(elements).filter(function (el) {
+      return (0, _toConsumableArray2.default)(elements).filter(function (el) {
         if (el === testedEl) return false;else if (el.contains(testedEl)) return true;else return false;
       }).length !== 0;
     }
@@ -892,11 +872,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           if (el.getAttribute('id')) {
             var wrapper = document.createElement('SPAN');
             wrapper.setAttribute('id', "".concat(name).concat(nonZeroId));
-
-            _toConsumableArray(el.childNodes).forEach(function (node) {
+            (0, _toConsumableArray2.default)(el.childNodes).forEach(function (node) {
               wrapper.appendChild(node);
             });
-
             el.appendChild(wrapper);
           } else el.setAttribute('id', "".concat(name).concat(nonZeroId));
         }
@@ -923,7 +901,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     // eslint-disable-next-line @typescript-eslint/ban-types
 
     function isNode(obj) {
-      return _typeof(obj) === 'object' && 'nodeType' in obj && obj.nodeType === 1;
+      return (0, _typeof2.default)(obj) === 'object' && 'nodeType' in obj && obj.nodeType === 1;
     }
 
     exports.isNode = isNode;
