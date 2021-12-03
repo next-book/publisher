@@ -1,5 +1,5 @@
 /**
- * @module
+ * @module Gauge
  */
 
 /**
@@ -18,12 +18,14 @@ const attrNames = {
  * @param attr - The attribute name
  * @returns Sum of values stored in attribute
  */
-const sumAttr = (attr: string) => (ideas: NodeListOf<Element>): number =>
-  Array.from(ideas).reduce((acc, idea: Element) => {
-    const iattr = idea.getAttribute(attr);
-    if (!iattr) return acc;
-    return acc + parseInt(iattr, 10);
-  }, 0);
+const sumAttr =
+  (attr: string) =>
+  (ideas: NodeListOf<Element>): number =>
+    Array.from(ideas).reduce((acc, idea: Element) => {
+      const iattr = idea.getAttribute(attr);
+      if (!iattr) return acc;
+      return acc + parseInt(iattr, 10);
+    }, 0);
 
 /**
  * Sets sum of values stored in atribute to a same-called attribute
@@ -32,9 +34,11 @@ const sumAttr = (attr: string) => (ideas: NodeListOf<Element>): number =>
  * @param attr - The attribute name
  * @returns Mutates DOM. Sets the sum in the provided attribute of the element.
  */
-const setSumAttr = (attr: string) => (el: Element): void => {
-  el.setAttribute(attr, sumAttr(attr)(el.querySelectorAll('.idea')).toString());
-};
+const setSumAttr =
+  (attr: string) =>
+  (el: Element): void => {
+    el.setAttribute(attr, sumAttr(attr)(el.querySelectorAll('.idea')).toString());
+  };
 
 /**
  * Counts number of characters of each `.idea` element and stores the value

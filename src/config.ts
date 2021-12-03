@@ -2,6 +2,7 @@
  * Config module
  * @module
  */
+import { Metadata } from '../shared';
 import { TocBase } from './toc';
 
 /**
@@ -22,14 +23,9 @@ export type Selectors = Array<keyof HTMLElementTagNameMap | string> | SelectorFn
 
 export type Delimiter = string /* | RegExp | TokenizerFn */;
 
-export interface Metadata {
-  title?: string;
-  subtitle?: string;
-  author?: string;
-  published?: number;
-  keywords?: string[];
-}
-
+/**
+ * Publisher config
+ */
 export interface Config {
   /**
    * i18n ISO string
@@ -42,7 +38,7 @@ export interface Config {
   output: 'jsdom' | 'html';
 
   /**
-   * D
+   * Delimiter
    */
   delimiter: Delimiter;
 

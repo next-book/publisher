@@ -2,13 +2,12 @@ import fs from 'fs';
 import { JSDOM } from 'jsdom';
 import path from 'path';
 import rimraf from 'rimraf';
-import { Manifest } from './app';
 import copy from 'recursive-copy';
 import * as sw from './service-worker/builder';
+import { Manifest } from '../shared';
 import { Config } from './config';
 import { TocBase } from './toc';
-
-type PathLike = string;
+import { PathLike } from './utils/fs';
 
 type PrepContent = {
   content: string[];
@@ -132,7 +131,7 @@ export function copyFolder(pairs: Pair[], finalCallback: () => void): void {
    * hence the type assertion below is ok
    */
 
-  const pair = (pairs.shift() as unknown) as Pair;
+  const pair = pairs.shift() as unknown as Pair;
 
   copy(pair.from, pair.to, () => {
     if (pairs.length > 0) copyFolder(pairs, finalCallback);

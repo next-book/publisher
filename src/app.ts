@@ -8,57 +8,18 @@ import pretty from 'pretty';
 import slug from 'slug';
 import tagDocument from './tagger';
 import i18n from './i18n';
-import loadConfig, { Config, Metadata as ConfigMetadata } from './config';
+import loadConfig, { Config } from './config';
 import { gaugeDocument, gaugePublication, PublicationStats } from './gauge';
-import getDocumentToc, { getToc, Heading } from './toc';
+import getDocumentToc, { getToc } from './toc';
 import * as chapterNav from './chapter-navigation';
-import { Revision } from './revision';
-
-enum DocRole {
-  Break = 'break',
-  Chapter = 'chapter',
-  Cover = 'cover',
-  Colophon = 'colophon',
-  Other = 'other',
-}
-
-interface PublicationSum {
-  all: {
-    words: number;
-    chars: number;
-    ideas: number;
-  };
-  chapters: {
-    words: number;
-    chars: number;
-    ideas: number;
-  };
-}
-
-export interface DocumentMetadata {
-  title: string | null | undefined;
-  file: string;
-  words: number;
-  chars: number;
-  ideas: number;
-  role: DocRole;
-  order: number | null;
-  prev: string | null;
-  next: string | null;
-  toc: Heading[];
-}
-
-export interface Manifest extends ConfigMetadata {
-  identifier: string;
-  revision: Revision;
-  generatedAt: {
-    date: string;
-    unix: number;
-  };
-  documents: DocumentMetadata[];
-  totals: PublicationSum;
-  keywords?: string[] | undefined;
-}
+import {
+  DocRole,
+  PublicationSum,
+  DocumentMetadata,
+  Manifest,
+  Revision,
+  Metadata as ConfigMetadata,
+} from '../shared';
 
 interface MappedPublication {
   manifest: Manifest;

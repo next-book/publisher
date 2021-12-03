@@ -1,10 +1,9 @@
 import { spawnSync } from 'child_process';
-
-export type Revision = string | null;
+import { Revision } from '../shared';
 
 let revision: Revision;
 
-function getGitRev(): string | null {
+function getGitRev(): Revision {
   try {
     const spawn = spawnSync('git', ['rev-parse', '--short', 'HEAD']);
 
@@ -22,7 +21,7 @@ function getGitRev(): string | null {
   }
 }
 
-export function getRevision(): string | null {
+export function getRevision(): Revision {
   if (revision) return revision;
 
   revision = getGitRev();

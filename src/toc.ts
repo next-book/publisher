@@ -3,7 +3,7 @@
  * @module
  */
 import { JSDOM as Jsdom } from 'jsdom';
-import { DocumentMetadata } from './app';
+import { DocumentMetadata, Heading, HeadingLevel } from '../shared';
 
 export type TocBase = TocBaseItem[];
 
@@ -16,16 +16,6 @@ export type TocBaseItem = {
   children?: TocBase;
   listType?: ListType;
 };
-
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-
-export interface Heading {
-  index: number;
-  level: HeadingLevel;
-  name: string | null;
-  id: string | null;
-  children: Heading[];
-}
 
 /**
  * Generates a table of contents tree from headings in a Document.
@@ -124,7 +114,7 @@ function renderTocItemFromMeta(meta: DocumentMetadata): DocumentFragment {
 function renderTocItem(
   item: TocBaseItem,
   meta: DocumentMetadata[],
-  topLevel: boolean = false
+  topLevel = false
 ): DocumentFragment {
   const childrenWrapper = renderChildren(item, meta);
   if (item.isSection) return childrenWrapper;

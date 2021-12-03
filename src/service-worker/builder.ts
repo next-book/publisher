@@ -1,7 +1,6 @@
 import fs from 'fs';
 import glob from 'recursive-readdir';
-
-type PathLike = string;
+import { PathLike } from '../utils/fs';
 
 export async function build(dir: PathLike, revision: string): Promise<string> {
   const code = fs.readFileSync(`${__dirname}/code.tpl.js`, 'utf8');

@@ -17,8 +17,8 @@ const refNumAttr = 'data-nb-ref-number';
  *
  * @param document - DOM document
  * @param options - config options
- * @returns mutates DOM document
-with marked chunks by {@link markElementsToBeTagged}. */
+ * @returns mutates DOM document with marked chunks
+ * by {@link markElementsToBeTagged}. */
 export default function tagDocument(document: Document, options: Config): void {
   markElementsToBeTagged(document, options.root, options.selectors);
   tagIdeas(document, options.delimiter);
