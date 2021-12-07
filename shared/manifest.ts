@@ -52,7 +52,7 @@ export interface Metadata {
   keywords?: string[];
 }
 
-export interface Manifest extends Metadata {
+export default interface Manifest extends Metadata {
   identifier: string;
   revision: Revision;
   generatedAt: {
