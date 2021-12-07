@@ -96,6 +96,3 @@ export interface MetaIdentifierElement extends HTMLCustomMetaElement {
   content: Identifier;
   getAttribute(qualifiedName: 'content'): Identifier;
 }
-
-// todo: toc.ts attr role="doc-toc"
-// todo: chapter-navigation.ts attr rel="doc-toc"
