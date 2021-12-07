@@ -46,8 +46,6 @@ export default function produce(document: Document, parsedObj: ParsedObj): Node 
  * @returns HTML Element span
  */
 function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document): HTMLElement {
-  const span = document.createElement('SPAN');
-  span.classList.add('idea');
 
   idea.forEach(item => {
     if (typeof item === 'string') {

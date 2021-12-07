@@ -36,7 +36,7 @@ export function addChapterInPageNavigation(chapters: Document[], root: DOMString
 }
 
 function createNavFragment(doc: Document, className: string): DocumentFragment {
-  const nav = doc.createElement('NAV');
+  const nav = doc.createElement('nav');
   nav.classList.add(className);
 
   const fragment = doc.createDocumentFragment();
@@ -49,13 +49,13 @@ function appendLinkToNav(doc: Document, navFragment: DocumentFragment, link: Nod
   const nav = navFragment.firstChild;
   if (!nav) return;
   const navFirstChild = <HTMLElement | null>nav.firstChild;
-  const li = doc.createElement('LI');
+  const li = doc.createElement('li');
   li.appendChild(link);
 
   if (navFirstChild && navFirstChild.tagName === 'UL') {
     navFirstChild.appendChild(li);
   } else {
-    const ul = doc.createElement('UL');
+    const ul = doc.createElement('ul');
     ul.appendChild(li);
     nav.appendChild(ul);
   }
@@ -71,7 +71,7 @@ function createLink(
   const el: HTMLAnchorElement | null = doc.querySelector(`link[rel="${rel}"]`);
 
   if (el && el.href) {
-    const a = doc.createElement('A');
+    const a = doc.createElement('a');
     a.setAttribute('href', `${el.getAttribute('href')}#${urlFragment}`);
     a.setAttribute('rel', rel);
     a.innerHTML = text;
@@ -85,8 +85,8 @@ export function addChapterStartAnchor(documents: Document[], root: DOMStringLike
     const content = doc.querySelector(root);
     if (!content) return;
 
-    const anchor = doc.createElement('A');
     anchor.setAttribute('id', 'chapter-start');
+    const anchor = doc.createElement('a');
 
     doc.querySelector(root)?.insertBefore(anchor, content.firstChild);
   });
@@ -97,8 +97,8 @@ export function addChapterEndAnchor(documents: Document[], root: DOMStringLike):
     const content = doc.querySelector(root);
     if (!content) return;
 
-    const anchor = doc.createElement('A');
     anchor.setAttribute('id', 'chapter-end');
+    const anchor = doc.createElement('a');
 
     content.appendChild(anchor);
   });
@@ -109,10 +109,10 @@ export function addFullTextUrl(documents: Document[], url: string, root: DOMStri
     const content = doc.querySelector(root);
     if (!content) return;
 
-    const p = doc.createElement('P');
     p.setAttribute('id', 'full-text-link');
+    const p = doc.createElement('p');
 
-    const anchor = doc.createElement('A');
+    const anchor = doc.createElement('a');
     anchor.setAttribute('href', url);
     anchor.innerHTML = `Toto je ukázka. Pro zobrazení plné verze knihy následujte tento odkaz.`; // todo: translate
     p.appendChild(anchor);

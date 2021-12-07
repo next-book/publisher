@@ -223,7 +223,7 @@ function addDocRoles(documents: Document[], metadata: DocumentMetadata[]) {
     headElement.querySelector('meta[name="nb-role"]')?.remove();
 
     const role = metadata[index].role;
-    const el = document.createElement('META');
+    const el = document.createElement('meta');
     el.setAttribute('name', 'nb-role');
     el.setAttribute('content', role);
     headElement.appendChild(el);
@@ -244,7 +244,7 @@ function addLanguageCode(documents: Document[], code: string): void {
 
 function addIdentifier(documents: Document[], identifier: string) {
   documents.forEach(document => {
-    const el = document.createElement('META');
+    const el = document.createElement('meta');
     el.setAttribute('name', 'nb-identifier');
     el.setAttribute('content', identifier);
     const head = document.querySelector('head');

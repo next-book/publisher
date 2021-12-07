@@ -111,7 +111,7 @@ function numberEls(document: Document, selector: DOMStringLike, name: string): v
 
     if (name === IDEA_NAME) {
       if (el.getAttribute('id')) {
-        const wrapper = document.createElement('SPAN');
+        const wrapper = document.createElement('span');
         wrapper.setAttribute('id', `${name}${nonZeroId}`);
 
         [...el.childNodes].forEach(node => {
