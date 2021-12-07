@@ -4,7 +4,7 @@ import path from 'path';
 import rimraf from 'rimraf';
 import copy from 'recursive-copy';
 import * as sw from './service-worker/builder';
-import { Manifest } from '../shared';
+import { Manifest } from '../shared/manifest';
 import { Config } from './config';
 import { TocBase } from './toc';
 import { PathLike } from './utils/fs';

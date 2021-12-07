@@ -19,7 +19,7 @@ import {
   Manifest,
   Revision,
   Metadata as ConfigMetadata,
-} from '../shared';
+} from '../shared/manifest';
 
 interface MappedPublication {
   manifest: Manifest;

@@ -3,13 +3,13 @@
  * @module
  */
 import { JSDOM as Jsdom } from 'jsdom';
-import { DocumentMetadata, Heading, HeadingLevel } from '../shared';
+import { DocumentMetadata, Heading, HeadingLevel } from '../shared/manifest';
 
 export type TocBase = TocBaseItem[];
 
 type ListType = 'plain' | 'numbered' | 'bulleted';
 
-export type TocBaseItem = {
+type TocBaseItem = {
   isSection?: boolean;
   title?: string;
   link?: string;

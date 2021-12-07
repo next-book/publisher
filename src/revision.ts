@@ -1,5 +1,5 @@
 import { spawnSync } from 'child_process';
-import { Revision } from '../shared';
+import { Revision } from '../shared/manifest';
 
 let revision: Revision;
 

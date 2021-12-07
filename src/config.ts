@@ -2,7 +2,7 @@
  * Config module
  * @module
  */
-import { Metadata } from '../shared';
+import { Metadata } from '../shared/manifest';
 import { TocBase } from './toc';
 
 /**
