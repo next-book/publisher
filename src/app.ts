@@ -12,14 +12,14 @@ import loadConfig, { Config } from './config';
 import { gaugeDocument, gaugePublication, PublicationStats } from './gauge';
 import getDocumentToc, { getToc } from './toc';
 import * as chapterNav from './chapter-navigation';
-import {
+import Manifest, {
   DocRole,
   PublicationSum,
   DocumentMetadata,
-  Manifest,
   Revision,
   Metadata as ConfigMetadata,
 } from '../shared/manifest';
+import { StyleClass, MetaDocRoleElement, MetaIdentifierElement, Id, Rel } from '../shared/dom';
 
 interface MappedPublication {
   manifest: Manifest;
@@ -164,10 +164,12 @@ function gatherMetadata(
     const file = filenames[index];
     const { words, chars, ideas } = lengths[index];
     const toc = getDocumentToc(document);
-    const docRoleMeta = document.querySelector('meta[name="nb-role"]')?.getAttribute('content');
+    const docRoleMeta = document
+      .querySelector<MetaDocRoleElement>('meta[name="nb-role"]')
+      ?.getAttribute('content');
 
     const role =
-      docRoleMeta && Object.values(DocRole).includes(docRoleMeta as DocRole)
+      docRoleMeta && Object.values(DocRole).includes(docRoleMeta)
         ? docRoleMeta
         : file === 'index.html'
         ? DocRole.Cover
@@ -205,7 +207,7 @@ function gatherMetadata(
 
 function addDefaultBodyClasses(documents: Document[]) {
   documents.forEach(document => {
-    document.querySelector('body')?.classList.add('nb-custom-style');
+    document.querySelector('body')?.classList.add(StyleClass.Custom);
   });
 }
 
@@ -220,10 +222,10 @@ function addDocRoles(documents: Document[], metadata: DocumentMetadata[]) {
     const headElement = document.querySelector('head');
     if (!headElement) throw new Error('Missing <head> HTML element.');
 
-    headElement.querySelector('meta[name="nb-role"]')?.remove();
+    headElement.querySelector<MetaDocRoleElement>('meta[name="nb-role"]')?.remove();
 
     const role = metadata[index].role;
-    const el = document.createElement('meta');
+    const el = document.createElement('meta') as MetaDocRoleElement;
     el.setAttribute('name', 'nb-role');
     el.setAttribute('content', role);
     headElement.appendChild(el);
@@ -244,7 +246,7 @@ function addLanguageCode(documents: Document[], code: string): void {
 
 function addIdentifier(documents: Document[], identifier: string) {
   documents.forEach(document => {
-    const el = document.createElement('meta');
+    const el = document.createElement('meta') as MetaIdentifierElement;
     el.setAttribute('name', 'nb-identifier');
     el.setAttribute('content', identifier);
     const head = document.querySelector('head');
@@ -276,13 +278,13 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
   } | null;
 
   const base: NavItem[] = [
-    { tagName: 'link', rel: 'index', href: './index.html' },
-    { tagName: 'link', rel: 'license', href: './license.html' },
+    { tagName: 'link', rel: Rel.Index, href: './index.html' },
+    { tagName: 'link', rel: Rel.License, href: './license.html' },
     {
       tagName: 'link',
-      rel: 'publication',
+      rel: Rel.Publication,
       href: './manifest.json',
-      id: 'manifest',
+      id: Id.Manifest,
     },
   ];
 
@@ -300,12 +302,12 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
 
     extra.push({
       tagName: 'link',
-      rel: 'prev',
+      rel: Rel.Prev,
       href: docMeta['prev'] ? `./${docMeta['prev']}` : './index.html',
     });
     extra.push({
       tagName: 'link',
-      rel: 'next',
+      rel: Rel.Next,
       href: docMeta['next'] ? `./${docMeta['next']}` : './index.html',
     });
     if (docMeta['order'])
@@ -315,7 +317,7 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
         content: docMeta['order']?.toString(),
       });
 
-    const self = [{ tagName: 'link', rel: 'self', href: docMeta.file }];
+    const self = [{ tagName: 'link', rel: Rel.Self, href: docMeta.file }];
 
     base
       .concat(extra)

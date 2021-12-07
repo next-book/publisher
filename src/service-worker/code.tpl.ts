@@ -483,7 +483,7 @@ async function handleMessage(e: MessageEvent) {
     return;
   }
   if (resolvers.hasOwnProperty(e.data.message)) {
-    let data = await resolvers[e.data.message](e.data as never);
+    const data = await resolvers[e.data.message](e.data as never);
     postMessage(data);
     return;
   }

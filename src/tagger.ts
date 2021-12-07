@@ -6,11 +6,7 @@ import { Config, Delimiter, Selectors } from './config';
 import produce from './producer';
 import parse from './parser';
 import { DOMStringLike } from './utils/dom';
-
-const IDEA_NAME = 'idea';
-const CHUNK_NAME = 'chunk';
-const SKIP_NAME = 'nb-skip';
-const refNumAttr = 'data-nb-ref-number';
+import { TagClass as Class, TagAttr } from '../shared/dom';
 
 /**
  * Recognizes and tags chunks and ideas in a document
@@ -23,8 +19,8 @@ export default function tagDocument(document: Document, options: Config): void {
   markElementsToBeTagged(document, options.root, options.selectors);
   tagIdeas(document, options.delimiter);
 
-  numberEls(document, `.${CHUNK_NAME}`, CHUNK_NAME);
-  numberEls(document, `.${IDEA_NAME}`, IDEA_NAME);
+  numberEls(document, `.${Class.Chunk}`, Class.Chunk);
+  numberEls(document, `.${Class.Chunk}`, Class.Chunk);
 }
 
 /**
@@ -56,10 +52,10 @@ function markElementsToBeTagged(document: Document, root: string, selectors: Sel
   if (elements)
     elements.forEach(el => {
       if (
-        !(el.closest(`.${SKIP_NAME}`) || el.classList.contains(SKIP_NAME)) &&
+        !(el.closest(`.${Class.Skip}`) || el.classList.contains(Class.Skip)) &&
         !hasAncestorChunk(el, elements)
       ) {
-        el.classList.add(CHUNK_NAME);
+        el.classList.add(Class.Chunk);
       }
     });
 }
@@ -89,7 +85,7 @@ function hasAncestorChunk(testedEl: Element, elements: NodeListOf<Element>): boo
  * @returns Modifies the Document
  */
 function tagIdeas(document: Document, delimiter: Delimiter): void {
-  document.querySelectorAll(`.${CHUNK_NAME}`).forEach(chunk => {
+  document.querySelectorAll(`.${Class.Chunk}`).forEach(chunk => {
     const tagged = produce(document, parse(chunk, delimiter));
     chunk.parentNode?.replaceChild(tagged, chunk);
   });
@@ -107,11 +103,11 @@ function tagIdeas(document: Document, delimiter: Delimiter): void {
 function numberEls(document: Document, selector: DOMStringLike, name: string): void {
   Array.prototype.forEach.call(document.querySelectorAll(selector), (el, index) => {
     const nonZeroId = index + 1;
-    el.setAttribute(refNumAttr, nonZeroId);
+    el.setAttribute(TagAttr.RefNum, nonZeroId);
 
-    if (name === IDEA_NAME) {
+    if (name === Class.Chunk) {
       if (el.getAttribute('id')) {
-        const wrapper = document.createElement('span');
+        const wrapper = document.createElement('SPAN');
         wrapper.setAttribute('id', `${name}${nonZeroId}`);
 
         [...el.childNodes].forEach(node => {

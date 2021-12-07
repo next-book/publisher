@@ -1,5 +1,7 @@
+export type Identifier = string;
 export type Revision = string | null;
-
+export type Order = number | null;
+export type OrderLike = string;
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 export interface Heading {
@@ -38,7 +40,7 @@ export interface DocumentMetadata {
   chars: number;
   ideas: number;
   role: DocRole;
-  order: number | null;
+  order: Order;
   prev: string | null;
   next: string | null;
   toc: Heading[];
@@ -53,7 +55,7 @@ export interface Metadata {
 }
 
 export default interface Manifest extends Metadata {
-  identifier: string;
+  identifier: Identifier;
   revision: Revision;
   generatedAt: {
     date: string;

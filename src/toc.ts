@@ -4,6 +4,7 @@
  */
 import { JSDOM as Jsdom } from 'jsdom';
 import { DocumentMetadata, Heading, HeadingLevel } from '../shared/manifest';
+import { TagClass, TocClass, Role } from '../shared/dom';
 
 export type TocBase = TocBaseItem[];
 
@@ -25,7 +26,9 @@ type TocBaseItem = {
  */
 export default function getDocumentToc(doc: Document): Heading[] {
   const headings = <HTMLHeadingElement[]>[
-    ...doc.querySelectorAll('h1.chunk, h2.chunk, h3.chunk, h4.chunk, h5.chunk, h6.chunk'),
+    ...doc.querySelectorAll(
+      [...Array(6)].map((v, i) => 'h' + (i + 1) + '.' + TagClass.Chunk + ' ').toString()
+    ),
   ];
   return headings
     .map(fetchHeading)
@@ -86,16 +89,16 @@ function isTheNextHeadingOnSameLevel(heading: Heading, currentRoot: Heading): bo
  */
 
 export function getToc(meta: DocumentMetadata[], tocBase?: TocBase): DocumentFragment {
-  const root = Jsdom.fragment('<nav role="doc-toc"></nav>');
-  const nav = root.querySelector('nav') as HTMLElement;
+  const root = Jsdom.fragment('<nav role="' + Role.DocToc + '"></nav>');
+  const nav = root.querySelector('nav');
 
   if (tocBase)
-    tocBase.map(item => renderTocItem(item, meta, true)).forEach(el => el && nav.appendChild(el));
+    tocBase.map(item => renderTocItem(item, meta, true)).forEach(el => el && nav?.appendChild(el));
   else {
     const ul = Jsdom.fragment('<ul></ul>');
     const items = meta.map(renderTocItemFromMeta).forEach(el => el && ul.appendChild(el));
 
-    nav.appendChild(ul);
+    nav?.appendChild(ul);
   }
 
   return root;
@@ -153,7 +156,7 @@ function renderChildren(item: TocBaseItem, meta: DocumentMetadata[]): DocumentFr
 
   const childrenWrapper =
     isSection === true || listType === 'plain'
-      ? Jsdom.fragment(`<ul class="plain"></ul>`)
+      ? Jsdom.fragment('<ul class="' + TocClass.PlainList + '"></ul>')
       : listType === 'numbered'
       ? Jsdom.fragment('<ol></ol>')
       : Jsdom.fragment('<ul></ul>');
@@ -170,7 +173,7 @@ function renderChildren(item: TocBaseItem, meta: DocumentMetadata[]): DocumentFr
 }
 
 function renderDocumentToc(headings: Heading[], file: string): DocumentFragment {
-  const root = Jsdom.fragment('<ol class="headings-toc"></ol>');
+  const root = Jsdom.fragment('<ol class="' + TocClass.Headings + '"></ol>');
   const ol = root.querySelector('ol') as HTMLElement;
 
   headings.map(h => {

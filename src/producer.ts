@@ -5,6 +5,7 @@
  */
 import { ParsedObj, Idea, IdeaPiece } from './structures';
 import { isNode } from './utils/dom';
+import { TagClass } from '../shared/dom';
 
 /**
  * Produces ideas from a parsedObj
@@ -46,6 +47,8 @@ export default function produce(document: Document, parsedObj: ParsedObj): Node 
  * @returns HTML Element span
  */
 function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document): HTMLElement {
+  const span = document.createElement('span');
+  span.classList.add(TagClass.Idea);
 
   idea.forEach(item => {
     if (typeof item === 'string') {
