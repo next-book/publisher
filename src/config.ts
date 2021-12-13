@@ -2,7 +2,7 @@
  * Config module
  * @module
  */
-import { Metadata } from '../shared/manifest';
+import { Metadata, LanguageCode, Root } from '../shared/manifest';
 import { TocBase } from './toc';
 
 /**
@@ -30,7 +30,7 @@ export interface Config {
   /**
    * i18n ISO string
    */
-  languageCode: string;
+  languageCode: LanguageCode;
 
   /**
    * Output format specifier
@@ -46,7 +46,7 @@ export interface Config {
    * Root element, within which book content is recognized and
    * processed by publisher.
    */
-  root: keyof HTMLElementTagNameMap | string;
+  root: Root;
 
   /**
    * Selectors for DOM elements to be recognized

@@ -69,7 +69,7 @@ export default function map(
 
   if (!conf.meta) throw new Error('Metadata not defined in config.');
   const manifest = composeManifest(
-    conf.meta,
+    conf,
     pubMetadata,
     readingOrder,
     sumPublication(pubMetadata),
@@ -99,20 +99,27 @@ export default function map(
 }
 
 function composeManifest(
-  meta: ConfigMetadata,
+  config: Config,
   documents: DocumentMetadata[],
   readingOrder: string[],
   totals: PublicationSum,
   revision: Revision
 ): Manifest {
-  const id = [meta?.author?.split(' ').pop(), meta.title, meta.published, revision]
+  const id = [
+    config.meta?.author?.split(' ').pop(),
+    config.meta?.title,
+    config.meta?.published,
+    revision,
+  ]
     .filter(str => str)
     .join(' ');
 
   const time = new Date();
 
   return {
-    ...meta,
+    ...config.meta,
+    languageCode: config.languageCode,
+    root: config.root,
     identifier: slug(id, { lower: true }),
     revision,
     generatedAt: {
