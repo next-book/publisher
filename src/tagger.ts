@@ -27,7 +27,7 @@ export default function tagDocument(document: Document, options: Config): void {
  * Mark DOM Elements to be tagged
  *
  * @remarks
- * Skips nested nodes and nodes with SKIP_NAME class (and their child * nodes).
+ * Skips nested nodes and nodes with {@link TagClass.Skip} enum string (and their child * nodes).
  *
  * @param document - DOM document
  * @param root - Root element
@@ -48,7 +48,7 @@ function markElementsToBeTagged(document: Document, root: string, selectors: Sel
   const elements =
     typeof selectors === 'function'
       ? selectors(rootElement)
-      : rootElement.querySelectorAll(selectors.join(', ')); // beware: there was no join in the code before typescript
+      : rootElement.querySelectorAll(selectors.join(', '));
   if (elements)
     elements.forEach(el => {
       if (
