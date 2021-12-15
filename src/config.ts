@@ -1,6 +1,14 @@
 /**
  * Config module
  * @module
+ *
+ * The config is being created in following stages:
+ * 1. First in {@link prepConfig}, the custom book options in the shape of {@link PartialConfig} are loaded.
+ * 2. Preview feature settings in shape of {@link Preview} are being created by appling loaded custom
+ *    options onto {@link previewDefaults}.
+ *    The preview feature settings are added to the loaded config, together making the
+ *    shape of {@link PartialConfigWithPreview}.
+ * 3. Since config is guaranteed to have preview settings, it is then used to override {@link configDefaults}.
  */
 import { Metadata, LanguageCode, Root } from '../shared/manifest';
 import { TocBase } from './toc';
@@ -119,7 +127,7 @@ export interface Config {
   preview: Preview;
 }
 
-const defaults: Config = {
+const configDefaults: Config = {
   languageCode: 'en',
   output: 'html',
   delimiter: '\n',
@@ -136,13 +144,14 @@ const defaults: Config = {
   preview: { ...previewDefaults },
 };
 
+/**
+ * @example Custom book config loaded from file may contain
+ * selected (partial) config properties
+ */
 export type PartialConfig = Partial<Config>;
-export interface PartialConfigWithPreview extends PartialConfig {
-  preview: Preview;
-}
 
 const loadConfig = (overrides: PartialConfig): Config => {
-  return Object.assign({}, defaults, overrides);
+  return Object.assign({}, configDefaults, overrides);
 };
 
 export default loadConfig;

@@ -5,7 +5,7 @@ import rimraf from 'rimraf';
 import copy from 'recursive-copy';
 import * as sw from './service-worker/builder';
 import Manifest from '../shared/manifest';
-import { PartialConfigWithPreview, PartialConfig, previewDefaults, Preview } from './config';
+import { PartialConfig, previewDefaults, Preview } from './config';
 import { PathLike } from './utils/fs';
 
 type PrepContent = {
@@ -37,6 +37,14 @@ export function prepContent(
   content.forEach(file => console.log(`> ${file.name}`));
 
   return { content: content.map(file => file.data), filenames: content.map(file => file.name) };
+}
+
+/**
+ * @example We have guaranteed that config contains Preview info,
+ * once we add user preview options applied onto defaults.
+ */
+export interface PartialConfigWithPreview extends PartialConfig {
+  preview: Preview;
 }
 
 /**
