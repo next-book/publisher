@@ -2,9 +2,8 @@
 import cmd from 'commander';
 import express from 'express';
 import path from 'path';
-import map from '../app';
+import map, { dumpArray } from '../app';
 import {
-  prepPreviewConfig,
   prepConfig,
   writeOutput,
   copyFolders,
@@ -23,12 +22,16 @@ cmd
   .option('-p, --preview [url]', 'Generate a preview (three chapters only)')
   .parse(process.argv);
 
-const config = cmd.preview ? prepPreviewConfig(cmd.src, cmd.preview) : prepConfig(cmd.src);
-
+const config = prepConfig(cmd.src, cmd.preview);
+console.log('Config', dumpArray(config));
 if (!config) throw new Error('No config set');
 
-const revisionId = cmd.preview ? `${getRevision()}-preview` : getRevision();
-const { content, filenames } = prepContent(cmd.src, cmd.filter, config.removeChapters);
+const revisionId = config.preview?.isPreview ? `${getRevision()}-preview` : getRevision();
+const { content, filenames } = prepContent(
+  cmd.src,
+  cmd.filter,
+  config.preview.isPreview ? config.preview.removeChapters : []
+);
 const { documents, manifest } = map(content, filenames, config, revisionId);
 
 writeOutput(cmd.out, filenames, documents, manifest);

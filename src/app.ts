@@ -8,7 +8,7 @@ import pretty from 'pretty';
 import slug from 'slug';
 import tagDocument from './tagger';
 import i18n from './i18n';
-import loadConfig, { Config } from './config';
+import loadConfig, { Config, PartialConfig } from './config';
 import { gaugeDocument, gaugePublication, PublicationStats } from './gauge';
 import getDocumentToc, { getToc } from './toc';
 import * as chapterNav from './chapter-navigation';
@@ -16,8 +16,8 @@ import Manifest, {
   DocRole,
   PublicationSum,
   DocumentMetadata,
+  Metadata,
   Revision,
-  Metadata as ConfigMetadata,
 } from '../shared/manifest';
 import { StyleClass, MetaDocRoleElement, MetaIdentifierElement, Id, Rel } from '../shared/dom';
 
@@ -38,7 +38,7 @@ interface MappedPublication {
 export default function map(
   content: string[],
   filenames: string[],
-  options: Config,
+  options: PartialConfig,
   revision: Revision
 ): MappedPublication {
   const conf = loadConfig(options);
@@ -77,7 +77,8 @@ export default function map(
   );
 
   //preview
-  if (conf.fullTextUrl) chapterNav.addFullTextUrl(documents, conf.fullTextUrl, conf.root);
+  if (conf.preview.isPreview)
+    chapterNav.addFullTextUrl(documents, conf.preview.fullTextUrl, conf.root);
 
   // set language and add code to html
   i18n.changeLanguage(conf.languageCode);
@@ -106,9 +107,9 @@ function composeManifest(
   revision: Revision
 ): Manifest {
   const id = [
-    config.meta?.author?.split(' ').pop(),
-    config.meta?.title,
-    config.meta?.published,
+    config.meta.author?.split(' ').pop(),
+    config.meta.title,
+    config.meta.published,
     revision,
   ]
     .filter(str => str)
@@ -117,11 +118,13 @@ function composeManifest(
   const time = new Date();
 
   return {
+    preview: { ...config.preview },
     ...config.meta,
     languageCode: config.languageCode,
     root: config.root,
     identifier: slug(id, { lower: true }),
     revision,
+    readingOrder: readingOrder,
     generatedAt: {
       date: String(time),
       unix: time.getTime(),
@@ -373,7 +376,7 @@ function exportDoms(doms: Jsdom[], format: 'jsdom' | 'html'): (Jsdom | string)[]
  * @param arr - Array to dump
  * @returns
  */
-function dumpArray(arr: unknown) {
+export function dumpArray(arr: unknown) {
   return JSON.stringify(arr, null, 2)
     .split('\n')
     .map(line => `>${line}`)

@@ -8,6 +8,8 @@
  * its constituent resources (https://www.w3.org/TR/pub-manifest/).
  */
 
+import { Preview } from '../src/config';
+
 export type Identifier = string;
 export type Revision = string | null;
 export type Order = number | null;
@@ -64,8 +66,12 @@ export interface Metadata {
   subtitle?: string;
   author?: string;
   published?: number;
+  publisher?: string;
   keywords?: string[];
+  edition?: string;
 }
+
+// https://github.com/orgs/next-book/teams/nb-core/discussions/1
 
 export default interface Manifest extends Metadata {
   identifier: Identifier;
@@ -75,9 +81,10 @@ export default interface Manifest extends Metadata {
     date: string;
     unix: number;
   };
+  readingOrder: string[];
   documents: DocumentMetadata[];
   totals: PublicationSum;
   keywords?: string[];
   root: Root;
-  // preview: boolean;
+  preview: Preview;
 }

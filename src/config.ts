@@ -23,6 +23,40 @@ export type Selectors = Array<keyof HTMLElementTagNameMap | string> | SelectorFn
 
 export type Delimiter = string /* | RegExp | TokenizerFn */;
 
+export type PreviewTrue = {
+  isPreview: true;
+
+  /**
+   * URL used in nav and site links
+   */
+  fullTextUrl: string;
+};
+
+type PreviewFalse = { isPreview: false };
+
+export type Preview = {
+  /**
+   * Chapter files to be excluded
+   */
+  chaptersSlice: number;
+
+  /**
+   * Chapter files to be excluded
+   */
+  removeChapters: string[];
+
+  /**
+   * URL may be set oven when isPreview is false
+   */
+  fullTextUrl?: string;
+} & (PreviewTrue | PreviewFalse);
+
+export const previewDefaults: Preview = {
+  isPreview: false,
+  chaptersSlice: 3,
+  removeChapters: [],
+};
+
 /**
  * Publisher config
  */
@@ -38,7 +72,7 @@ export interface Config {
   output: 'jsdom' | 'html';
 
   /**
-   * Delimiter
+   * D
    */
   delimiter: Delimiter;
 
@@ -56,28 +90,33 @@ export interface Config {
   /**
    * Book metadata
    */
-  meta?: Metadata;
+  meta: Metadata;
 
   /**
-   * Chapters as list of `.html` files
+   * ReadingOrder as list of `.html` files
    */
-  readingOrder?: string[];
+  readingOrder: string[];
+
+  /**
+   * Chapters reading order as list of `.html` files.
+   *
+   * @remarks When provided, gets renamed to readingOrder.
+   * @deprecated Use the new readingOrder property instead.
+   */
+  chapters?: string[];
 
   /**
    * TOC structure without in-document headings
    */
-  tocBase?: TocBase;
+  tocBase: TocBase;
 
   /**
    * Static files folders to be published as a list of folder names.
    * Folders will be copied from source to output as they are
    */
-  static?: string[];
+  static: string[];
 
-  /**
-   * URL used in nav and site links
-   */
-  fullTextUrl?: string;
+  preview: Preview;
 }
 
 const defaults: Config = {
@@ -86,17 +125,24 @@ const defaults: Config = {
   delimiter: '\n',
   root: 'main',
   selectors: ['p', 'li', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'dl'],
+  static: [],
+  readingOrder: [],
+  tocBase: [],
   meta: {
     title: 'No title',
     subtitle: 'No subtitle',
     author: 'No author',
   },
+  preview: { ...previewDefaults },
 };
 
-type ConfigOverrides = Partial<Config>;
+export type PartialConfig = Partial<Config>;
+export interface PartialConfigWithPreview extends PartialConfig {
+  preview: Preview;
+}
 
-const loadConfig = (options: ConfigOverrides): Config => {
-  return Object.assign({}, defaults, options);
+const loadConfig = (overrides: PartialConfig): Config => {
+  return Object.assign({}, defaults, overrides);
 };
 
 export default loadConfig;

@@ -5,36 +5,13 @@ import rimraf from 'rimraf';
 import copy from 'recursive-copy';
 import * as sw from './service-worker/builder';
 import Manifest from '../shared/manifest';
-import { Config } from './config';
-import { TocBase } from './toc';
+import { PartialConfigWithPreview, PartialConfig, previewDefaults, Preview } from './config';
 import { PathLike } from './utils/fs';
 
 type PrepContent = {
   content: string[];
   filenames: string[];
 };
-
-interface BookConfigMetaData {
-  title?: string;
-  subtitle: string;
-  author: string;
-  published: number;
-  keywords: string[];
-}
-
-interface BookConfig extends Config {
-  meta: BookConfigMetaData;
-  readingOrder: string[];
-  removeChapters: string[];
-  tocBase: TocBase;
-  static: string[];
-}
-
-interface PreviewConfig extends Config {
-  readingOrder: string[];
-  removeChapters: string[];
-  fullTextUrl: string;
-}
 
 type Pair = { from: string; to: string };
 
@@ -62,27 +39,48 @@ export function prepContent(
   return { content: content.map(file => file.data), filenames: content.map(file => file.name) };
 }
 
-export function prepConfig(srcDir: PathLike): BookConfig | null {
+/**
+ * Reads book config options from file
+ * @param srcDir
+ * @param fullTextUrl
+ * @returns
+ */
+export function prepConfig(
+  srcDir: PathLike,
+  fullTextUrl?: string
+): PartialConfigWithPreview | null {
   const configPath = path.join(srcDir, '/book.json');
   console.log(`Looking up a custom book config in "${configPath}/".`);
 
-  const bookConfig: BookConfig = fs.existsSync(configPath)
+  const partialConfig: PartialConfig = fs.existsSync(configPath)
     ? JSON.parse(fs.readFileSync(configPath, 'utf8'))
     : null;
-  console.log(bookConfig ? 'Found custom book config.' : 'Custom book config not found.');
 
-  return bookConfig;
-}
+  // rename depricated `chapters` property
+  if (partialConfig.chapters && !partialConfig.readingOrder) {
+    partialConfig.readingOrder = [...partialConfig.chapters];
+    delete partialConfig.chapters;
+  }
 
-export function prepPreviewConfig(srcDir: PathLike, fullTextUrl: string): PreviewConfig {
-  console.log('Preparing preview version of the book.');
+  // overriden preview config defaults with custom options
+  const preview: Preview = { ...previewDefaults, ...partialConfig.preview };
 
-  const config = prepConfig(srcDir);
-  return Object.assign({}, config, {
-    readingOrder: config?.readingOrder?.slice(0, 3),
-    removeChapters: config?.readingOrder?.slice(3),
-    fullTextUrl,
-  });
+  if (fullTextUrl) {
+    preview.isPreview = true;
+    preview.fullTextUrl = fullTextUrl;
+  }
+
+  const config: PartialConfigWithPreview = { ...partialConfig, preview: { ...preview } };
+
+  if (preview.isPreview && preview.fullTextUrl) {
+    console.log('Preparing preview version of the book.');
+    config.readingOrder = partialConfig.readingOrder?.slice(0, preview.chaptersSlice);
+    if (partialConfig.readingOrder)
+      config.preview.removeChapters = partialConfig.readingOrder.slice(preview.chaptersSlice);
+  }
+
+  console.log(config ? 'Found custom book config.' : 'Custom book config not found.');
+  return config;
 }
 
 export function writeOutput(
