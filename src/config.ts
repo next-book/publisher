@@ -1,6 +1,5 @@
 /**
  * Config module
- * @module
  *
  * The config is being created in following stages:
  * 1. First in {@link prepConfig}, the custom book options in the shape of {@link PartialConfig} are loaded.
@@ -9,7 +8,9 @@
  *    The preview feature settings are added to the loaded config, together making the
  *    shape of {@link PartialConfigWithPreview}.
  * 3. Since config is guaranteed to have preview settings, it is then used to override {@link configDefaults}.
+ * @module
  */
+
 import { Metadata, LanguageCode, Root } from '../shared/manifest';
 import { TocBase } from './toc';
 
