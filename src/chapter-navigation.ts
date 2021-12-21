@@ -1,4 +1,4 @@
-import i18n from './i18n';
+import t from './i18n';
 import { DOMStringLike } from './utils/dom';
 import { Id, Rel, PageClass, URLFragment, NavClass, ChapterId } from '../shared/dom';
 
@@ -18,16 +18,16 @@ export function addChapterInPageNavigation(chapters: Document[], root: DOMString
     const beginNav = createNavFragment(doc, NavClass.Begin);
     const endNav = createNavFragment(doc, NavClass.End);
 
-    createLink(doc, Rel.Index, '', i18n.t('navigation:title-page'), anchor => {
+    createLink(doc, Rel.Index, '', t('navigation:title-page'), anchor => {
       appendLinkToNav(doc, beginNav, anchor.cloneNode(true));
       appendLinkToNav(doc, endNav, anchor.cloneNode(true));
     });
 
-    createLink(doc, Rel.Prev, ChapterId.End, `← ${i18n.t('navigation:prev-chapter')}`, anchor => {
+    createLink(doc, Rel.Prev, ChapterId.End, `← ${t('navigation:prev-chapter')}`, anchor => {
       appendLinkToNav(doc, beginNav, anchor);
     });
 
-    createLink(doc, Rel.Next, 'chunk1', `${i18n.t('navigation:next-chapter')} →`, anchor => {
+    createLink(doc, Rel.Next, 'chunk1', `${t('navigation:next-chapter')} →`, anchor => {
       appendLinkToNav(doc, endNav, anchor);
     });
 
