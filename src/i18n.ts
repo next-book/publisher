@@ -51,9 +51,9 @@ type GetDictValue<T extends string, O> = T extends `${infer A}:${infer B}`
  * @param key Key of the translation from the fallback language dictionary.
  * @returns Corresponding translation for the key.
  */
-const t = <TKeys extends string>(
+export const t = <TKeys extends string>(
   key: DeepLeafKeys<typeof en>,
-  options: TOptions | string
+  options?: TOptions | string
 ): GetDictValue<TKeys, typeof en> => i18n.t(key, options) as GetDictValue<TKeys, typeof en>;
 
-export default t;
+export default i18n;

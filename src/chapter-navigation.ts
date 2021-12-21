@@ -1,4 +1,4 @@
-import t from './i18n';
+import { t } from './i18n';
 import { DOMStringLike } from './utils/dom';
 import { Id, Rel, PageClass, URLFragment, NavClass, ChapterId } from '../shared/dom';
 
