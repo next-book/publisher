@@ -75,6 +75,7 @@
     "eslint-plugin-import": "^2.24.0",
     "eslint-plugin-tsdoc": "^0.2.14",
     "jest": "^27.0.6",
+    "jest-matcher-utils": "^27.4.2",
     "onchange": "^6.1.0",
     "prettier": "^2.4.1",
     "ts-jest": "^27.0.4",
