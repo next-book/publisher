@@ -10,7 +10,7 @@ import {
 } from 'jest-matcher-utils';
 
 /**
- * Fails when wrong key is found in all i18n resources in test against the fallback dictionary.
+ * Fails when key is missing in i18n resources when compared against the fallback dictionary.
  */
 
 interface Dictionary {
@@ -32,15 +32,15 @@ function getDictionaries(resources: resources): DictionariesTable {
   return table;
 }
 
-function hasEqualStructure(received: any, expected: any): boolean {
-  return Object.keys(received).every(key => {
-    const v = received[key];
+function hasExpectedStructure(received: any, expected: any): boolean {
+  return Object.keys(expected).every(key => {
+    const v = expected[key];
 
     if (typeof v === 'object' && v !== null) {
-      return hasEqualStructure(v, expected[key]);
+      return hasExpectedStructure(received[key], v);
     }
 
-    return expected.hasOwnProperty(key) && v !== '';
+    return received.hasOwnProperty(key) && v !== '';
   });
 }
 
@@ -58,9 +58,9 @@ function cloneDictionaryWithType(dict: Dictionary | string): Dictionary {
   return clone;
 }
 
-function toMatchDictionary(this: jest.MatcherContext, received: any, expected: any) {
-  const matcherName = 'toMatchDictionary';
-  const pass = hasEqualStructure(received, expected);
+function toContainKeysOfDictionary(this: jest.MatcherContext, received: any, expected: any) {
+  const matcherName = 'toContainKeysOfDictionary';
+  const pass = hasExpectedStructure(received, expected);
 
   const isExpand = (expand?: boolean): boolean => expand !== false;
   const isNot = this.isNot;
@@ -84,7 +84,7 @@ function toMatchDictionary(this: jest.MatcherContext, received: any, expected: a
         printDiffOrStringify(
           expectedClone,
           receivedClone,
-          'Expected',
+          'Expected (missing keys)',
           'Received',
           isExpand(this.expand)
         );
@@ -93,20 +93,23 @@ function toMatchDictionary(this: jest.MatcherContext, received: any, expected: a
 }
 
 // add custom matcher according to https://jestjs.io/docs/expect#expectextendmatchers
-expect.extend({ toMatchDictionary });
+expect.extend({ toContainKeysOfDictionary });
 
 // declare the matcher to be part of module
 declare global {
   namespace jest {
     interface Matchers<R> {
-      toMatchDictionary<E extends {} | any[]>(expected: E): R;
+      toContainKeysOfDictionary<E extends {} | any[]>(expected: E): R;
     }
   }
 }
 
 describe('translations', () => {
   const cases = getDictionaries(resources);
-  test.each(cases)('given %p dictionary, match the fallback dictionary', (language, dict) => {
-    expect(dict).toMatchDictionary(fallback);
-  });
+  test.each(cases)(
+    'given %p dictionary, contain the keys of fallback dictionary',
+    (language, dict) => {
+      expect(dict).toContainKeysOfDictionary(fallback);
+    }
+  );
 });
