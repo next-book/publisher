@@ -11,7 +11,12 @@ import i18n from './i18n';
 import loadConfig, { Config, PartialConfig } from './config';
 import { gaugeDocument, gaugePublication, PublicationStats } from './gauge';
 import getDocumentToc, { getToc } from './toc';
-import * as chapterNav from './chapter-navigation';
+import {
+  addChapterStartAnchor,
+  addChapterEndAnchor,
+  addChapterInPageNavigation,
+  addFullTextUrl,
+} from './chapter-navigation';
 import Manifest, { DocRole, PublicationSum, DocumentMetadata, Revision } from '../shared/manifest';
 import { StyleClass, MetaDocRoleElement, MetaIdentifierElement, Id, Rel } from '../shared/dom';
 
@@ -70,25 +75,29 @@ export default function map(
     revision
   );
 
-  //preview
-  if (conf.preview.isPreview)
-    chapterNav.addFullTextUrl(documents, conf.preview.fullTextUrl, conf.root);
-
-  // set language and add code to html
-  i18n.changeLanguage(conf.languageCode);
-  addLanguageCode(documents, conf.languageCode);
-
-  // add nav
   addMetaNavigation(documents, pubMetadata);
-  chapterNav.addChapterStartAnchor(documents, conf.root);
-  chapterNav.addChapterEndAnchor(documents, conf.root);
-  chapterNav.addChapterInPageNavigation(documents, conf.root);
 
-  // add roles
-  addIdentifier(documents, manifest.identifier);
-  addDocRoles(documents, pubMetadata);
-  addDefaultBodyClasses(documents);
-  addToc(documents, getToc(pubMetadata, conf.tocBase));
+  // set language
+  i18n.changeLanguage(conf.languageCode);
+
+  documents.forEach((doc, index) => {
+    // add nav
+
+    //preview
+    if (conf.preview.isPreview) addFullTextUrl(doc, conf.preview.fullTextUrl, conf.root);
+
+    addLanguageCode(doc, conf.languageCode);
+
+    addChapterStartAnchor(doc, conf.root);
+    addChapterEndAnchor(doc, conf.root);
+    addChapterInPageNavigation(doc, conf.root);
+
+    // add roles
+    addIdentifier(doc, manifest.identifier);
+    addDocRoles(doc, pubMetadata, index);
+    addDefaultBodyClass(doc);
+    addToc(doc, getToc(pubMetadata, conf.tocBase));
+  });
 
   return { manifest, documents: exportDoms(doms, conf.output) };
 }
@@ -210,61 +219,52 @@ function gatherMetadata(
   });
 }
 
-function addDefaultBodyClasses(documents: Document[]) {
-  documents.forEach(document => {
-    document.querySelector('body')?.classList.add(StyleClass.Custom);
-  });
+function addDefaultBodyClass(doc: Document) {
+  doc.querySelector('body')?.classList.add(StyleClass.Custom);
 }
 
-function addToc(documents: Document[], toc: DocumentFragment) {
-  documents.forEach(document => {
-    document.querySelector('body')?.prepend(toc.cloneNode(true));
-  });
+function addToc(doc: Document, toc: DocumentFragment) {
+  doc.querySelector('body')?.prepend(toc.cloneNode(true));
 }
 
-function addDocRoles(documents: Document[], metadata: DocumentMetadata[]) {
-  documents.forEach((document, index) => {
-    const headElement = document.querySelector('head');
-    if (!headElement) throw new Error('Missing <head> HTML element.');
+function addDocRoles(doc: Document, metadata: DocumentMetadata[], index: number) {
+  const headElement = doc.querySelector('head');
+  if (!headElement) throw new Error('Missing <head> HTML element.');
 
-    headElement.querySelector<MetaDocRoleElement>('meta[name="nb-role"]')?.remove();
+  headElement.querySelector<MetaDocRoleElement>('meta[name="nb-role"]')?.remove();
 
-    const role = metadata[index].role;
-    const el = document.createElement('meta') as MetaDocRoleElement;
-    el.setAttribute('name', 'nb-role');
-    el.setAttribute('content', role);
-    headElement.appendChild(el);
+  const role = metadata[index].role;
+  const el = doc.createElement('meta') as MetaDocRoleElement;
+  el.setAttribute('name', 'nb-role');
+  el.setAttribute('content', role);
+  headElement.appendChild(el);
 
-    document.body.classList.add(`nb-role-${role}`);
-  });
+  doc.body.classList.add(`nb-role-${role}`);
 }
 
-function addLanguageCode(documents: Document[], code: string): void {
+function addLanguageCode(doc: Document, code: string): void {
   console.log('\nAdding language code…');
-  if (code)
-    documents.forEach(document => {
-      const htmlElement = document.querySelector('html');
-      if (!htmlElement) throw new Error('Missing <html> HTML element.');
-      htmlElement.setAttribute('lang', code);
-    });
+  if (code) {
+    const htmlElement = doc.querySelector('html');
+    if (!htmlElement) throw new Error('Missing <html> HTML element.');
+    htmlElement.setAttribute('lang', code);
+  }
 }
 
-function addIdentifier(documents: Document[], identifier: string) {
-  documents.forEach(document => {
-    const el = document.createElement('meta') as MetaIdentifierElement;
-    el.setAttribute('name', 'nb-identifier');
-    el.setAttribute('content', identifier);
-    const head = document.querySelector('head');
-    if (!head) throw new Error('Missing head element.');
-    head.appendChild(el);
-  });
+function addIdentifier(doc: Document, identifier: string) {
+  const el = doc.createElement('meta') as MetaIdentifierElement;
+  el.setAttribute('name', 'nb-identifier');
+  el.setAttribute('content', identifier);
+  const head = doc.querySelector('head');
+  if (!head) throw new Error('Missing head element.');
+  head.appendChild(el);
 }
 
 /**
  * Adds meta navigation links e.g. to next/prev, license, manifest, homepage
  * to the <head> of documents.
  *
- * @param documents - A list of DOM Documents to add meta navigation to
+ * @param doc - A list of DOM Documents to add meta navigation to
  * @param metadata - Document metadata used for meta navigation links
  * @returns Mutates documents by adding and appending navigation links
  * to `<head>` HTML element.
@@ -298,8 +298,8 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
     base.push({ tagName: 'link', rel: 'colophon', href: colophon });
   }
 
-  documents.forEach((document, index) => {
-    const headElement = document.querySelector('head');
+  documents.forEach((doc, index) => {
+    const headElement = doc.querySelector('head');
     if (!headElement) throw Error('HTML <head> element missing');
 
     const docMeta = metadata[index];
@@ -330,7 +330,7 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
       .filter(meta => meta !== null)
       .forEach(meta => {
         if (!meta) return;
-        const el = document.createElement(meta.tagName);
+        const el = doc.createElement(meta.tagName);
         Object.keys(meta)
           .filter(key => ['name', 'content', 'rel', 'href', 'id'].includes(key))
           .forEach(key => {
