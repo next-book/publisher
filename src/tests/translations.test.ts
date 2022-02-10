@@ -1,5 +1,5 @@
 import fallback from '@next-book/interface/src/js/translation/en.json';
-import { resources } from './i18n';
+import { resources } from '../i18n';
 import {
   matcherHint,
   printExpected,

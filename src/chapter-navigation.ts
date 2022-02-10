@@ -11,8 +11,9 @@ import { Id, Rel, PageClass, URLFragment, NavClass, ChapterId } from '../shared/
  */
 export function addChapterInPageNavigation(doc: Document, root: DOMStringLike): void {
   const content = doc.querySelector(root);
+  if (!content) throw new Error(`The document does not contain expected root "${root}".`);
   const self = doc.querySelector<HTMLLinkElement>('link[rel="self"]')?.getAttribute('href');
-  if (!content) return;
+  if (!self) throw new Error(`The document does not contain expected self reference.`);
 
   const beginNav = createNavFragment(doc, NavClass.Begin);
   const endNav = createNavFragment(doc, NavClass.End);
@@ -60,28 +61,28 @@ function appendLinkToNav(doc: Document, navFragment: DocumentFragment, link: Nod
   }
 }
 
-function createLink(
+export function createLink(
   doc: Document,
-  rel: string,
+  rel: Rel,
   urlFragment: URLFragment,
   text: string,
   callback: (anchor: Node) => void
 ) {
   const el = doc.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
+  if (!el) throw new Error(`The document does not contain expected link relation "${rel}".`);
+  if (!el.href) throw new Error(`The link relation "${rel}" does not contain href.`);
 
-  if (el && el.href) {
-    const a = doc.createElement('a');
-    a.setAttribute('href', `${el.getAttribute('href')}#${urlFragment}`);
-    a.setAttribute('rel', rel);
-    a.innerHTML = text;
+  const a = doc.createElement('a');
+  a.setAttribute('href', `${el.getAttribute('href')}#${urlFragment}`);
+  a.setAttribute('rel', rel);
+  a.innerHTML = text;
 
-    callback(a);
-  }
+  callback(a);
 }
 
 export function addChapterStartAnchor(doc: Document, root: DOMStringLike): void {
   const content = doc.querySelector(root);
-  if (!content) return;
+  if (!content) throw new Error(`The document does not contain expected root "${root}".`);
 
   const anchor = doc.createElement('a');
   anchor.setAttribute('id', ChapterId.Start);
@@ -91,8 +92,7 @@ export function addChapterStartAnchor(doc: Document, root: DOMStringLike): void 
 
 export function addChapterEndAnchor(doc: Document, root: DOMStringLike): void {
   const content = doc.querySelector(root);
-  if (!content) return;
-
+  if (!content) throw new Error(`The document does not contain expected root "${root}".`);
   const anchor = doc.createElement('a');
   anchor.setAttribute('id', ChapterId.End);
 
@@ -101,7 +101,7 @@ export function addChapterEndAnchor(doc: Document, root: DOMStringLike): void {
 
 export function addFullTextUrl(doc: Document, url: string, root: DOMStringLike): void {
   const content = doc.querySelector(root);
-  if (!content) return;
+  if (!content) throw new Error(`The document does not contain expected root "${root}".`);
 
   const p = doc.createElement('p');
   p.setAttribute('id', Id.FullTextLink);
