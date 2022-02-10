@@ -128,7 +128,7 @@ export interface Config {
   preview: Preview;
 }
 
-const configDefaults: Config = {
+export const configDefaults: Config = {
   languageCode: 'en',
   output: 'html',
   delimiter: '\n',

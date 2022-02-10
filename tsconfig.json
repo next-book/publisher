@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*", "tests/**/*"],
+  "include": ["src/**/*", "src/tests/**/*", "./jest.setup.ts"],
   "compilerOptions": {
     "outDir": "dist",
     "target": "ES2020",
