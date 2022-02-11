@@ -17,7 +17,7 @@ export class Separator {}
  * @param delimiter - The delimiter
  * @returns An instance of {@link ParsedObj}
  */
-export default function parse(node: Node | HTMLElement, delimiter: Delimiter): ParsedObj {
+export default function parse(node: Node, delimiter: Delimiter): ParsedObj {
   const pieces: (Node | string | Separator | ParsedObj)[] = [];
   // first create a flat list of strings, HTML Elements, ParsedObjs, and Separators
   node.childNodes.forEach(child => {
