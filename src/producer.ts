@@ -15,6 +15,8 @@ import { TagClass } from '../shared/dom';
  * @returns HTML node
  */
 export default function produce(document: Document, parsedObj: ParsedObj): Node {
+  if (!document) throw new Error('Expected document undefined.');
+  if (!parsedObj) throw new Error('Expected parsedObj undefined.');
   const fragment = document.createDocumentFragment();
   const { node, ideas, delimiter } = parsedObj;
 
