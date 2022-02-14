@@ -18,6 +18,8 @@ export class Separator {}
  * @returns An instance of {@link ParsedObj}
  */
 export default function parse(node: Node, delimiter: Delimiter): ParsedObj {
+  if (!node) throw new Error('Expected node undefined.');
+  if (typeof delimiter == 'undefined') throw new Error('Expected delimiter undefined.');
   const pieces: (Node | string | Separator | ParsedObj)[] = [];
   // first create a flat list of strings, HTML Elements, ParsedObjs, and Separators
   node.childNodes.forEach(child => {

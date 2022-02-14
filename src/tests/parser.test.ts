@@ -4,6 +4,17 @@
 import { ParsedObj } from '../structures';
 import parse from '../parser';
 
+it('should throw when undefined node provided', () => {
+  expect(() => parse(undefined as unknown as Node, '')).toThrowError('Expected node undefined.');
+});
+
+it('should throw when undefined delimiter provided', () => {
+  document.body.innerHTML = `<main></main>`;
+  expect(() => parse(document.querySelector('main')!, undefined as unknown as string)).toThrowError(
+    'Expected delimiter undefined.'
+  );
+});
+
 it('should return ParsedObj with empty ideas', () => {
   document.body.innerHTML = `<main></main>`;
   const parsed = parse(document.querySelector('main')!, '');
