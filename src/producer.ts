@@ -49,10 +49,12 @@ export default function produce(document: Document, parsedObj: ParsedObj): Node 
  * @returns HTML Element span
  */
 function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document): HTMLElement {
+export function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document): HTMLElement {
   const span = document.createElement('span');
   span.classList.add(TagClass.Idea);
 
   idea.forEach(item => {
+    if (item instanceof ParsedObj) throw new Error('Idea children contain ParsedObj.');
     if (typeof item === 'string') {
       span.appendChild(document.createTextNode(item));
     } else if (isNode(item as Node)) {
