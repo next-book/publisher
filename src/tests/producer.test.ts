@@ -80,6 +80,41 @@ describe('produce', () => {
     expect(produce(document, parsed)).toStrictEqual(main);
   });
 
+  it('should produce whitespace and span idea separated by newline when produced whitespace string and text', () => {
+    const parsed = new ParsedObj(document.createElement('main'), [' ', ['content']], '\n');
+
+    const main = document.createElement('main');
+
+    main.appendChild(document.createTextNode(' '));
+    main.appendChild(document.createTextNode('\n'));
+
+    const span = document.createElement('span');
+    span.classList.add('idea');
+    span.appendChild(document.createTextNode('content'));
+    main.appendChild(span);
+
+    expect(produce(document, parsed)).toStrictEqual(main);
+  });
+
+  it('should produce two whitespace and span idea separated by newlines when produced whitespace strings and text', () => {
+    const parsed = new ParsedObj(document.createElement('main'), ['  ', ' ', ['content']], '\n');
+
+    const main = document.createElement('main');
+
+    main.appendChild(document.createTextNode('  '));
+    main.appendChild(document.createTextNode('\n'));
+
+    main.appendChild(document.createTextNode(' '));
+    main.appendChild(document.createTextNode('\n'));
+
+    const span = document.createElement('span');
+    span.classList.add('idea');
+    span.appendChild(document.createTextNode('content'));
+    main.appendChild(span);
+
+    expect(produce(document, parsed)).toStrictEqual(main);
+  });
+
   it('should produce node with single idea with two lines: main>span.idea*1>{first\\nsecond}', () => {
     const parsed = new ParsedObj(document.createElement('main'), [['first', 'second']], '\n');
 
