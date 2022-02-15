@@ -79,7 +79,6 @@ export function containsParsedObj(idea: IdeaPiece[]): boolean {
   return idea.reduce<boolean>((acc, item) => acc || item instanceof ParsedObj, false);
 }
 
-function anchorObject(idea: Idea, document: Document) {
 /**
  * Returns document containing the appropriate children for idea.
  * @remarks Provided idea should be guaranteed to contain ParsedObj by its caller.
@@ -89,7 +88,6 @@ function anchorObject(idea: Idea, document: Document) {
  */
 export function anchorObject(idea: IdeaPiece[], document: Document) {
   const fragment = document.createDocumentFragment();
-  if (!Array.isArray(idea)) throw new Error('Idea is not an array.');
 
   idea.forEach(item => {
     if (item instanceof ParsedObj) {
