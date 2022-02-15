@@ -581,14 +581,6 @@ describe('containsParsedObj', () => {
 
 describe('produceHTMLSpanIdea', () => {
   it('should return span idea with no children when provided empty array', () => {
-    const ideaPieces: IdeaPiece[] = [new ParsedObj(document.createElement('main'), [], '\n')];
-
-    expect(() => produceHTMLSpanIdea(ideaPieces, document)).toThrowError(
-      'Idea children contain ParsedObj.'
-    );
-  });
-
-  it('should return span idea with no children when provided empty array', () => {
     const ideaPieces: IdeaPiece[] = [];
 
     const expected = document.createElement('span');
@@ -649,7 +641,7 @@ describe('produceHTMLSpanIdea', () => {
   it('should return span idea and ignore separator', () => {
     const link = document.createElement('a');
     link.appendChild(document.createTextNode('b'));
-    const ideaPieces = ['a', link, new Separator(), 'c'];
+    const idea = ['a', link, new Separator(), 'c'];
 
     const expected = document.createElement('span');
     expected.classList.add('idea');
@@ -659,7 +651,7 @@ describe('produceHTMLSpanIdea', () => {
     expected.appendChild(anchor);
     expected.appendChild(document.createTextNode('c'));
 
-    expect(produceHTMLSpanIdea(ideaPieces, document)).toStrictEqual(expected);
+    expect(produceHTMLSpanIdea(idea, document)).toStrictEqual(expected);
   });
 });
 
