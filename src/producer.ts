@@ -70,6 +70,7 @@ function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document): HTMLElement
  * @returns True if contains parsed object, False otherwise.
  */
 function containsParsedObj(idea: IdeaPiece[]) {
+export function containsParsedObj(idea: IdeaPiece[]) {
   return idea.reduce((acc, item) => acc || item instanceof ParsedObj, false);
 }
 
