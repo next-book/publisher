@@ -1,13 +1,11 @@
 /**
  * @jest-environment jsdom
  */
-
-import { Separator } from '../parser';
-import produce, { anchorObject, containsParsedObj, produceHTMLSpanIdea } from '../producer';
-import { IdeaPiece } from '../structures';
+import produce from '../producer';
+import { Ideas } from '../structures';
 import ParsedObj from '../structures/parsedobj';
 
-describe('produce', () => {
+describe('forbidden input', () => {
   it('should throw when provided with undefined document', () => {
     expect(() =>
       produce(undefined as unknown as Document, new ParsedObj(document.body, [], '\n'))
@@ -19,7 +17,9 @@ describe('produce', () => {
       'Expected parsedObj undefined.'
     );
   });
+});
 
+describe('base input', () => {
   it('should produce node with no children', () => {
     const parsed = new ParsedObj(document.createElement('main'), [], '');
     expect(produce(document, parsed).hasChildNodes()).toBe(false);
@@ -79,42 +79,97 @@ describe('produce', () => {
 
     expect(produce(document, parsed)).toStrictEqual(main);
   });
+});
 
-  it('should produce whitespace and span idea separated by newline when produced whitespace string and text', () => {
-    const parsed = new ParsedObj(document.createElement('main'), [' ', ['content']], '\n');
+describe('empty strings and whitespace input', () => {
+  it('should produce Node with no children when provided three whitespace string idea children', () => {
+    const ideas = new Ideas();
+    ideas.addIdea();
+    ideas.appendToIdea('');
+    const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
 
     const main = document.createElement('main');
-
-    main.appendChild(document.createTextNode(' '));
-    main.appendChild(document.createTextNode('\n'));
-
-    const span = document.createElement('span');
-    span.classList.add('idea');
-    span.appendChild(document.createTextNode('content'));
-    main.appendChild(span);
 
     expect(produce(document, parsed)).toStrictEqual(main);
   });
 
-  it('should produce two whitespace and span idea separated by newlines when produced whitespace strings and text', () => {
-    const parsed = new ParsedObj(document.createElement('main'), ['  ', ' ', ['content']], '\n');
+  it('should produce Node with no children when provided empty string and whitespace string idea children', () => {
+    const ideas = new Ideas();
+    ideas.addIdea();
+    ideas.appendToIdea('');
+    ideas.appendToIdea('           ');
+    console.log(ideas.fetch());
+    const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
 
     const main = document.createElement('main');
-
-    main.appendChild(document.createTextNode('  '));
-    main.appendChild(document.createTextNode('\n'));
-
-    main.appendChild(document.createTextNode(' '));
-    main.appendChild(document.createTextNode('\n'));
-
-    const span = document.createElement('span');
-    span.classList.add('idea');
-    span.appendChild(document.createTextNode('content'));
-    main.appendChild(span);
 
     expect(produce(document, parsed)).toStrictEqual(main);
   });
 
+  it('should produce Node with no children when provided whitespace string idea child', () => {
+    const ideas = new Ideas();
+    ideas.addIdea();
+    ideas.appendToIdea('      ');
+
+    const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
+
+    const main = document.createElement('main');
+
+    expect(produce(document, parsed)).toStrictEqual(main);
+  });
+
+  it('should produce Node with no children when provided two whitespace string idea children', () => {
+    const ideas = new Ideas();
+    ideas.addIdea();
+    ideas.appendToIdea('      ');
+    ideas.appendToIdea('      ');
+    const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
+
+    const main = document.createElement('main');
+    const idea1 = document.createElement('span');
+    idea1.classList.add('idea');
+    idea1.appendChild(document.createTextNode(' '));
+    idea1.appendChild(document.createTextNode(' '));
+    main.appendChild(idea1);
+
+    expect(produce(document, parsed)).toStrictEqual(main);
+  });
+
+  it('should produce two html span ideas where multiple whitespace characters get transformed into one', () => {
+    const ideas = new Ideas();
+    ideas.addIdea();
+    ideas.appendToIdea('      ');
+    ideas.appendToIdea('               ');
+    ideas.appendToIdea('      ');
+    ideas.addIdea();
+    ideas.appendToIdea(' ');
+    ideas.appendToIdea('   content   ');
+    ideas.appendToIdea('      ');
+    const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
+
+    const main = document.createElement('main');
+
+    const span1 = document.createElement('span');
+    span1.classList.add('idea');
+    span1.appendChild(document.createTextNode(' '));
+    span1.appendChild(document.createTextNode('               '));
+    span1.appendChild(document.createTextNode(' '));
+    main.appendChild(span1);
+
+    main.appendChild(document.createTextNode('\n'));
+
+    const span2 = document.createElement('span');
+    span2.classList.add('idea');
+    span2.appendChild(document.createTextNode(' '));
+    span2.appendChild(document.createTextNode('   content   '));
+    span2.appendChild(document.createTextNode(' '));
+    main.appendChild(span2);
+
+    expect(produce(document, parsed)).toStrictEqual(main);
+  });
+});
+
+describe('simple input', () => {
   it('should produce node with single idea with two lines: main>span.idea*1>{first\\nsecond}', () => {
     const parsed = new ParsedObj(document.createElement('main'), [['first', 'second']], '\n');
 
@@ -148,7 +203,9 @@ describe('produce', () => {
 
     expect(produce(document, parsed)).toStrictEqual(main);
   });
+});
 
+describe('simple ParsedObj input', () => {
   it('should produce empty anchor without idea when provided parsedobj idea', () => {
     const parsedA = new ParsedObj(document.createElement('a'), [], '\n');
     const parsed = new ParsedObj(document.createElement('main'), [[parsedA]], '\n');
@@ -287,7 +344,9 @@ describe('produce', () => {
 
     expect(produce(document, parsed)).toStrictEqual(main);
   });
+});
 
+describe('complex ParsedObj input', () => {
   it('should produce nested nested node, when provided nested ParsedObj containing other parsed Objects', () => {
     const main = document.createElement('main');
 
@@ -525,209 +584,5 @@ describe('produce', () => {
     produced.appendChild(producedParagraph2);
 
     expect(produce(document, parsed)).toStrictEqual(produced);
-  });
-});
-
-describe('containsParsedObj', () => {
-  it('returns false when provided with empty idea piece array', () => {
-    expect(containsParsedObj([])).toBe(false);
-  });
-  it('returns false when provided with idea piece array containing strings', () => {
-    expect(containsParsedObj(['a', 'b'])).toBe(false);
-  });
-  it('returns true when provided with idea piece array containing ParsedObj', () => {
-    expect(
-      containsParsedObj([
-        'a',
-        document.createElement('span'),
-        new ParsedObj(document.createElement('main'), [], '\n'),
-        new Separator(),
-        document.createElement('a'),
-        'b',
-        'c',
-      ])
-    ).toBe(true);
-  });
-  it('returns true when provided with idea piece array containing ParsedObj on first index', () => {
-    expect(
-      containsParsedObj([
-        new ParsedObj(document.createElement('main'), [], '\n'),
-        'a',
-        'b',
-        new Separator(),
-        'd',
-        'e',
-        document.createTextNode('text'),
-        document.createElement('span'),
-        'g',
-      ])
-    ).toBe(true);
-  });
-  it('returns true when provided with idea piece array containing ParsedObj on last index', () => {
-    expect(
-      containsParsedObj([
-        'a',
-        'b',
-        new Separator(),
-        'd',
-        'e',
-        document.createTextNode('text'),
-        'g',
-        new ParsedObj(document.createElement('main'), [], '\n'),
-      ])
-    ).toBe(true);
-  });
-});
-
-describe('produceHTMLSpanIdea', () => {
-  it('should return span idea with no children when provided empty array', () => {
-    const ideaPieces: IdeaPiece[] = [];
-
-    const expected = document.createElement('span');
-    expected.classList.add('idea');
-
-    expect(produceHTMLSpanIdea(ideaPieces, document)).toStrictEqual(expected);
-  });
-
-  it('should return span idea with no children when provided array whose only item is Separator', () => {
-    const ideaPieces: IdeaPiece[] = [new Separator()];
-
-    const expected = document.createElement('span');
-    expected.classList.add('idea');
-
-    expect(produceHTMLSpanIdea(ideaPieces, document)).toStrictEqual(expected);
-  });
-
-  it('should return span idea when provided simple string children', () => {
-    const ideaPieces = ['a', 'b', 'c'];
-
-    const expected = document.createElement('span');
-    expected.classList.add('idea');
-    expected.appendChild(document.createTextNode('a'));
-    expected.appendChild(document.createTextNode('b'));
-    expected.appendChild(document.createTextNode('c'));
-
-    expect(produceHTMLSpanIdea(ideaPieces, document)).toStrictEqual(expected);
-  });
-
-  it('should return span idea containing text node children, when provided strings and Separator', () => {
-    const ideaPieces = ['a', 'b', new Separator(), 'c'];
-
-    const expected = document.createElement('span');
-    expected.classList.add('idea');
-    expected.appendChild(document.createTextNode('a'));
-    expected.appendChild(document.createTextNode('b'));
-    expected.appendChild(document.createTextNode('c'));
-
-    expect(produceHTMLSpanIdea(ideaPieces, document)).toStrictEqual(expected);
-  });
-
-  it('should return span idea containing anchor when provided list containing anchor', () => {
-    const link = document.createElement('a');
-    link.appendChild(document.createTextNode('b'));
-    const ideaPieces = ['a', link, 'c'];
-
-    const expected = document.createElement('span');
-    expected.classList.add('idea');
-    expected.appendChild(document.createTextNode('a'));
-    const anchor = document.createElement('a');
-    anchor.appendChild(document.createTextNode('b'));
-    expected.appendChild(anchor);
-    expected.appendChild(document.createTextNode('c'));
-
-    expect(produceHTMLSpanIdea(ideaPieces, document)).toStrictEqual(expected);
-  });
-
-  it('should return span idea and ignore separator', () => {
-    const link = document.createElement('a');
-    link.appendChild(document.createTextNode('b'));
-    const idea = ['a', link, new Separator(), 'c'];
-
-    const expected = document.createElement('span');
-    expected.classList.add('idea');
-    expected.appendChild(document.createTextNode('a'));
-    const anchor = document.createElement('a');
-    anchor.appendChild(document.createTextNode('b'));
-    expected.appendChild(anchor);
-    expected.appendChild(document.createTextNode('c'));
-
-    expect(produceHTMLSpanIdea(idea, document)).toStrictEqual(expected);
-  });
-});
-
-describe('anchorObject', () => {
-  it('should return fragment when idea is empty array', () => {
-    const anchor = anchorObject([], document);
-    expect(anchor instanceof DocumentFragment).toBe(true);
-  });
-
-  it('should return fragment containing three text children when provided array of strings', () => {
-    const idea = ['a', 'b', 'c'];
-
-    const fragment = document.createDocumentFragment();
-    fragment.appendChild(document.createTextNode('a'));
-    fragment.appendChild(document.createTextNode('b'));
-    fragment.appendChild(document.createTextNode('c'));
-
-    expect(anchorObject(idea, document)).toStrictEqual(fragment);
-  });
-
-  it('should return fragment containing three text children when provided array of strings', () => {
-    const link = document.createElement('a');
-    link.appendChild(document.createTextNode('b'));
-    const idea = ['a', link, 'c'];
-
-    const fragment = document.createDocumentFragment();
-    fragment.appendChild(document.createTextNode('a'));
-    const anchor = document.createElement('a');
-    anchor.appendChild(document.createTextNode('b'));
-    fragment.appendChild(anchor);
-    fragment.appendChild(document.createTextNode('c'));
-
-    expect(anchorObject(idea, document)).toStrictEqual(fragment);
-  });
-
-  it('should return fragment containing three text children when provided array of strings', () => {
-    const quote = document.createElement('q');
-    const parsedQuote = new ParsedObj(
-      quote,
-      [['nebo NELEZ.'], ['Nebo NÁLEZ. A dusíkové akcie také klesly.'], ['Strašlivá stagnace.']],
-      '\n'
-    );
-
-    const link = document.createElement('a');
-    link.appendChild(document.createTextNode('b'));
-    const idea = [parsedQuote, link, 'c'];
-
-    const fragment = document.createDocumentFragment();
-
-    // quote
-    const q = document.createElement('q');
-    // quote ideas ...
-    const qi1 = document.createElement('span');
-    qi1.classList.add('idea');
-    qi1.appendChild(document.createTextNode('nebo NELEZ.'));
-    q.appendChild(qi1);
-    q.appendChild(document.createTextNode('\n'));
-
-    const qi2 = document.createElement('span');
-    qi2.classList.add('idea');
-    qi2.appendChild(document.createTextNode('Nebo NÁLEZ. A dusíkové akcie také klesly.'));
-    q.appendChild(qi2);
-    q.appendChild(document.createTextNode('\n'));
-
-    const qi3 = document.createElement('span');
-    qi3.classList.add('idea');
-    qi3.appendChild(document.createTextNode('Strašlivá stagnace.'));
-    q.appendChild(qi3);
-
-    fragment.appendChild(q);
-
-    const anchor = document.createElement('a');
-    anchor.appendChild(document.createTextNode('b'));
-    fragment.appendChild(anchor);
-    fragment.appendChild(document.createTextNode('c'));
-
-    expect(anchorObject(idea, document)).toStrictEqual(fragment);
   });
 });

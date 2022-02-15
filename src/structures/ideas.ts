@@ -9,7 +9,7 @@ import {
 import { isNode } from '../utils/dom';
 
 export type IdeaPiece = ParsedObj | string | Node | Separator;
-export type Idea = string | IdeaPiece[];
+export type Idea = IdeaPiece[];
 
 /**
  * Ideas contains an array of items in which every
