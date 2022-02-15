@@ -24,7 +24,7 @@ type DictionaryTableItem = (Dictionary | string)[];
 type DictionariesTable = DictionaryTableItem[];
 function getDictionaries(resources: resources): DictionariesTable {
   const table: DictionariesTable = [];
-  for (let language in resources) {
+  for (const language in resources) {
     if (language !== 'en') {
       table.push([language, resources[language]]);
     }
@@ -47,7 +47,7 @@ function hasExpectedStructure(received: any, expected: any): boolean {
 function cloneDictionaryWithType(dict: Dictionary | string): Dictionary {
   const clone: Dictionary = {};
   if (typeof dict !== 'string') {
-    for (let key in dict) {
+    for (const key in dict) {
       if (typeof dict[key] === 'object' && dict[key] != null)
         clone[key] = cloneDictionaryWithType(dict[key]);
       else
