@@ -34,7 +34,13 @@ export default function tagDocument(document: Document, options: Config): void {
  * @param selectors - Array of selectors or a {@link SelectorFn}
  * @returns Modifies DOM document
  */
-function markElementsToBeTagged(document: Document, root: string, selectors: Selectors): void {
+export function markElementsToBeTagged(
+  document: Document,
+  root: string,
+  selectors: Selectors
+): void {
+  if (Array.isArray(selectors) && selectors.length == 0)
+    throw new Error('Selectors cannot be empty array.');
   const rootElement = root ? document.querySelector(root) : document;
   if (!rootElement) {
     console.error(
