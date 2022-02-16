@@ -98,7 +98,6 @@ describe('empty strings and whitespace input', () => {
     ideas.addIdea();
     ideas.appendToIdea('');
     ideas.appendToIdea('           ');
-    console.log(ideas.fetch());
     const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
 
     const main = document.createElement('main');
