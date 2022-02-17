@@ -2,7 +2,8 @@
  * @jest-environment jsdom
  */
 
-import { markElementsToBeTagged, hasAncestorChunk } from '../tagger';
+import { markElementsToBeTagged, hasAncestorChunk, tagIdeas, numberEls } from '../tagger';
+import { TagClass as Class, classSelector } from '../../shared/dom';
 
 describe('hasAncestorChunk', () => {
   it('should return false if the provided NodeList is empty', () => {
@@ -209,9 +210,165 @@ describe('markElementsToBeTagged', () => {
 });
 
 describe('tagIdeas', () => {
-  it('', () => {});
+  it('tags no idea', () => {
+    document.body.innerHTML = `<main>
+      <p>long text</p>
+    </main>`;
+    tagIdeas(document, '\n');
+    expect(document.querySelectorAll('span.idea').length).toBe(0);
+  });
+
+  it('tags idea', () => {
+    document.body.innerHTML = `<main>
+      <p class="chunk">long text</p>
+    </main>`;
+    tagIdeas(document, '\n');
+    expect(document.querySelectorAll('p.chunk > span.idea').length).toBe(1);
+  });
+
+  it('tags ideas based on newlines', () => {
+    document.body.innerHTML = `<main>
+      <p class="chunk">long text
+      that is actually
+      multiline<i>what is this
+      text a multiline</i></p>
+    </main>`;
+    tagIdeas(document, '\n');
+    expect(document.querySelectorAll('p.chunk > span.idea').length).toBe(3);
+    expect(document.querySelectorAll('p.chunk > i > span.idea').length).toBe(2);
+  });
+
+  it('tags ideas based on newlines', () => {
+    document.body.innerHTML = `<main><p class="chunk">long text with <i>italic</i> and <q>quote</q></p></main>`;
+    tagIdeas(document, '\n');
+    expect(document.querySelectorAll('p.chunk span.idea').length).toBe(1);
+  });
+
+  it('taggs ideas in chunks', () => {
+    document.body.innerHTML = `<main>
+      <h1 class="chunk">1</h1>
+      <p class="chunk">1
+      2 <i>italic</i></p>
+      <p class="chunk">3</p>
+      <h2 class="chunk">2</h2>
+      <p class="nb-skip otherclass">c <a href="/">test link</a></p>
+      <p class="chunk">4</p>
+      <ul>
+        <li class="chunk">1</li>
+        <li class="chunk">2
+
+
+
+
+        3
+        4
+
+        5
+
+        6
+        </li>
+        <li class="chunk">7</li>
+        <li class="chunk">8
+          <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+          </ul>
+        </li>
+      </ul>
+    </main>`;
+    tagIdeas(document, '\n');
+    expect(document.querySelectorAll('p.chunk > span.idea').length).toBe(4);
+    expect(document.querySelectorAll('i.chunk').length).toBe(0);
+    expect(document.querySelectorAll('h1.chunk > span.idea').length).toBe(1);
+    expect(document.querySelectorAll('h2.chunk > span.idea').length).toBe(1);
+    expect(document.querySelectorAll('li > span.idea').length).toBe(8);
+    expect(document.querySelectorAll('li > ul > span.idea > li').length).toBe(3);
+  });
 });
 
-describe('numberEls', () => {});
+describe('numberEls', () => {
+  describe('chunks', () => {
+    it('numbers multiple chunks', () => {
+      document.body.innerHTML = `<main>
+        <p class="chunk"><span class="idea">text<span></p>
+        <p class="chunk"><span class="idea">text<span></p>
+        <p class="chunk"><span class="idea">text<span></p>
+      </main>`;
+      numberEls(document, classSelector(Class.Chunk), Class.Chunk);
+      const numbered = document.querySelectorAll('*[data-nb-ref-number]');
+
+      expect(numbered[0].getAttribute('data-nb-ref-number')).toBe('1');
+      expect(numbered[1].getAttribute('data-nb-ref-number')).toBe('2');
+      expect(numbered[2].getAttribute('data-nb-ref-number')).toBe('3');
+    });
+
+    it('numbers multiple chunks with nested chunk', () => {
+      document.body.innerHTML = `<main>
+        <p class="chunk"><span class="idea">text<span>
+          <p class="chunk"><span class="idea">text<span></p>
+        </p>
+        <p class="chunk"><span class="idea">text<span></p>
+        <p class="chunk"><span class="idea">text<span></p>
+      </main>`;
+      numberEls(document, classSelector(Class.Chunk), Class.Chunk);
+      const numbered = document.querySelectorAll('*[data-nb-ref-number]');
+
+      expect(numbered[0].getAttribute('data-nb-ref-number')).toBe('1');
+      expect(numbered[1].getAttribute('data-nb-ref-number')).toBe('2');
+      expect(numbered[2].getAttribute('data-nb-ref-number')).toBe('3');
+      expect(numbered[3].getAttribute('data-nb-ref-number')).toBe('4');
+    });
+  });
+
+  describe('ideas', () => {
+    it('adds reference numbers and ids', () => {
+      document.body.innerHTML = `<main>
+        <p class="chunk"><span class="idea">text<span></p>
+        <p class="chunk"><span class="idea">text<span></p>
+        <p class="chunk"><span class="idea">text<span></p>
+      </main>`;
+      numberEls(document, classSelector(Class.Idea), Class.Idea);
+      const refs = document.querySelectorAll('span.idea[data-nb-ref-number]');
+      const ideas = document.querySelectorAll('.chunk > span[id]');
+
+      expect(refs[0].getAttribute('data-nb-ref-number')).toBe('1');
+      expect(refs[1].getAttribute('data-nb-ref-number')).toBe('2');
+      expect(refs[2].getAttribute('data-nb-ref-number')).toBe('3');
+      expect(ideas[0].getAttribute('id')).toBe('idea1');
+      expect(ideas[1].getAttribute('id')).toBe('idea2');
+      expect(ideas[2].getAttribute('id')).toBe('idea3');
+    });
+
+    it('adds reference numbers and ids when nested chunk provided', () => {
+      document.body.innerHTML = `<main>
+        <p class="chunk">
+          <span class="idea">text<span>
+          <p class="chunk">
+            <span class="idea">text<span>
+          </p>
+        </p>
+        <p class="chunk">
+          <span class="idea">text<span>
+        </p>
+        <p class="chunk">
+          <span class="idea">text<span>
+        </p>
+      </main>`;
+      numberEls(document, classSelector(Class.Idea), Class.Idea);
+      const refs = document.querySelectorAll('span.idea[data-nb-ref-number]');
+      const ideas = document.querySelectorAll('span[id]');
+
+      expect(ideas[0].getAttribute('id')).toBe('idea1');
+      expect(ideas[1].getAttribute('id')).toBe('idea2');
+      expect(ideas[2].getAttribute('id')).toBe('idea3');
+      expect(ideas[3].getAttribute('id')).toBe('idea4');
+      expect(refs[0].getAttribute('data-nb-ref-number')).toBe('1');
+      expect(refs[1].getAttribute('data-nb-ref-number')).toBe('2');
+      expect(refs[2].getAttribute('data-nb-ref-number')).toBe('3');
+      expect(refs[3].getAttribute('data-nb-ref-number')).toBe('4');
+    });
+  });
+});
 
 describe('tagDocument', () => {});
