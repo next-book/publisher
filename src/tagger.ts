@@ -90,7 +90,7 @@ export function hasAncestorChunk(testedEl: Element, elements: NodeListOf<Node>):
  * @param delimiter - Delimiter of ideas.
  * @returns Modifies the Document
  */
-function tagIdeas(document: Document, delimiter: Delimiter): void {
+export function tagIdeas(document: Document, delimiter: Delimiter): void {
   document.querySelectorAll(`.${Class.Chunk}`).forEach(chunk => {
     const tagged = produce(document, parse(chunk, delimiter));
     chunk.parentNode?.replaceChild(tagged, chunk);
@@ -106,7 +106,7 @@ function tagIdeas(document: Document, delimiter: Delimiter): void {
  * @param name - Name used in creating id attributes (<name>#)
  * @returns Modifies DOM document
  */
-function numberEls(document: Document, selector: DOMStringLike, name: string): void {
+export function numberEls(document: Document, selector: DOMStringLike, name: string): void {
   Array.prototype.forEach.call(document.querySelectorAll(selector), (el, index) => {
     const nonZeroId = index + 1;
     el.setAttribute(TagAttr.RefNum, nonZeroId);
