@@ -2,15 +2,77 @@
  * @jest-environment jsdom
  */
 
-import { markElementsToBeTagged } from '../tagger';
+import { markElementsToBeTagged, hasAncestorChunk } from '../tagger';
 
-describe('tagDocument', () => {});
+describe('hasAncestorChunk', () => {
+  it('should return false if the provided NodeList is empty', () => {
+    const fragment = document.createDocumentFragment();
+    const p = document.createElement('p');
+    expect(hasAncestorChunk(p, fragment.childNodes)).toBe(false);
+  });
+
+  it('should be false when the tested element is not in the provided list', () => {
+    const fragment = document.createDocumentFragment();
+    const p = document.createElement('p');
+    fragment.appendChild(document.createElement('i'));
+    fragment.appendChild(document.createElement('a'));
+    expect(hasAncestorChunk(p, fragment.childNodes)).toBe(false);
+  });
+
+  it('should be false when the tested element is zero level deep in provided list', () => {
+    const fragment = document.createDocumentFragment();
+    const p = document.createElement('p');
+    fragment.appendChild(p);
+    fragment.appendChild(document.createElement('i'));
+    fragment.appendChild(document.createElement('a'));
+    expect(hasAncestorChunk(p, fragment.childNodes)).toBe(false);
+  });
+
+  it('should be false when the tested element is not in the provided list', () => {
+    const fragment = document.createDocumentFragment();
+    const p = document.createElement('p');
+    fragment.appendChild(document.createElement('i'));
+    fragment.appendChild(document.createElement('a'));
+    expect(hasAncestorChunk(p, fragment.childNodes)).toBe(false);
+  });
+
+  it('should be true when the tested element is one level deep in provided list', () => {
+    const fragment = document.createDocumentFragment();
+    const p = document.createElement('p');
+    const div = document.createElement('div');
+    div.appendChild(p);
+    fragment.appendChild(div);
+    fragment.appendChild(document.createElement('a'));
+    expect(hasAncestorChunk(p, fragment.childNodes)).toBe(true);
+  });
+
+  it('should be true when the tested element is two levels deep in provided list', () => {
+    const fragment = document.createDocumentFragment();
+    const p = document.createElement('p');
+    const div1 = document.createElement('div');
+    const div2 = document.createElement('div');
+    div2.appendChild(p);
+    div1.appendChild(div2);
+    fragment.appendChild(div1);
+    fragment.appendChild(document.createElement('a'));
+    expect(hasAncestorChunk(p, fragment.childNodes)).toBe(true);
+  });
+
+  it('should be false when the inclusive descendant is not the same instance', () => {
+    const fragment = document.createDocumentFragment();
+    const p = document.createElement('p');
+    const div = document.createElement('div');
+    div.appendChild(document.createElement('p'));
+    fragment.appendChild(div);
+    fragment.appendChild(document.createElement('a'));
+    expect(hasAncestorChunk(p, fragment.childNodes)).toBe(false);
+  });
+});
 
 describe('markElementsToBeTagged', () => {
   describe('invalid input', () => {
     it('should throw when selectors are empty array', () => {
       const selectors: string[] = [];
-
       expect(() => markElementsToBeTagged(document, 'main', selectors)).toThrowError(
         'Selectors cannot be empty array.'
       );
@@ -145,3 +207,11 @@ describe('markElementsToBeTagged', () => {
     });
   });
 });
+
+describe('tagIdeas', () => {
+  it('', () => {});
+});
+
+describe('numberEls', () => {});
+
+describe('tagDocument', () => {});

@@ -73,7 +73,7 @@ export function markElementsToBeTagged(
  * @param elements - List of elements
  * @returns Returns the boolean value of the assertion
  */
-function hasAncestorChunk(testedEl: Element, elements: NodeListOf<Element>): boolean {
+export function hasAncestorChunk(testedEl: Element, elements: NodeListOf<Node>): boolean {
   return (
     [...elements].filter(el => {
       if (el === testedEl) return false;
