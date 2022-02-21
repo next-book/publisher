@@ -1,6 +1,6 @@
 {
   "name": "@next-book/publisher",
-  "version": "0.2.26",
+  "version": "0.3.0-canary",
   "description": "Publish web books with next-book",
   "main": "dist/src/app.js",
   "bin": {
