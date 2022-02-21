@@ -12,6 +12,12 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
 (function () {
   function r(e, n, t) {
     function o(i, f) {
@@ -46,6 +52,109 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
   return r;
 })()({
   1: [function (require, module, exports) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports.GaugeAttr = exports.TagAttr = exports.classSelector = exports.Role = exports.Rel = exports.ChapterId = exports.Id = exports.DocRoleClass = exports.NavClass = exports.TocClass = exports.TagClass = exports.StyleClass = exports.PageClass = void 0;
+    var PageClass;
+
+    (function (PageClass) {
+      PageClass["Home"] = "home";
+    })(PageClass = exports.PageClass || (exports.PageClass = {}));
+
+    var StyleClass;
+
+    (function (StyleClass) {
+      StyleClass["Custom"] = "nb-custom-style";
+    })(StyleClass = exports.StyleClass || (exports.StyleClass = {}));
+
+    var TagClass;
+
+    (function (TagClass) {
+      TagClass["Chunk"] = "chunk";
+      TagClass["Idea"] = "idea";
+      /** For skipping elements and their children from tagging */
+
+      TagClass["Skip"] = "nb-skip";
+    })(TagClass = exports.TagClass || (exports.TagClass = {}));
+
+    var TocClass;
+
+    (function (TocClass) {
+      TocClass["Headings"] = "headings-toc";
+      TocClass["PlainList"] = "plain";
+    })(TocClass = exports.TocClass || (exports.TocClass = {}));
+
+    var NavClass;
+
+    (function (NavClass) {
+      NavClass["Begin"] = "begin-nav";
+      NavClass["End"] = "end-nav";
+    })(NavClass = exports.NavClass || (exports.NavClass = {}));
+
+    exports.DocRoleClass = {
+      break: 'nb-role-break',
+      chapter: 'nb-role-chapter',
+      cover: 'nb-role-cover',
+      colophon: 'nb-role-colophon',
+      other: 'nb-role-other'
+    };
+    var Id;
+
+    (function (Id) {
+      Id["FullTextLink"] = "full-text-link";
+      Id["Manifest"] = "manifest";
+    })(Id = exports.Id || (exports.Id = {}));
+
+    var ChapterId;
+
+    (function (ChapterId) {
+      ChapterId["Start"] = "chapter-start";
+      ChapterId["End"] = "chapter-end";
+    })(ChapterId = exports.ChapterId || (exports.ChapterId = {}));
+
+    var Rel;
+
+    (function (Rel) {
+      Rel["Index"] = "index";
+      Rel["License"] = "license";
+      Rel["Publication"] = "publication";
+      Rel["Prev"] = "prev";
+      Rel["Next"] = "next";
+      Rel["Self"] = "self";
+    })(Rel = exports.Rel || (exports.Rel = {}));
+
+    var Role;
+
+    (function (Role) {
+      Role["DocToc"] = "doc-toc";
+    })(Role = exports.Role || (exports.Role = {}));
+
+    var classSelector = function classSelector(classname) {
+      return '.' + classname;
+    };
+
+    exports.classSelector = classSelector;
+    var TagAttr;
+
+    (function (TagAttr) {
+      /** Element ref number provided by tagger */
+      TagAttr["RefNum"] = "data-nb-ref-number";
+    })(TagAttr = exports.TagAttr || (exports.TagAttr = {}));
+
+    var GaugeAttr;
+
+    (function (GaugeAttr) {
+      /** Number of characters provided by gauge */
+      GaugeAttr["Chars"] = "data-nb-chars";
+      /** Number of words provided by gauge */
+
+      GaugeAttr["Words"] = "data-nb-words";
+    })(GaugeAttr = exports.GaugeAttr || (exports.GaugeAttr = {}));
+  }, {}],
+  2: [function (require, module, exports) {
     "use strict";
 
     var __importDefault = this && this.__importDefault || function (mod) {
@@ -87,62 +196,76 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
       mapHtml: mapHtml
     };
   }, {
-    "./config": 2,
-    "./gauge": 3,
-    "./tagger": 9
+    "./config": 3,
+    "./gauge": 4,
+    "./tagger": 10
   }],
-  2: [function (require, module, exports) {
-    "use strict";
-
-    Object.defineProperty(exports, "__esModule", {
-      value: true
-    });
-    var defaults = {
-      languageCode: 'en',
-      output: 'html',
-      delimiter: '\n',
-      root: 'main',
-      selectors: ['p', 'li', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'dl'],
-      meta: {
-        title: 'No title',
-        subtitle: 'No subtitle',
-        author: 'No author'
-      }
-    };
-
-    var loadConfig = function loadConfig(options) {
-      return Object.assign({}, defaults, options);
-    };
-
-    exports.default = loadConfig;
-  }, {}],
   3: [function (require, module, exports) {
     "use strict";
     /**
+     * Config module
+     *
+     * The config is being created in following stages:
+     * 1. First in {@link prepConfig}, the custom book options in the shape of {@link PartialConfig} are loaded.
+     * 2. Preview feature settings in shape of {@link Preview} are being created by appling loaded custom
+     *    options onto {@link previewDefaults}.
+     *    The preview feature settings are added to the loaded config, together making the
+     *    shape of {@link PartialConfigWithPreview}.
+     * 3. Since config is guaranteed to have preview settings, it is then used to override {@link configDefaults}.
      * @module
      */
 
     Object.defineProperty(exports, "__esModule", {
       value: true
     });
-    exports.gaugePublication = exports.gaugeDocument = void 0;
+    exports.previewDefaults = void 0;
+    exports.previewDefaults = {
+      isPreview: false,
+      chaptersSlice: 3,
+      removeChapters: []
+    };
+    var configDefaults = {
+      languageCode: 'en',
+      output: 'html',
+      delimiter: '\n',
+      root: 'main',
+      selectors: ['p', 'li', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'dl'],
+      static: [],
+      readingOrder: [],
+      tocBase: [],
+      meta: {
+        title: 'No title',
+        subtitle: 'No subtitle',
+        author: 'No author'
+      },
+      preview: _objectSpread({}, exports.previewDefaults)
+    };
+
+    var loadConfig = function loadConfig(overrides) {
+      return Object.assign({}, configDefaults, overrides);
+    };
+
+    exports.default = loadConfig;
+  }, {}],
+  4: [function (require, module, exports) {
+    "use strict";
     /**
-     * Names of attributes used to store gauge data.
+     * @module Gauge
      */
 
-    var attrNames = {
-      /** Number of characters */
-      chars: 'data-nb-chars',
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports.gaugePublication = exports.gaugeDocument = void 0;
 
-      /** Number of words */
-      words: 'data-nb-words'
-    };
+    var dom_1 = require("../shared/dom");
     /**
      * Sum of values stored in attribute of provided elements.
      *
      * @param attr - The attribute name
      * @returns Sum of values stored in attribute
      */
+
 
     var sumAttr = function sumAttr(attr) {
       return function (ideas) {
@@ -164,7 +287,7 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
     var setSumAttr = function setSumAttr(attr) {
       return function (el) {
-        el.setAttribute(attr, sumAttr(attr)(el.querySelectorAll('.idea')).toString());
+        el.setAttribute(attr, sumAttr(attr)(el.querySelectorAll(dom_1.classSelector(dom_1.TagClass.Idea))).toString());
       };
     };
     /**
@@ -177,14 +300,14 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
 
     function countChars(document) {
-      Array.prototype.map.call(document.querySelectorAll('.idea'), function (idea) {
-        idea.setAttribute(attrNames.chars, idea.textContent.length);
+      Array.prototype.map.call(document.querySelectorAll(dom_1.classSelector(dom_1.TagClass.Idea)), function (idea) {
+        idea.setAttribute(dom_1.GaugeAttr.Chars, idea.textContent.length);
       });
     }
 
     function countWords(document) {
-      Array.prototype.map.call(document.querySelectorAll('.idea'), function (idea) {
-        idea.setAttribute(attrNames.words, idea.textContent.split(/\s+/g).length);
+      Array.prototype.map.call(document.querySelectorAll(dom_1.classSelector(dom_1.TagClass.Idea)), function (idea) {
+        idea.setAttribute(dom_1.GaugeAttr.Words, idea.textContent.split(/\s+/g).length);
       });
     }
 
@@ -202,8 +325,8 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
 
     function gaugeDocument(document) {
-      gaugeContent(document, attrNames.words, countWords);
-      gaugeContent(document, attrNames.chars, countChars);
+      gaugeContent(document, dom_1.GaugeAttr.Words, countWords);
+      gaugeContent(document, dom_1.GaugeAttr.Chars, countChars);
     }
 
     exports.gaugeDocument = gaugeDocument;
@@ -218,16 +341,18 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
     function gaugePublication(documents) {
       return documents.map(function (document) {
         return {
-          words: parseInt(document.body.getAttribute(attrNames.words), 10),
-          chars: parseInt(document.body.getAttribute(attrNames.chars), 10),
-          ideas: document.querySelectorAll('.idea').length
+          words: parseInt(document.body.getAttribute(dom_1.GaugeAttr.Words), 10),
+          chars: parseInt(document.body.getAttribute(dom_1.GaugeAttr.Chars), 10),
+          ideas: document.querySelectorAll(dom_1.classSelector(dom_1.TagClass.Idea)).length
         };
       });
     }
 
     exports.gaugePublication = gaugePublication;
-  }, {}],
-  4: [function (require, module, exports) {
+  }, {
+    "../shared/dom": 1
+  }],
+  5: [function (require, module, exports) {
     "use strict";
 
     Object.defineProperty(exports, "__esModule", {
@@ -291,9 +416,9 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
       return new RegExp(delimiter.replace('\\', '\\\\')).test(text);
     }
   }, {
-    "./structures": 7
+    "./structures": 8
   }],
-  5: [function (require, module, exports) {
+  6: [function (require, module, exports) {
     "use strict";
 
     Object.defineProperty(exports, "__esModule", {
@@ -308,6 +433,8 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
     var structures_1 = require("./structures");
 
     var dom_1 = require("./utils/dom");
+
+    var dom_2 = require("../shared/dom");
     /**
      * Produces ideas from a parsedObj
      *
@@ -352,8 +479,8 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
      */
 
     function produceHTMLSpanIdea(idea, document) {
-      var span = document.createElement('SPAN');
-      span.classList.add('idea');
+      var span = document.createElement('span');
+      span.classList.add(dom_2.TagClass.Idea);
       idea.forEach(function (item) {
         if (typeof item === 'string') {
           span.appendChild(document.createTextNode(item));
@@ -400,10 +527,11 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
       return node;
     }
   }, {
-    "./structures": 7,
-    "./utils/dom": 10
+    "../shared/dom": 1,
+    "./structures": 8,
+    "./utils/dom": 11
   }],
-  6: [function (require, module, exports) {
+  7: [function (require, module, exports) {
     "use strict";
 
     Object.defineProperty(exports, "__esModule", {
@@ -627,10 +755,10 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
     exports.default = Ideas;
   }, {
-    "../utils/dom": 10,
-    "../utils/regexp": 11
+    "../utils/dom": 11,
+    "../utils/regexp": 12
   }],
-  7: [function (require, module, exports) {
+  8: [function (require, module, exports) {
     "use strict";
     /**
      * Structures used for parsing input and producing html for publication.
@@ -656,10 +784,10 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
     exports.ParsedObj = parsedobj_1.default;
   }, {
-    "./ideas": 6,
-    "./parsedobj": 8
+    "./ideas": 7,
+    "./parsedobj": 9
   }],
-  8: [function (require, module, exports) {
+  9: [function (require, module, exports) {
     "use strict";
 
     Object.defineProperty(exports, "__esModule", {
@@ -752,9 +880,9 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
     exports.default = ParsedObj;
   }, {
-    "../utils/regexp": 11
+    "../utils/regexp": 12
   }],
-  9: [function (require, module, exports) {
+  10: [function (require, module, exports) {
     "use strict";
 
     var __importDefault = this && this.__importDefault || function (mod) {
@@ -771,23 +899,21 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
     var parser_1 = __importDefault(require("./parser"));
 
-    var IDEA_NAME = 'idea';
-    var CHUNK_NAME = 'chunk';
-    var SKIP_NAME = 'nb-skip';
-    var refNumAttr = 'data-nb-ref-number';
+    var dom_1 = require("../shared/dom");
     /**
      * Recognizes and tags chunks and ideas in a document
      *
      * @param document - DOM document
      * @param options - config options
-     * @returns mutates DOM document
-    with marked chunks by {@link markElementsToBeTagged}. */
+     * @returns mutates DOM document with marked chunks
+     * by {@link markElementsToBeTagged}. */
+
 
     function tagDocument(document, options) {
       markElementsToBeTagged(document, options.root, options.selectors);
       tagIdeas(document, options.delimiter);
-      numberEls(document, ".".concat(CHUNK_NAME), CHUNK_NAME);
-      numberEls(document, ".".concat(IDEA_NAME), IDEA_NAME);
+      numberEls(document, dom_1.classSelector(dom_1.TagClass.Chunk), dom_1.TagClass.Chunk);
+      numberEls(document, dom_1.classSelector(dom_1.TagClass.Idea), dom_1.TagClass.Idea);
     }
 
     exports.default = tagDocument;
@@ -795,7 +921,7 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
      * Mark DOM Elements to be tagged
      *
      * @remarks
-     * Skips nested nodes and nodes with SKIP_NAME class (and their child * nodes).
+     * Skips nested nodes and nodes with {@link TagClass.Skip} enum string (and their child * nodes).
      *
      * @param document - DOM document
      * @param root - Root element
@@ -813,11 +939,10 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
         return;
       }
 
-      var elements = typeof selectors === 'function' ? selectors(rootElement) : rootElement.querySelectorAll(selectors.join(', ')); // beware: there was no join in the code before typescript
-
+      var elements = typeof selectors === 'function' ? selectors(rootElement) : rootElement.querySelectorAll(selectors.join(', '));
       if (elements) elements.forEach(function (el) {
-        if (!(el.closest(".".concat(SKIP_NAME)) || el.classList.contains(SKIP_NAME)) && !hasAncestorChunk(el, elements)) {
-          el.classList.add(CHUNK_NAME);
+        if (!(el.closest(".".concat(dom_1.TagClass.Skip)) || el.classList.contains(dom_1.TagClass.Skip)) && !hasAncestorChunk(el, elements)) {
+          el.classList.add(dom_1.TagClass.Chunk);
         }
       });
     }
@@ -845,7 +970,7 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
 
     function tagIdeas(document, delimiter) {
-      document.querySelectorAll(".".concat(CHUNK_NAME)).forEach(function (chunk) {
+      document.querySelectorAll(".".concat(dom_1.TagClass.Chunk)).forEach(function (chunk) {
         var _chunk$parentNode;
 
         var tagged = producer_1.default(document, parser_1.default(chunk, delimiter));
@@ -866,9 +991,9 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
     function numberEls(document, selector, name) {
       Array.prototype.forEach.call(document.querySelectorAll(selector), function (el, index) {
         var nonZeroId = index + 1;
-        el.setAttribute(refNumAttr, nonZeroId);
+        el.setAttribute(dom_1.TagAttr.RefNum, nonZeroId);
 
-        if (name === IDEA_NAME) {
+        if (name === dom_1.TagClass.Idea) {
           if (el.getAttribute('id')) {
             var wrapper = document.createElement('SPAN');
             wrapper.setAttribute('id', "".concat(name).concat(nonZeroId));
@@ -881,10 +1006,11 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
       });
     }
   }, {
-    "./parser": 4,
-    "./producer": 5
+    "../shared/dom": 1,
+    "./parser": 5,
+    "./producer": 6
   }],
-  10: [function (require, module, exports) {
+  11: [function (require, module, exports) {
     "use strict";
 
     Object.defineProperty(exports, "__esModule", {
@@ -906,7 +1032,7 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
     exports.isNode = isNode;
   }, {}],
-  11: [function (require, module, exports) {
+  12: [function (require, module, exports) {
     "use strict";
     /**
      * Annotated RegExp’s to be used in a convenient way.
@@ -1029,4 +1155,4 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
     exports.leftAndRightWhitespace = /^(\s*)([\s\S]+?)(\s*)$/;
   }, {}]
-}, {}, [1]);
+}, {}, [2]);

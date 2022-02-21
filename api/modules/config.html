@@ -70,6 +70,15 @@
 					<div class="lead">
 						<p>Config module</p>
 					</div>
+					<p>The config is being created in following stages:</p>
+					<ol>
+						<li>First in <a href="data_helper.html#prepConfig">prepConfig</a>, the custom book options in the shape of <a href="config.html#PartialConfig">PartialConfig</a> are loaded.</li>
+						<li>Preview feature settings in shape of <a href="config.html#Preview">Preview</a> are being created by appling loaded custom
+							options onto <a href="config.html#previewDefaults">previewDefaults</a>.
+							The preview feature settings are added to the loaded config, together making the
+						shape of <a href="../interfaces/data_helper.PartialConfigWithPreview.html">PartialConfigWithPreview</a>.</li>
+						<li>Since config is guaranteed to have preview settings, it is then used to override {@link configDefaults}.</li>
+					</ol>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -80,16 +89,24 @@
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/config.Config.html" class="tsd-kind-icon">Config</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/config.Metadata.html" class="tsd-kind-icon">Metadata</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#Delimiter" class="tsd-kind-icon">Delimiter</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#PartialConfig" class="tsd-kind-icon">Partial<wbr>Config</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#Preview" class="tsd-kind-icon">Preview</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#PreviewTrue" class="tsd-kind-icon">Preview<wbr>True</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#SelectorFn" class="tsd-kind-icon">Selector<wbr>Fn</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#Selectors" class="tsd-kind-icon">Selectors</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#TokenizerFn" class="tsd-kind-icon">Tokenizer<wbr>Fn</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="config.html#previewDefaults" class="tsd-kind-icon">preview<wbr>Defaults</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -109,9 +126,63 @@
 					<div class="tsd-signature tsd-kind-icon">Delimiter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9fecaeb/src/config.ts#L23">src/config.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/d260ffe/src/config.ts#L33">src/config.ts:33</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="PartialConfig" class="tsd-anchor"></a>
+					<h3>Partial<wbr>Config</h3>
+					<div class="tsd-signature tsd-kind-icon">Partial<wbr>Config<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/d260ffe/src/config.ts#L152">src/config.ts:152</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><p>Custom book config loaded from file may contain
+								selected (partial) config properties</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="Preview" class="tsd-anchor"></a>
+					<h3>Preview</h3>
+					<div class="tsd-signature tsd-kind-icon">Preview<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>chaptersSlice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>fullTextUrl<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>removeChapters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="config.html#PreviewTrue" class="tsd-signature-type" data-tsd-kind="Type alias">PreviewTrue</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PreviewFalse</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/d260ffe/src/config.ts#L46">src/config.ts:46</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="PreviewTrue" class="tsd-anchor"></a>
+					<h3>Preview<wbr>True</h3>
+					<div class="tsd-signature tsd-kind-icon">Preview<wbr>True<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>fullTextUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/d260ffe/src/config.ts#L35">src/config.ts:35</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>full<wbr>Text<wbr>Url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>URL used in nav and site links</p>
+									</div>
+								</div>
+							</li>
+							<li class="tsd-parameter">
+								<h5>is<wbr>Preview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span></h5>
+							</li>
+						</ul>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="SelectorFn" class="tsd-anchor"></a>
@@ -119,7 +190,7 @@
 					<div class="tsd-signature tsd-kind-icon">Selector<wbr>Fn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Document</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Element</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9fecaeb/src/config.ts#L19">src/config.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/d260ffe/src/config.ts#L29">src/config.ts:29</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -162,7 +233,7 @@
 					<div class="tsd-signature tsd-kind-icon">Selectors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">HTMLElementTagNameMap</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="config.html#SelectorFn" class="tsd-signature-type" data-tsd-kind="Type alias">SelectorFn</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9fecaeb/src/config.ts#L21">src/config.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/d260ffe/src/config.ts#L31">src/config.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -172,7 +243,7 @@
 					<div class="tsd-signature tsd-kind-icon">Tokenizer<wbr>Fn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span>, text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9fecaeb/src/config.ts#L10">src/config.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/d260ffe/src/config.ts#L20">src/config.ts:20</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -207,24 +278,37 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="previewDefaults" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> preview<wbr>Defaults</h3>
+					<div class="tsd-signature tsd-kind-icon">preview<wbr>Defaults<span class="tsd-signature-symbol">:</span> <a href="config.html#Preview" class="tsd-signature-type" data-tsd-kind="Type alias">Preview</a><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/d260ffe/src/config.ts#L63">src/config.ts:63</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="default" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> default</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a></li>
+						<li class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">(</span>overrides<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/next-book/publisher/blob/9fecaeb/src/config.ts#L102">src/config.ts:102</a></li>
+									<li>Defined in <a href="https://github.com/next-book/publisher/blob/d260ffe/src/config.ts#L154">src/config.ts:154</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>overrides: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a></h4>
@@ -240,6 +324,9 @@
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="Gauge.html">Gauge</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="app.html">app</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -250,9 +337,6 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="data_helper.html">data-<wbr>helper</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="gauge.html">gauge</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="i18n.html">i18n</a>
@@ -268,9 +352,6 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="service_worker_builder.html">service-<wbr>worker/builder</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="service_worker_code_tpl.html">service-<wbr>worker/code.tpl</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="structures.html">structures</a>
@@ -291,6 +372,9 @@
 						<a href="utils_dom.html">utils/dom</a>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="utils_fs.html">utils/fs</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="utils_regexp.html">utils/regexp</a>
 					</li>
 				</ul>
@@ -300,11 +384,17 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/config.Config.html" class="tsd-kind-icon">Config</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/config.Metadata.html" class="tsd-kind-icon">Metadata</a>
-					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="config.html#Delimiter" class="tsd-kind-icon">Delimiter</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="config.html#PartialConfig" class="tsd-kind-icon">Partial<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="config.html#Preview" class="tsd-kind-icon">Preview</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="config.html#PreviewTrue" class="tsd-kind-icon">Preview<wbr>True</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="config.html#SelectorFn" class="tsd-kind-icon">Selector<wbr>Fn</a>
@@ -314,6 +404,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="config.html#TokenizerFn" class="tsd-kind-icon">Tokenizer<wbr>Fn</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="config.html#previewDefaults" class="tsd-kind-icon">preview<wbr>Defaults</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="config.html#default" class="tsd-kind-icon">default</a>
@@ -330,6 +423,7 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
