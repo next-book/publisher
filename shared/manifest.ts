@@ -62,9 +62,9 @@ export interface DocumentMetadata {
 }
 
 export interface Metadata {
-  title?: string;
-  subtitle?: string;
-  author?: string;
+  title: string;
+  subtitle: string;
+  author: string;
   published?: number;
   publisher?: string;
   keywords?: string[];
