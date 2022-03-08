@@ -49,7 +49,7 @@ export interface PublicationSum {
 }
 
 export interface DocumentMetadata {
-  title: string | null | undefined;
+  title: string;
   file: string;
   words: number;
   chars: number;

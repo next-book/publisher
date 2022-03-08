@@ -12,13 +12,7 @@ import loadConfig, { Config, PartialConfig } from './config';
 import { gaugeDocument, gaugePublication, PublicationStats } from './gauge';
 import getDocumentToc, { getToc } from './toc';
 import * as chapterNav from './chapter-navigation';
-import Manifest, {
-  DocRole,
-  PublicationSum,
-  DocumentMetadata,
-  Metadata,
-  Revision,
-} from '../shared/manifest';
+import Manifest, { DocRole, PublicationSum, DocumentMetadata, Revision } from '../shared/manifest';
 import { StyleClass, MetaDocRoleElement, MetaIdentifierElement, Id, Rel } from '../shared/dom';
 
 interface MappedPublication {
@@ -171,6 +165,7 @@ function gatherMetadata(
 
   return documents.map((document, index) => {
     const title = document.querySelector('title')?.textContent;
+    if (!title) throw new Error('Document title later required by interface is missing.');
     const file = filenames[index];
     const { words, chars, ideas } = lengths[index];
     const toc = getDocumentToc(document);
