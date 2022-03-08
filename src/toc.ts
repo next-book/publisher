@@ -96,8 +96,8 @@ export function getToc(meta: DocumentMetadata[], tocBase?: TocBase): DocumentFra
     tocBase.map(item => renderTocItem(item, meta, true)).forEach(el => el && nav?.appendChild(el));
   else {
     const ul = Jsdom.fragment('<ul></ul>');
-    const items = meta.map(renderTocItemFromMeta).forEach(el => el && ul.appendChild(el));
-
+    const items = meta.map(renderTocItemFromMeta);
+    items.forEach(el => el && ul.appendChild(el));
     nav?.appendChild(ul);
   }
 

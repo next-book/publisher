@@ -9,13 +9,12 @@
     "strict": true,
     "checkJs": false,
     "allowJs": true,
+    "noUnusedLocals": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "lib": [
-      "DOM", "DOM.Iterable"
-    ],
+    "lib": ["DOM", "DOM.Iterable"],
     "forceConsistentCasingInFileNames": false,
     "typeRoots": ["node_modules/@types"]
   },
