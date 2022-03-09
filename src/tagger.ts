@@ -6,7 +6,7 @@ import { Config, Delimiter, Selectors } from './config';
 import produce from './producer';
 import parse from './parser';
 import { DOMStringLike } from './utils/dom';
-import { TagClass as Class, TagAttr, classSelector } from '../shared/dom';
+import { TagClass as Class, Id, TagAttr, classSelector } from '../shared/dom';
 
 /**
  * Recognizes and tags chunks and ideas in a document
@@ -20,7 +20,7 @@ export default function tagDocument(document: Document, options: Config): void {
   tagIdeas(document, options.delimiter);
 
   numberEls(document, classSelector(Class.Chunk), Class.Chunk);
-  numberEls(document, classSelector(Class.Idea), Class.Idea);
+  numberEls(document, classSelector(Class.Idea), Id.Idea);
 }
 
 /**
@@ -105,7 +105,7 @@ function numberEls(document: Document, selector: DOMStringLike, name: string): v
     const nonZeroId = index + 1;
     el.setAttribute(TagAttr.RefNum, nonZeroId);
 
-    if (name === Class.Idea) {
+    if (name === Id.Idea) {
       if (el.getAttribute('id')) {
         const wrapper = document.createElement('SPAN');
         wrapper.setAttribute('id', `${name}${nonZeroId}`);
