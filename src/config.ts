@@ -3,7 +3,7 @@
  *
  * The config is being created in following stages:
  * 1. First in {@link prepConfig}, the custom book options in the shape of {@link PartialConfig} are loaded.
- * 2. Preview feature settings in shape of {@link Preview} are being created by appling loaded custom
+ * 2. Preview feature settings in shape of {@link Preview} are being created by applying loaded custom
  *    options onto {@link previewDefaults}.
  *    The preview feature settings are added to the loaded config, together making the
  *    shape of {@link PartialConfigWithPreview}.
