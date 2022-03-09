@@ -57,7 +57,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     Object.defineProperty(exports, "__esModule", {
       value: true
     });
-    exports.GaugeAttr = exports.TagAttr = exports.classSelector = exports.Role = exports.Rel = exports.ChapterId = exports.Id = exports.DocRoleClass = exports.NavClass = exports.TocClass = exports.TagClass = exports.StyleClass = exports.PageClass = void 0;
+    exports.getIdeaId = exports.LinkRel = exports.ResearchMetaName = exports.MetaName = exports.ComponentClass = exports.PaginationClass = exports.CropClass = exports.FootnotesClass = exports.StateClass = exports.GaugeAttr = exports.TagAttr = exports.classSelector = exports.Role = exports.Rel = exports.ChapterId = exports.Id = exports.DocRoleClass = exports.NavClass = exports.TocClass = exports.TagClass = exports.StyleClass = exports.PageClass = void 0;
     var PageClass;
 
     (function (PageClass) {
@@ -106,6 +106,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
     (function (Id) {
       Id["FullTextLink"] = "full-text-link";
       Id["Manifest"] = "manifest";
+      Id["Idea"] = "idea";
     })(Id = exports.Id || (exports.Id = {}));
 
     var ChapterId;
@@ -153,6 +154,82 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
       GaugeAttr["Words"] = "data-nb-words";
     })(GaugeAttr = exports.GaugeAttr || (exports.GaugeAttr = {}));
+
+    var StateClass;
+
+    (function (StateClass) {
+      StateClass["Ready"] = "nb-ready";
+    })(StateClass = exports.StateClass || (exports.StateClass = {}));
+
+    var FootnotesClass;
+
+    (function (FootnotesClass) {
+      FootnotesClass["Wrapper"] = "footnotes";
+    })(FootnotesClass = exports.FootnotesClass || (exports.FootnotesClass = {}));
+
+    var CropClass;
+
+    (function (CropClass) {
+      CropClass["Wrapper"] = "nb-cropped";
+      CropClass["Visible"] = "visible";
+    })(CropClass = exports.CropClass || (exports.CropClass = {}));
+
+    var PaginationClass;
+
+    (function (PaginationClass) {
+      PaginationClass["Forward"] = "step-forward";
+      PaginationClass["Back"] = "step-back";
+    })(PaginationClass = exports.PaginationClass || (exports.PaginationClass = {}));
+
+    var ComponentClass;
+
+    (function (ComponentClass) {
+      ComponentClass["Annotations"] = "nb-annotations";
+      ComponentClass["Navigation"] = "nb-navigation";
+      ComponentClass["Position"] = "nb-position";
+      ComponentClass["Manifest"] = "nb-manifest";
+      ComponentClass["Peeks"] = "nb-peeks";
+      ComponentClass["Trace"] = "nb-trace";
+      ComponentClass["Offline"] = "nb-offline";
+      ComponentClass["Controls"] = "nb-controls";
+      ComponentClass["Config"] = "nb-config";
+      ComponentClass["Onboarding"] = "nb-onboarding";
+      ComponentClass["Research"] = "nb-research";
+    })(ComponentClass = exports.ComponentClass || (exports.ComponentClass = {}));
+
+    var MetaName;
+
+    (function (MetaName) {
+      MetaName["Order"] = "nb-order";
+      MetaName["DocRole"] = "nb-role";
+      MetaName["Identifier"] = "nb-identifier";
+    })(MetaName = exports.MetaName || (exports.MetaName = {}));
+
+    var ResearchMetaName;
+
+    (function (ResearchMetaName) {
+      ResearchMetaName["Text"] = "nb-research";
+      ResearchMetaName["Orgs"] = "nb-research-orgs";
+      ResearchMetaName["GA"] = "nb-research-ga";
+    })(ResearchMetaName = exports.ResearchMetaName || (exports.ResearchMetaName = {}));
+
+    var LinkRel;
+
+    (function (LinkRel) {
+      LinkRel["Index"] = "index";
+      LinkRel["Self"] = "self";
+      LinkRel["Prev"] = "prev";
+      LinkRel["Publication"] = "publication";
+      LinkRel["Next"] = "next";
+      LinkRel["Colophon"] = "colophon";
+      LinkRel["License"] = "license";
+    })(LinkRel = exports.LinkRel || (exports.LinkRel = {}));
+
+    var getIdeaId = function getIdeaId(n) {
+      return TagClass.Idea + n.toString();
+    };
+
+    exports.getIdeaId = getIdeaId;
   }, {}],
   2: [function (require, module, exports) {
     "use strict";
@@ -913,7 +990,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
       markElementsToBeTagged(document, options.root, options.selectors);
       tagIdeas(document, options.delimiter);
       numberEls(document, dom_1.classSelector(dom_1.TagClass.Chunk), dom_1.TagClass.Chunk);
-      numberEls(document, dom_1.classSelector(dom_1.TagClass.Idea), dom_1.TagClass.Idea);
+      numberEls(document, dom_1.classSelector(dom_1.TagClass.Idea), dom_1.Id.Idea);
     }
 
     exports.default = tagDocument;
@@ -993,7 +1070,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
         var nonZeroId = index + 1;
         el.setAttribute(dom_1.TagAttr.RefNum, nonZeroId);
 
-        if (name === dom_1.TagClass.Idea) {
+        if (name === dom_1.Id.Idea) {
           if (el.getAttribute('id')) {
             var wrapper = document.createElement('SPAN');
             wrapper.setAttribute('id', "".concat(name).concat(nonZeroId));
