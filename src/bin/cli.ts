@@ -2,7 +2,7 @@
 import cmd from 'commander';
 import express from 'express';
 import path from 'path';
-import map, { dumpArray } from '../app';
+import map from '../app';
 import {
   prepConfig,
   writeOutput,
@@ -23,7 +23,7 @@ cmd
   .parse(process.argv);
 
 const config = prepConfig(cmd.src, cmd.preview);
-console.log('Config', dumpArray(config));
+// console.log('Config', dumpArray(config));
 if (!config) throw new Error('No config set');
 
 const revisionId = config.preview?.isPreview ? `${getRevision()}-preview` : getRevision();

@@ -1,18 +1,17 @@
 /**
  * Config module
  *
- * The config is being created in following stages:
- * 1. First in {@link prepConfig}, the custom book options in the shape of {@link PartialConfig} are loaded.
- * 2. Preview feature settings in shape of {@link Preview} are being created by applying loaded custom
- *    options onto {@link previewDefaults}.
- *    The preview feature settings are added to the loaded config, together making the
- *    shape of {@link PartialConfigWithPreview}.
- * 3. Since config is guaranteed to have preview settings, it is then used to override {@link configDefaults}.
+ * The config is being created in following stages in {@link prepConfig}:
+ * 1. First in {@link prepConfig}, the custom book options in the shape of {@link PartialConfigWithDeprecated} are loaded.
+ * 2. Deprecated options are transformed to their new form and the config gets shape of {@link PartialConfig}.
+ * 3. Config is acquired by parsing and applying defaults on {@link PartialConfig} with {@link Preview} options.
+ * 4. Since config is guaranteed to have preview settings decided, the preview logic is applied on the config.
  * @module
  */
 
-import { Metadata, LanguageCode, Root } from '../shared/manifest';
-import { TocBase } from './toc';
+import { metaDataSchema } from '../shared/manifest';
+import { TocBaseItem } from './toc';
+import { z } from 'zod';
 
 /**
  * A callback used to split chunk contents into ideas.
@@ -32,80 +31,114 @@ export type Selectors = Array<keyof HTMLElementTagNameMap | string> | SelectorFn
 
 export type Delimiter = string /* | RegExp | TokenizerFn */;
 
-export type PreviewTrue = {
-  isPreview: true;
+const defaultChapterSlice = 3;
+const previewTrueSchema = z.object({
+  isPreview: z.literal(true),
+
+  /**
+   * Chapter files to be excluded
+   */
+  chaptersSlice: z.number().optional().default(defaultChapterSlice),
+
+  /**
+   * Chapter files to be excluded
+   */
+  removeChapters: z.string().array(),
 
   /**
    * URL used in nav and site links
    */
-  fullTextUrl: string;
-};
+  fullTextUrl: z.string().url(),
+});
 
-type PreviewFalse = { isPreview: false };
+export type PreviewTrue = z.infer<typeof previewTrueSchema>;
 
-export type Preview = {
-  /**
-   * Chapter files to be excluded
-   */
-  chaptersSlice: number;
+const previewFalseSchema = z.object({
+  isPreview: z.literal(false),
+});
 
-  /**
-   * Chapter files to be excluded
-   */
-  removeChapters: string[];
+export const previewSchema = z.discriminatedUnion('isPreview', [
+  previewTrueSchema,
+  previewFalseSchema,
+]);
 
-  /**
-   * URL may be set oven when isPreview is false
-   */
-  fullTextUrl?: string;
-} & (PreviewTrue | PreviewFalse);
+export type Preview = z.infer<typeof previewSchema>;
 
-export const previewDefaults: Preview = {
-  isPreview: false,
-  chaptersSlice: 3,
-  removeChapters: [],
-};
+const tocBaseItemSchema: z.ZodType<TocBaseItem> = z.lazy(() =>
+  z.object({
+    isSection: z.boolean().optional(),
+    title: z.string().optional(),
+    link: z.string().optional(),
+    children: tocBaseSchema.optional(),
+    listType: z.enum(['plain', 'numbered', 'bulleted']).optional(),
+  })
+);
 
-/**
- * Publisher config
- */
-export interface Config {
+const tocBaseSchema = z.array(tocBaseItemSchema);
+
+export const configSchema = z.object({
   /**
    * i18n ISO string
    */
-  languageCode: LanguageCode;
+  languageCode: z.string().default('en'),
 
   /**
    * Output format specifier
    */
-  output: 'jsdom' | 'html';
+  output: z.enum(['jsdom', 'html']).default('html'),
 
   /**
-   * D
+   * Parser delimiter
    */
-  delimiter: Delimiter;
+  delimiter: z.string().default('\n'),
 
   /**
    * Root element, within which book content is recognized and
    * processed by publisher.
    */
-  root: Root;
+  root: z.string().default('main'),
 
   /**
    * Selectors for DOM elements to be recognized
    */
-  selectors: Selectors;
+  selectors: z
+    .string()
+    .array()
+    .default(['p', 'li', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'dl']),
 
   /**
    * Book metadata
    */
-  meta: Metadata;
+  meta: metaDataSchema.optional().default({
+    title: 'No title',
+    subtitle: 'No subtitle',
+    author: 'No author',
+  }),
 
   /**
    * ReadingOrder as list of `.html` files
    */
-  readingOrder: string[];
+  readingOrder: z.string().array().default([]),
 
+  /**
+   * TOC structure without in-document headings
+   */
+  tocBase: tocBaseSchema.default([]),
+
+  /**
+   * Static files folders to be published as a list of folder names.
+   * Folders will be copied from source to output as they are
+   */
+  static: z.string().array().default([]),
+
+  preview: previewSchema.optional().default({
+    isPreview: false,
+  }),
+});
+
+export type Config = z.infer<typeof configSchema>;
+
+export interface ConfigWithDeprecated extends Config {
   /**
    * Chapters reading order as list of `.html` files.
    *
@@ -113,37 +146,13 @@ export interface Config {
    * @deprecated Use the new readingOrder property instead.
    */
   chapters?: string[];
-
-  /**
-   * TOC structure without in-document headings
-   */
-  tocBase: TocBase;
-
-  /**
-   * Static files folders to be published as a list of folder names.
-   * Folders will be copied from source to output as they are
-   */
-  static: string[];
-
-  preview: Preview;
 }
 
-export const configDefaults: Config = {
-  languageCode: 'en',
-  output: 'html',
-  delimiter: '\n',
-  root: 'main',
-  selectors: ['p', 'li', 'dd', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'dl'],
-  static: [],
-  readingOrder: [],
-  tocBase: [],
-  meta: {
-    title: 'No title',
-    subtitle: 'No subtitle',
-    author: 'No author',
-  },
-  preview: { ...previewDefaults },
-};
+/**
+ * @example Custom book config loaded from file may contain
+ * selected (partial) config properties
+ */
+export type PartialConfigWithDeprecated = Partial<ConfigWithDeprecated>;
 
 /**
  * @example Custom book config loaded from file may contain
@@ -151,8 +160,16 @@ export const configDefaults: Config = {
  */
 export type PartialConfig = Partial<Config>;
 
-const loadConfig = (overrides: PartialConfig): Config => {
-  return Object.assign({}, configDefaults, overrides);
+const loadConfig = (options: PartialConfig): Config => {
+  const loaded = configSchema.safeParse(options);
+  if (!loaded.success) {
+    const errors = loaded.error.flatten().fieldErrors;
+    for (const [key, value] of Object.entries(errors)) {
+      console.error(`${key}: ${value}`);
+    }
+    throw new Error('Invalid config options.');
+  }
+  return loaded.data;
 };
 
 export default loadConfig;

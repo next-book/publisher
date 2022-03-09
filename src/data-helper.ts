@@ -5,7 +5,14 @@ import rimraf from 'rimraf';
 import copy from 'recursive-copy';
 import * as sw from './service-worker/builder';
 import Manifest from '../shared/manifest';
-import { PartialConfig, previewDefaults, Preview } from './config';
+import loadConfig, {
+  Config,
+  Preview,
+  previewSchema,
+  PreviewTrue,
+  PartialConfig,
+  PartialConfigWithDeprecated,
+} from './config';
 import { PathLike } from './utils/fs';
 
 type PrepContent = {
@@ -40,54 +47,53 @@ export function prepContent(
 }
 
 /**
- * @example We have guaranteed that config contains Preview info,
- * once we add user preview options applied onto defaults.
- */
-export interface PartialConfigWithPreview extends PartialConfig {
-  preview: Preview;
-}
-
-/**
  * Reads book config options from file
  * @param srcDir
  * @param fullTextUrl
  * @returns
  */
-export function prepConfig(
-  srcDir: PathLike,
-  fullTextUrl?: string
-): PartialConfigWithPreview | null {
+export function prepConfig(srcDir: PathLike, fullTextUrl?: string): Config {
   const configPath = path.join(srcDir, '/book.json');
   console.log(`Looking up a custom book config in "${configPath}/".`);
 
-  const partialConfig: PartialConfig = fs.existsSync(configPath)
+  const partialConfigDepr: PartialConfigWithDeprecated = fs.existsSync(configPath)
     ? JSON.parse(fs.readFileSync(configPath, 'utf8'))
     : null;
 
   // rename depricated `chapters` property
-  if (partialConfig.chapters && !partialConfig.readingOrder) {
-    partialConfig.readingOrder = [...partialConfig.chapters];
-    delete partialConfig.chapters;
+  if (partialConfigDepr.chapters && !partialConfigDepr.readingOrder) {
+    partialConfigDepr.readingOrder = [...partialConfigDepr.chapters];
+    delete partialConfigDepr.chapters;
   }
+
+  const partialConfig: PartialConfig = partialConfigDepr;
+
+  let preview: Preview = {
+    isPreview: false,
+  };
 
   // overriden preview config defaults with custom options
-  const preview: Preview = { ...previewDefaults, ...partialConfig.preview };
-
   if (fullTextUrl) {
-    preview.isPreview = true;
-    preview.fullTextUrl = fullTextUrl;
+    preview = previewSchema.parse({
+      isPreview: true,
+      fullTextUrl: fullTextUrl,
+      removeChapters: [],
+    });
   }
 
-  const config: PartialConfigWithPreview = { ...partialConfig, preview: { ...preview } };
+  const config = loadConfig({ ...partialConfig, preview: { ...preview } });
 
-  if (preview.isPreview && preview.fullTextUrl) {
+  // apply preview options
+  if (preview.isPreview) {
     console.log('Preparing preview version of the book.');
-    config.readingOrder = partialConfig.readingOrder?.slice(0, preview.chaptersSlice);
-    if (partialConfig.readingOrder)
-      config.preview.removeChapters = partialConfig.readingOrder.slice(preview.chaptersSlice);
+    if (config.readingOrder) {
+      config.readingOrder = config.readingOrder?.slice(0, preview.chaptersSlice);
+      (config.preview as PreviewTrue).removeChapters = config.readingOrder.slice(
+        preview.chaptersSlice
+      );
+    }
   }
 
-  console.log(config ? 'Found custom book config.' : 'Custom book config not found.');
   return config;
 }
 

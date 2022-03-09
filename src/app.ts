@@ -8,7 +8,7 @@ import pretty from 'pretty';
 import slug from 'slug';
 import tagDocument from './tagger';
 import i18n from './i18n';
-import loadConfig, { Config, PartialConfig } from './config';
+import { Config } from './config';
 import { gaugeDocument, gaugePublication, PublicationStats } from './gauge';
 import getDocumentToc, { getToc } from './toc';
 import {
@@ -37,11 +37,10 @@ interface MappedPublication {
 export default function map(
   content: string[],
   filenames: string[],
-  options: PartialConfig,
+  conf: Config,
   revision: Revision
 ): MappedPublication {
-  const conf = loadConfig(options);
-  console.log(`\nUsing mapper config:\n${dumpArray(conf)}\n`);
+  // console.log(`\nUsing mapper config:\n${dumpArray(conf)}\n`);
 
   const doms = content.map(doc => new Jsdom(doc));
   const documents = doms.map(dom => dom.window.document);

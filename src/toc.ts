@@ -10,7 +10,7 @@ export type TocBase = TocBaseItem[];
 
 type ListType = 'plain' | 'numbered' | 'bulleted';
 
-type TocBaseItem = {
+export type TocBaseItem = {
   isSection?: boolean;
   title?: string;
   link?: string;

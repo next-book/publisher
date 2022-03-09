@@ -9,6 +9,7 @@
  */
 
 import { Preview } from '../src/config';
+import { z } from 'zod';
 
 export type Identifier = string;
 export type Revision = string | null;
@@ -61,15 +62,17 @@ export interface DocumentMetadata {
   toc: Heading[];
 }
 
-export interface Metadata {
-  title: string;
-  subtitle: string;
-  author: string;
-  published?: number;
-  publisher?: string;
-  keywords?: string[];
-  edition?: string;
-}
+export const metaDataSchema = z.object({
+  title: z.string(),
+  subtitle: z.string(),
+  author: z.string(),
+  published: z.number().optional(),
+  publisher: z.string().optional(),
+  keywords: z.string().array().optional(),
+  edition: z.string().optional(),
+});
+
+type Metadata = z.infer<typeof metaDataSchema>;
 
 // https://github.com/orgs/next-book/teams/nb-core/discussions/1
 
