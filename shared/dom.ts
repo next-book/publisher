@@ -1,16 +1,8 @@
-import { DocRole } from './manifest';
+import { DocRole, Identifier, LanguageCode, OrderLike } from './manifest';
 
 /**
  * Renamed literals help with finding functions that operate with same values
  */
-
-/** The OrderLike is a string that contains number to be parsed */
-export type OrderLike = string;
-
-/** Next book identifier */
-export type Identifier = string;
-
-export type LanguageCode = string;
 
 /** The IdeaId is a string in the format of idea1, idea2, idea3 ... */
 type IdeaId = string;

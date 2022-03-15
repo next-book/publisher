@@ -2,8 +2,8 @@
   "name": "@next-book/publisher",
   "version": "0.3.5-canary",
   "description": "Publish web books with next-book",
-  "main": "dist/src/app.js",
-  "types": "dist/src/app.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "bin": {
     "publish-nb": "./dist/src/bin/cli.js"
   },
@@ -12,12 +12,11 @@
     "dev": "onchange 'src/*' -v -- npm run tscRun",
     "bundle": "browserify src/browser.ts -p [ tsify --noImplicitAny ] > dist/src/browser.js",
     "bundleServiceWorker": "browserify src/service-worker/code.tpl.ts -p [ tsify --noImplicitAny ] > dist/src/service-worker/code.tpl.js",
-    "transpile": "babel dist/src/browser.js --out-file dist/src/browser.js",
+    "transpile": "babel dist/src/browser.js --out-file docs/browser.js",
     "transpileServiceWorker": "babel dist/src/service-worker/code.tpl.js --out-file dist/src/service-worker/code.tpl.js",
-    "updateExample": "cp dist/src/browser.js docs/browser.js",
     "updateDocs": "typedoc --out docs/api src/**.ts src/**/*.ts",
     "compileAndTranspile": "tsc && chmod u+x dist/src/bin/cli.js && npm run bundle && npm run transpile && npm run transpileServiceWorker && npm run bundleServiceWorker",
-    "build": "npm run compileAndTranspile && npm run updateExample && npm run updateDocs",
+    "build": "npm run compileAndTranspile && npm run updateDocs",
     "build:watch": "tsc --watch",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "clearJestCache": "jest --clearCache"
