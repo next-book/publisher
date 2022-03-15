@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>parser | @next-book/publisher</title>
+	<title>NavClass | @next-book/publisher</title>
 	<meta name="description" content="Documentation for @next-book/publisher">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,84 +55,54 @@
 					<a href="../modules.html">@next-book/publisher</a>
 				</li>
 				<li>
-					<a href="parser.html">parser</a>
+					<a href="../modules/index.html">index</a>
+				</li>
+				<li>
+					<a href="index.NavClass.html">NavClass</a>
 				</li>
 			</ul>
-			<h1>Module parser</h1>
+			<h1>Enumeration NavClass</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Parser: parses a DOM Node (resp HTML Element) to be later used in producer
-						to update HTML for next-book specific use cases.</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/parser.Separator.html" class="tsd-kind-icon">Separator</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Functions</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="parser.html#default" class="tsd-kind-icon">default</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="index.NavClass.html#Begin" class="tsd-kind-icon">Begin</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="index.NavClass.html#End" class="tsd-kind-icon">End</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="default" class="tsd-anchor"></a>
-					<h3>default</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">HTMLElement</span>, delimiter<span class="tsd-signature-symbol">: </span><a href="config.html#Delimiter" class="tsd-signature-type" data-tsd-kind="Type alias">Delimiter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/structures_parsedobj.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/next-book/publisher/blob/137f434/src/parser.ts#L20">src/parser.ts:20</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns ParsedObj which contains original node and an array of arrays in
-										which every array represents one idea or ParsedObj. Ideas are delimited with
-									a delimiter that is searched for in text nodes.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>node: <span class="tsd-signature-type">Node</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">HTMLElement</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>DOM Node or HTML Element</p>
-									</div>
-								</li>
-								<li>
-									<h5>delimiter: <a href="config.html#Delimiter" class="tsd-signature-type" data-tsd-kind="Type alias">Delimiter</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The delimiter</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../classes/structures_parsedobj.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a></h4>
-							<p>An instance of <a href="structures.html#ParsedObj">ParsedObj</a></p>
-						</li>
-					</ul>
+				<h2>Enumeration members</h2>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="Begin" class="tsd-anchor"></a>
+					<h3>Begin</h3>
+					<div class="tsd-signature tsd-kind-icon">Begin<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;begin-nav&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/137f434/shared/dom.ts#L33">shared/dom.ts:33</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="End" class="tsd-anchor"></a>
+					<h3>End</h3>
+					<div class="tsd-signature tsd-kind-icon">End<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;end-nav&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/137f434/shared/dom.ts#L34">shared/dom.ts:34</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -143,72 +113,81 @@
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="Gauge.html">Gauge</a>
+						<a href="../modules/Gauge.html">Gauge</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="app.html">app</a>
+						<a href="../modules/app.html">app</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="chapter_navigation.html">chapter-<wbr>navigation</a>
+						<a href="../modules/chapter_navigation.html">chapter-<wbr>navigation</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="config.html">config</a>
+						<a href="../modules/config.html">config</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="data_helper.html">data-<wbr>helper</a>
+						<a href="../modules/data_helper.html">data-<wbr>helper</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="i18n.html">i18n</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="index.html">index</a>
+						<a href="../modules/i18n.html">i18n</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="parser.html">parser</a>
+						<a href="../modules/index.html">index</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="producer.html">producer</a>
+						<a href="../modules/parser.html">parser</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="revision.html">revision</a>
+						<a href="../modules/producer.html">producer</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="service_worker_builder.html">service-<wbr>worker/builder</a>
+						<a href="../modules/revision.html">revision</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="structures.html">structures</a>
+						<a href="../modules/service_worker_builder.html">service-<wbr>worker/builder</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="structures_ideas.html">structures/ideas</a>
+						<a href="../modules/structures.html">structures</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="structures_parsedobj.html">structures/parsedobj</a>
+						<a href="../modules/structures_ideas.html">structures/ideas</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="tagger.html">tagger</a>
+						<a href="../modules/structures_parsedobj.html">structures/parsedobj</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="toc.html">toc</a>
+						<a href="../modules/tagger.html">tagger</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="utils_dom.html">utils/dom</a>
+						<a href="../modules/toc.html">toc</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="utils_fs.html">utils/fs</a>
+						<a href="../modules/utils_dom.html">utils/dom</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="utils_regexp.html">utils/regexp</a>
+						<a href="../modules/utils_fs.html">utils/fs</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/utils_regexp.html">utils/regexp</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/parser.Separator.html" class="tsd-kind-icon">Separator</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-enum tsd-parent-kind-module">
+						<a href="index.NavClass.html" class="tsd-kind-icon">Nav<wbr>Class</a>
+						<ul>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="index.NavClass.html#Begin" class="tsd-kind-icon">Begin</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="index.NavClass.html#End" class="tsd-kind-icon">End</a>
+							</li>
+						</ul>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="parser.html#default" class="tsd-kind-icon">default</a>
-					</li>
+				</ul>
+				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>
