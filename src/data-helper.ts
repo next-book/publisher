@@ -5,14 +5,6 @@ import rimraf from 'rimraf';
 import copy from 'recursive-copy';
 import * as sw from './service-worker/builder';
 import Manifest from '../shared/manifest';
-import loadConfig, {
-  Config,
-  Preview,
-  previewSchema,
-  PreviewTrue,
-  PartialConfig,
-  PartialConfigWithDeprecated,
-} from './config';
 import { PathLike } from './utils/fs';
 
 type PrepContent = {
@@ -44,57 +36,6 @@ export function prepContent(
   content.forEach(file => console.log(`> ${file.name}`));
 
   return { content: content.map(file => file.data), filenames: content.map(file => file.name) };
-}
-
-/**
- * Reads book config options from file
- * @param srcDir
- * @param fullTextUrl
- * @returns
- */
-export function prepConfig(srcDir: PathLike, fullTextUrl?: string): Config {
-  const configPath = path.join(srcDir, '/book.json');
-  console.log(`Looking up a custom book config in "${configPath}/".`);
-
-  const partialConfigDepr: PartialConfigWithDeprecated = fs.existsSync(configPath)
-    ? JSON.parse(fs.readFileSync(configPath, 'utf8'))
-    : null;
-
-  // rename depricated `chapters` property
-  if (partialConfigDepr.chapters && !partialConfigDepr.readingOrder) {
-    partialConfigDepr.readingOrder = [...partialConfigDepr.chapters];
-    delete partialConfigDepr.chapters;
-  }
-
-  const partialConfig: PartialConfig = partialConfigDepr;
-
-  let preview: Preview = {
-    isPreview: false,
-  };
-
-  // overriden preview config defaults with custom options
-  if (fullTextUrl) {
-    preview = previewSchema.parse({
-      isPreview: true,
-      fullTextUrl: fullTextUrl,
-      removeChapters: [],
-    });
-  }
-
-  const config = loadConfig({ ...partialConfig, preview: { ...preview } });
-
-  // apply preview options
-  if (preview.isPreview) {
-    console.log('Preparing preview version of the book.');
-    if (config.readingOrder) {
-      config.readingOrder = config.readingOrder?.slice(0, preview.chaptersSlice);
-      (config.preview as PreviewTrue).removeChapters = config.readingOrder.slice(
-        preview.chaptersSlice
-      );
-    }
-  }
-
-  return config;
 }
 
 export function writeOutput(

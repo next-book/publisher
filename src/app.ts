@@ -64,8 +64,8 @@ export default function map(
   const lengths = gaugePublication(documents);
   if (!readingOrder) throw new Error('Reading order not defined in config.');
   const pubMetadata = gatherMetadata(documents, filenames, readingOrder, lengths);
-
   if (!conf.meta) throw new Error('Metadata not defined in config.');
+
   const manifest = composeManifest(
     conf,
     pubMetadata,

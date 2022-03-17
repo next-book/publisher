@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import loadConfig, { PartialConfig } from '../config';
+import { parseConfig, PartialConfig } from '../config';
 
 it('should throw with validation messages', () => {
   const consoleSpy = jest.spyOn(console, 'error');
@@ -11,7 +11,7 @@ it('should throw with validation messages', () => {
     root: 1,
     tocBase: '',
   };
-  expect(() => loadConfig(options as unknown as PartialConfig)).toThrowError(
+  expect(() => parseConfig(options as unknown as PartialConfig)).toThrowError(
     'Invalid config options.'
   );
   expect(consoleSpy).toHaveBeenCalledWith(`The following config fields were invalid:`);
@@ -21,7 +21,7 @@ it('should throw with validation messages', () => {
 });
 
 it('should return defaults when provided empty options', () => {
-  expect(loadConfig({} as unknown as PartialConfig)).toStrictEqual({
+  expect(parseConfig({} as unknown as PartialConfig)).toStrictEqual({
     languageCode: 'en',
     output: 'html',
     delimiter: '\n',

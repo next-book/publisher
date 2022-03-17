@@ -1,16 +1,14 @@
 /**
  * Config module
  *
- * The config is being created in following stages in {@link prepConfig}:
- * 1. First in {@link prepConfig}, the custom book options in the shape of {@link PartialConfigWithDeprecated} are loaded.
- * 2. Deprecated options are transformed to their new form and the config gets shape of {@link PartialConfig}.
- * 3. Config is acquired by parsing and applying defaults on {@link PartialConfig} with {@link Preview} options.
- * 4. Since config is guaranteed to have preview settings decided, the preview logic is applied on the config.
  * @module
  */
 
 import { metaDataSchema } from '../shared/manifest';
 import { TocBaseItem } from './toc';
+import { PathLike } from './utils/fs';
+import fs from 'fs';
+import path from 'path';
 import { z } from 'zod';
 
 /**
@@ -160,7 +158,7 @@ export type PartialConfigWithDeprecated = Partial<ConfigWithDeprecated>;
  */
 export type PartialConfig = Partial<Config>;
 
-const loadConfig = (options: PartialConfig): Config => {
+export const parseConfig = (options: PartialConfig): Config | never => {
   const loaded = configSchema.safeParse(options);
   if (!loaded.success) {
     const errors = loaded.error.flatten().fieldErrors;
@@ -172,5 +170,65 @@ const loadConfig = (options: PartialConfig): Config => {
   }
   return loaded.data;
 };
+
+/**
+ * Loads book config options from file
+ *
+ * The config is being created in following stages:
+ * 1. First, the custom book options in the shape of {@link PartialConfigWithDeprecated} are loaded.
+ * 2. Deprecated options are transformed to their new form and the config gets shape of {@link PartialConfig}.
+ * 3. Config is acquired by parsing and applying defaults on {@link PartialConfig} with {@link Preview} options.
+ * 4. Since config is guaranteed to have preview settings decided, the preview logic is applied on the config.
+ *
+ * @param srcDir - directory where book config is located
+ * @param fullTextUrl - link to the full book in case of preview feature active
+ * @returns a config object that is guaranteed to be valid against its predefined schema.
+ */
+function loadConfig(srcDir: PathLike, fullTextUrl?: string): Config | never {
+  const configPath = path.join(srcDir, '/book.json');
+  console.log(`Looking up a custom book config in "${configPath}/".`);
+
+  const partialConfigDepr: PartialConfigWithDeprecated = fs.existsSync(configPath)
+    ? JSON.parse(fs.readFileSync(configPath, 'utf8'))
+    : null;
+
+  // rename depricated `chapters` property
+  if (partialConfigDepr.chapters && !partialConfigDepr.readingOrder) {
+    partialConfigDepr.readingOrder = [...partialConfigDepr.chapters];
+    delete partialConfigDepr.chapters;
+  }
+
+  // gets no longer depricated features structure
+  const partialConfig: PartialConfig = partialConfigDepr;
+
+  let preview: Preview = {
+    isPreview: false,
+  };
+
+  if (fullTextUrl) {
+    // override preview config defaults with custom options
+    preview = previewSchema.parse({
+      isPreview: true,
+      fullTextUrl: fullTextUrl,
+      removeChapters: [],
+    });
+  }
+
+  // the config gets no longer partial
+  const config = parseConfig({ ...partialConfig, preview: { ...preview } });
+
+  // apply preview options
+  if (preview.isPreview) {
+    console.log('Preparing preview version of the book.');
+    if (config.readingOrder) {
+      config.readingOrder = config.readingOrder?.slice(0, preview.chaptersSlice);
+      (config.preview as PreviewTrue).removeChapters = config.readingOrder.slice(
+        preview.chaptersSlice
+      );
+    }
+  }
+
+  return config;
+}
 
 export default loadConfig;

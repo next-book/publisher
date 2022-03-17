@@ -3,13 +3,8 @@ import cmd from 'commander';
 import express from 'express';
 import path from 'path';
 import map from '../app';
-import {
-  prepConfig,
-  writeOutput,
-  copyFolders,
-  buildServiceWorker,
-  prepContent,
-} from '../data-helper';
+import loadConfig from '../config';
+import { writeOutput, copyFolders, buildServiceWorker, prepContent } from '../data-helper';
 import { getRevision } from '../revision';
 
 cmd
@@ -22,7 +17,7 @@ cmd
   .option('-p, --preview [url]', 'Generate a preview (three chapters only)')
   .parse(process.argv);
 
-const config = prepConfig(cmd.src, cmd.preview);
+const config = loadConfig(cmd.src, cmd.preview);
 // console.log('Config', dumpArray(config));
 if (!config) throw new Error('No config set');
 
