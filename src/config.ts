@@ -164,6 +164,7 @@ const loadConfig = (options: PartialConfig): Config => {
   const loaded = configSchema.safeParse(options);
   if (!loaded.success) {
     const errors = loaded.error.flatten().fieldErrors;
+    console.error(`The following config fields were invalid:`);
     for (const [key, value] of Object.entries(errors)) {
       console.error(`${key}: ${value}`);
     }
