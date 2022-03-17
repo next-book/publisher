@@ -12,7 +12,7 @@ import { Preview } from '../src/config';
 import { z } from 'zod';
 
 export type Identifier = string;
-export type Revision = string | null;
+export type Revision = string;
 export type Order = number | null;
 export type OrderLike = string;
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;

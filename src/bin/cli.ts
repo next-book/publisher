@@ -4,7 +4,8 @@ import express from 'express';
 import path from 'path';
 import map from '../app';
 import loadConfig from '../config';
-import { writeOutput, copyFolders, buildServiceWorker, prepContent } from '../data-helper';
+import buildServiceWorker from '../service-worker/builder';
+import { writeOutput, copyFolders, prepContent } from '../data-helper';
 import { getRevision } from '../revision';
 
 cmd

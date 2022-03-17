@@ -3,7 +3,6 @@ import { JSDOM } from 'jsdom';
 import path from 'path';
 import rimraf from 'rimraf';
 import copy from 'recursive-copy';
-import * as sw from './service-worker/builder';
 import Manifest from '../shared/manifest';
 import { PathLike } from './utils/fs';
 
@@ -89,13 +88,5 @@ export function copyFolder(pairs: Pair[], finalCallback: () => void): void {
   copy(pair.from, pair.to, () => {
     if (pairs.length > 0) copyFolder(pairs, finalCallback);
     else finalCallback();
-  });
-}
-
-export async function buildServiceWorker(dir: PathLike, revision: string): Promise<void> {
-  console.log('Building service worker…');
-
-  await sw.build(dir, revision).then(code => {
-    fs.writeFileSync(path.join(dir, 'service-worker.js'), code, 'utf8');
   });
 }

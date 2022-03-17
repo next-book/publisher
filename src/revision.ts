@@ -3,7 +3,7 @@ import { Revision } from '../shared/manifest';
 
 let revision: Revision;
 
-function getGitRev(): Revision {
+function getGitRev(): Revision | never {
   try {
     const spawn = spawnSync('git', ['rev-parse', '--short', 'HEAD']);
 
@@ -17,14 +17,13 @@ function getGitRev(): Revision {
 
     return spawn.stdout.toString().trim().substr(0, 7);
   } catch (err) {
-    return null;
+    throw new Error('There was a problem getting git revision.');
   }
 }
 
-export function getRevision(): Revision {
+export function getRevision(): Revision | never {
   if (revision) return revision;
 
   revision = getGitRev();
-  // todo: Avoid returning null. Follow parse, dont validate philosophy instead.
   return revision;
 }
