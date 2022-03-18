@@ -40,8 +40,6 @@ export default function map(
   conf: Config,
   revision: Revision
 ): MappedPublication {
-  // console.log(`\nUsing mapper config:\n${dumpArray(conf)}\n`);
-
   const doms = content.map(doc => new Jsdom(doc));
   const documents = doms.map(dom => dom.window.document);
   const { readingOrder } = conf;
@@ -362,19 +360,6 @@ function exportDoms(doms: Jsdom[], format: 'jsdom' | 'html'): (Jsdom | string)[]
   };
 
   return doms.map(dom => routines[format](dom));
-}
-
-/**
- * Dumps array
- *
- * @param arr - Array to dump
- * @returns
- */
-export function dumpArray(arr: unknown) {
-  return JSON.stringify(arr, null, 2)
-    .split('\n')
-    .map(line => `>${line}`)
-    .join('\n');
 }
 
 export { map, addMetaNavigation };

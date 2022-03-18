@@ -19,7 +19,6 @@ cmd
   .parse(process.argv);
 
 const config = loadConfig(cmd.src, cmd.preview);
-// console.log('Config', dumpArray(config));
 if (!config) throw new Error('No config set');
 
 const revisionId = config.preview?.isPreview ? `${getRevision()}-preview` : getRevision();
