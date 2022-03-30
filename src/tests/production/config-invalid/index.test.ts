@@ -1,7 +1,7 @@
 import execa, { ExecaError } from 'execa';
 
 const expectedMultiline = `
-The following config fields were invalid:
+The following config fields are not allowed:
 
 selectors
  - Expected array, received string
