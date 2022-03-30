@@ -171,11 +171,18 @@ export type PartialConfig = Partial<Config>;
 export const parseConfig = (options: PartialConfig): Config | never => {
   const loaded = configSchema.safeParse(options);
   if (!loaded.success) {
-    const errors = loaded.error.flatten().fieldErrors;
-    console.error(`The following config fields were invalid:`);
-    for (const [key, value] of Object.entries(errors)) {
-      console.error(`${key}: ${value}`);
+    const errors: { [field: string]: string[] } = {};
+    loaded.error.errors.forEach(issue => {
+      const field = issue.path.join(' > ');
+      if (!errors[field]) errors[field] = [];
+      errors[field].push(issue.message);
+    });
+    console.error(`\nThe following config fields are not allowed:`);
+    for (const [field, messages] of Object.entries(errors)) {
+      console.error('\n' + field);
+      messages.forEach(message => console.error(' - ' + message));
     }
+    console.error('\n');
     throw new Error('Invalid config options.');
   }
   return loaded.data;
@@ -196,11 +203,12 @@ export const parseConfig = (options: PartialConfig): Config | never => {
  */
 function loadConfig(srcDir: PathLike, fullTextUrl?: string): Config | never {
   const configPath = path.join(srcDir, '/book.json');
-  console.log(`Looking up a custom book config in "${configPath}/".`);
+  if (!fs.existsSync(configPath))
+    throw new Error(`Custom book config in "${configPath}" not found.`);
 
-  const partialConfigDepr: PartialConfigWithDeprecated = fs.existsSync(configPath)
-    ? JSON.parse(fs.readFileSync(configPath, 'utf8'))
-    : null;
+  const partialConfigDepr: PartialConfigWithDeprecated = JSON.parse(
+    fs.readFileSync(configPath, 'utf8')
+  );
 
   // rename depricated `chapters` property
   if (partialConfigDepr?.chapters && !partialConfigDepr.readingOrder) {
