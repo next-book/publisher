@@ -42,14 +42,12 @@ export function markElementsToBeTagged(
   if (Array.isArray(selectors) && selectors.length == 0)
     throw new Error('Selectors cannot be empty array.');
   const rootElement = root ? document.querySelector(root) : document;
-  if (!rootElement) {
-    console.error(
+  if (!rootElement)
+    throw new Error(
       `No root "${root}" element found in document titled "${
         document?.querySelector('title')?.innerHTML
       }".`
     );
-    return;
-  }
 
   const elements =
     typeof selectors === 'function'

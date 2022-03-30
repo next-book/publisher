@@ -18,8 +18,9 @@ import {
   addChapterInPageNavigation,
   addFullTextUrl,
 } from './chapter-navigation';
-import Manifest, { DocRole, PublicationSum, DocumentMetadata, Revision } from '../shared/manifest';
+import Manifest, { DocRole, PublicationSum, Revision, DocumentMetadata } from '../shared/manifest';
 import { StyleClass, MetaDocRoleElement, MetaIdentifierElement, Id, Rel } from '../shared/dom';
+import { assertUnreachable } from './utils/unreachable';
 
 interface MappedPublication {
   manifest: Manifest;
@@ -49,6 +50,8 @@ export default function map(
   console.log('Mapping documents:');
   const bar = new Progress.Bar({}, Progress.Presets.shades_classic);
   bar.start(documents.length, 0);
+
+  validateDocuments(documents, filenames, conf.root);
 
   documents.forEach((document, index) => {
     tagDocument(document, conf);
@@ -98,7 +101,67 @@ export default function map(
   return { manifest, documents: exportDoms(doms, conf.output) };
 }
 
-function composeManifest(
+enum MetadataError {
+  HtmlMissing,
+  HeadMissing,
+  RootMissing,
+  TitleMissing,
+  TitleTextMissing,
+}
+
+type ValidationError = { file: string; errors: MetadataError[] };
+
+function validateDocuments(documents: Document[], filenames: string[], root: DOMStringLike) {
+  const docErrors: ValidationError[] = [];
+  documents.forEach((doc, index) => {
+    const errors: MetadataError[] = [];
+    const rootElement = doc.querySelector(root);
+    if (!rootElement) errors.push(MetadataError.RootMissing);
+    const title = doc.querySelector('title');
+    if (!title) errors.push(MetadataError.TitleMissing);
+    const titleText = title?.textContent;
+    if (!titleText) errors.push(MetadataError.TitleTextMissing);
+    /**
+     * We check for <html> and <head> even though, they are always
+     * found even when not provided in the document source for some reason.
+     */
+    const htmlElement = doc.querySelector('html');
+    if (!htmlElement) errors.push(MetadataError.HtmlMissing);
+    const headElement = doc.querySelector('head');
+    if (!headElement) errors.push(MetadataError.HeadMissing);
+    if (errors.length > 0) docErrors.push({ file: filenames[index], errors });
+  });
+  if (docErrors.length === 0) return;
+  console.error('\nInsufficient document content found in:');
+  docErrors.forEach(doc => {
+    console.error('\n' + doc.file);
+    doc.errors.forEach(code => {
+      switch (code) {
+        case MetadataError.HtmlMissing:
+          console.error(` - <html> element is missing.`);
+          break;
+        case MetadataError.HeadMissing:
+          console.error(` - <head> element is missing.`);
+          break;
+        case MetadataError.RootMissing:
+          console.error(` - Root element "${root}" is missing.`);
+          break;
+        case MetadataError.TitleMissing:
+          console.error(` - <title> element is missing.`);
+          break;
+        case MetadataError.TitleTextMissing:
+          console.error(` - <title> text content is missing.`);
+          break;
+        default:
+          assertUnreachable(code);
+      }
+    });
+  });
+  console.error('\n');
+  throw new Error('Document content not sufficient.');
+}
+
+export function composeManifest(
   config: Config,
   documents: DocumentMetadata[],
   readingOrder: string[],
