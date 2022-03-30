@@ -7,8 +7,8 @@ import {
   addFullTextUrl,
   addChapterInPageNavigation,
   createLink,
-} from '../chapter-navigation';
-import { Rel } from '../../shared/dom';
+} from '../../chapter-navigation';
+import { Rel } from '../../../shared/dom';
 
 describe('addChapterInPageNavigation', () => {
   it('should throw when root is missing', () => {

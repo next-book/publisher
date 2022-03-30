@@ -1,0 +1,20 @@
+{
+  "languageCode": "en-US",
+  "meta": {
+    "title": "Next-book Boilerplate",
+    "subtitle": "Next-book Boilerplate",
+    "author": "Author Name",
+    "edition": 1,
+    "keywords": [],
+    "published": "2020",
+    "publisher": "nb"
+  },
+  "selectors": "main",
+  "readingOrder": ["reading.html", "sounds.html", "solitude.html"],
+  "static": [],
+  "tocBase": [
+    { "link": "solitude.html", "title": "Solitude" },
+    { "link": "reading.html", "title": "Reading" },
+    { "link": "sounds.html", "title": "Sounds" }
+  ]
+}

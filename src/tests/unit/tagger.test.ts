@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 
-import { markElementsToBeTagged, hasAncestorChunk, tagIdeas, numberEls } from '../tagger';
-import { TagClass as Class, classSelector } from '../../shared/dom';
+import { markElementsToBeTagged, hasAncestorChunk, tagIdeas, numberEls } from '../../tagger';
+import { TagClass as Class, classSelector } from '../../../shared/dom';
 
 describe('hasAncestorChunk', () => {
   it('should return false if the provided NodeList is empty', () => {
@@ -80,15 +80,12 @@ describe('markElementsToBeTagged', () => {
     });
 
     it('should log error when root is missing', () => {
-      const consoleSpy = jest.spyOn(console, 'error');
-
       const title = document.createElement('title');
       title.appendChild(document.createTextNode('custom title'));
       document.head.appendChild(title);
       const selectors = ['p'];
-      markElementsToBeTagged(document, 'main', selectors);
 
-      expect(consoleSpy).toHaveBeenCalledWith(
+      expect(() => markElementsToBeTagged(document, 'main', selectors)).toThrowError(
         `No root "main" element found in document titled "custom title".`
       );
     });

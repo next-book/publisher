@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { parseConfig, PartialConfig } from '../config';
+import { parseConfig, PartialConfig } from '../../config';
 
 it('should throw with validation messages', () => {
   const consoleSpy = jest.spyOn(console, 'error');
@@ -14,10 +14,14 @@ it('should throw with validation messages', () => {
   expect(() => parseConfig(options as unknown as PartialConfig)).toThrowError(
     'Invalid config options.'
   );
-  expect(consoleSpy).toHaveBeenCalledWith(`The following config fields were invalid:`);
-  expect(consoleSpy).toHaveBeenCalledWith(`output: Invalid enum value. Expected 'jsdom' | 'html'`);
-  expect(consoleSpy).toHaveBeenCalledWith(`root: Expected string, received number`);
-  expect(consoleSpy).toHaveBeenCalledWith(`output: Invalid enum value. Expected 'jsdom' | 'html'`);
+  expect(consoleSpy).toHaveBeenCalledWith(`\nThe following config fields are not allowed:`);
+  expect(consoleSpy).toHaveBeenCalledWith(`\noutput`);
+  expect(consoleSpy).toHaveBeenCalledWith(` - Invalid enum value. Expected 'jsdom' | 'html'`);
+  expect(consoleSpy).toHaveBeenCalledWith(`\nroot`);
+  expect(consoleSpy).toHaveBeenCalledWith(` - Expected string, received number`);
+  expect(consoleSpy).toHaveBeenCalledWith(`\ntocBase`);
+  expect(consoleSpy).toHaveBeenCalledWith(` - Expected array, received string`);
+  expect(consoleSpy).toHaveBeenCalledWith(`\n`);
 });
 
 it('should return defaults when provided empty options', () => {
@@ -32,7 +36,6 @@ it('should return defaults when provided empty options', () => {
     tocBase: [],
     meta: {
       title: 'No title',
-      subtitle: 'No subtitle',
       author: 'No author',
     },
     preview: {

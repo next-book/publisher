@@ -1,8 +1,8 @@
 /**
  * @jest-environment jsdom
  */
-import { ParsedObj } from '../structures';
-import parse from '../parser';
+import { ParsedObj } from '../../structures';
+import parse from '../../parser';
 
 describe('forbidden input', () => {
   it('should throw when undefined node provided', () => {

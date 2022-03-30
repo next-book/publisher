@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 
-import { Separator } from '../parser';
-import { containsParsedObj } from '../producer';
-import ParsedObj from '../structures/parsedobj';
+import { Separator } from '../../parser';
+import { containsParsedObj } from '../../producer';
+import ParsedObj from '../../structures/parsedobj';
 
 it('returns false when provided with empty idea piece array', () => {
   expect(containsParsedObj([])).toBe(false);

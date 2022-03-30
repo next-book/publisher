@@ -1,9 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-import produce from '../producer';
-import { Ideas } from '../structures';
-import ParsedObj from '../structures/parsedobj';
+import produce from '../../producer';
+import { Ideas } from '../../structures';
+import ParsedObj from '../../structures/parsedobj';
 
 describe('forbidden input', () => {
   it('should throw when provided with undefined document', () => {

@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 
-import { Separator } from '../parser';
-import { produceHTMLSpanIdea } from '../producer';
-import { IdeaPiece } from '../structures';
+import { Separator } from '../../parser';
+import { produceHTMLSpanIdea } from '../../producer';
+import { IdeaPiece } from '../../structures';
 
 it('should return span idea with no children when provided empty array', () => {
   const ideaPieces: IdeaPiece[] = [];

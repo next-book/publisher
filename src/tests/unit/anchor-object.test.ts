@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 
-import { anchorObject } from '../producer';
-import ParsedObj from '../structures/parsedobj';
+import { anchorObject } from '../../producer';
+import ParsedObj from '../../structures/parsedobj';
 
 it('should return fragment when idea is empty array', () => {
   const anchor = anchorObject([], document);
