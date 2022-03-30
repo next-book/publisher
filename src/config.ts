@@ -4,7 +4,6 @@
  * @module
  */
 
-import { metaDataSchema } from '../shared/manifest';
 import { TocBaseItem } from './toc';
 import { PathLike } from './utils/fs';
 import fs from 'fs';
@@ -74,6 +73,18 @@ const tocBaseItemSchema: z.ZodType<TocBaseItem> = z.lazy(() =>
 
 const tocBaseSchema = z.array(tocBaseItemSchema);
 
+export const metaDataSchema = z.object({
+  title: z.string(),
+  subtitle: z.string().optional(),
+  author: z.string(),
+  published: z.number().optional(),
+  publisher: z.string().optional(),
+  keywords: z.string().array().optional(),
+  edition: z.string().optional(),
+});
+
+export type Metadata = z.infer<typeof metaDataSchema>;
+
 export const configSchema = z.object({
   /**
    * i18n ISO string
@@ -109,7 +120,6 @@ export const configSchema = z.object({
    */
   meta: metaDataSchema.optional().default({
     title: 'No title',
-    subtitle: 'No subtitle',
     author: 'No author',
   }),
 
@@ -193,7 +203,7 @@ function loadConfig(srcDir: PathLike, fullTextUrl?: string): Config | never {
     : null;
 
   // rename depricated `chapters` property
-  if (partialConfigDepr.chapters && !partialConfigDepr.readingOrder) {
+  if (partialConfigDepr?.chapters && !partialConfigDepr.readingOrder) {
     partialConfigDepr.readingOrder = [...partialConfigDepr.chapters];
     delete partialConfigDepr.chapters;
   }

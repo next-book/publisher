@@ -8,15 +8,20 @@
  * its constituent resources (https://www.w3.org/TR/pub-manifest/).
  */
 
-import { Preview } from '../src/config';
+import { previewSchema } from '../src/config';
 import { z } from 'zod';
 
 export type Identifier = string;
-export type Revision = string;
-export type Order = number | null;
+
+const revisionSchema = z.string().min(1).max(7);
+export type Revision = z.infer<typeof revisionSchema>;
+const orderSchema = z.number().nullable();
+export type Order = z.infer<typeof orderSchema>;
+
 export type OrderLike = string;
-export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-export type Root = keyof HTMLElementTagNameMap | string;
+export type HeadingLevel = number;
+const rootSchema = z.string();
+export type Root = z.infer<typeof rootSchema>;
 /** i18n ISO string */
 export type LanguageCode = string;
 
@@ -28,6 +33,16 @@ export interface Heading {
   children: Heading[];
 }
 
+const Heading: z.ZodType<Heading> = z.lazy(() =>
+  z.object({
+    index: z.number(),
+    level: z.number().int().min(1).max(6),
+    name: z.string().nullable(),
+    id: z.string().nullable(),
+    children: z.array(Heading),
+  })
+);
+
 export enum DocRole {
   Break = 'break',
   Chapter = 'chapter',
@@ -36,58 +51,54 @@ export enum DocRole {
   Other = 'other',
 }
 
-export interface PublicationSum {
-  all: {
-    words: number;
-    chars: number;
-    ideas: number;
-  };
-  chapters: {
-    words: number;
-    chars: number;
-    ideas: number;
-  };
-}
-
-export interface DocumentMetadata {
-  title: string;
-  file: string;
-  words: number;
-  chars: number;
-  ideas: number;
-  role: DocRole;
-  order: Order;
-  prev: string | null;
-  next: string | null;
-  toc: Heading[];
-}
-
-export const metaDataSchema = z.object({
-  title: z.string(),
-  subtitle: z.string(),
-  author: z.string(),
-  published: z.number().optional(),
-  publisher: z.string().optional(),
-  keywords: z.string().array().optional(),
-  edition: z.string().optional(),
+const publicationSumSchema = z.object({
+  all: z.object({
+    words: z.number(),
+    chars: z.number(),
+    ideas: z.number(),
+  }),
+  chapters: z.object({
+    words: z.number(),
+    chars: z.number(),
+    ideas: z.number(),
+  }),
 });
 
-type Metadata = z.infer<typeof metaDataSchema>;
+export type PublicationSum = z.infer<typeof publicationSumSchema>;
+
+const documentMetadataSchema = z.object({
+  title: z.string(),
+  file: z.string(),
+  words: z.number(),
+  chars: z.number(),
+  ideas: z.number(),
+  role: z.nativeEnum(DocRole),
+  order: orderSchema,
+  prev: z.string().nullable(),
+  next: z.string().nullable(),
+  toc: Heading.array(),
+});
+
+export type DocumentMetadata = z.infer<typeof documentMetadataSchema>;
 
 // https://github.com/orgs/next-book/teams/nb-core/discussions/1
 
-export default interface Manifest extends Metadata {
-  identifier: Identifier;
-  languageCode: LanguageCode;
-  revision: Revision;
-  generatedAt: {
-    date: string;
-    unix: number;
-  };
-  readingOrder: string[];
-  documents: DocumentMetadata[];
-  totals: PublicationSum;
-  keywords?: string[];
-  root: Root;
-  preview: Preview;
-}
+export const manifestSchema = z.object({
+  identifier: z.string(),
+  languageCode: z.string(),
+  revision: revisionSchema,
+  generatedAt: z.object({
+    date: z.string(),
+    unix: z.number(),
+  }),
+  readingOrder: z.string().array(),
+  documents: documentMetadataSchema.array(),
+  totals: publicationSumSchema,
+  keywords: z.string().array().optional(),
+  root: rootSchema,
+  preview: previewSchema,
+});
+
+type Manifest = z.infer<typeof manifestSchema>;
+
+export default Manifest;

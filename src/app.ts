@@ -9,6 +9,7 @@ import slug from 'slug';
 import tagDocument from './tagger';
 import i18n from './i18n';
 import { Config } from './config';
+import { DOMStringLike } from './utils/dom';
 import { gaugeDocument, gaugePublication, PublicationStats } from './gauge';
 import getDocumentToc, { getToc } from './toc';
 import {
@@ -59,23 +60,24 @@ export default function map(
 
   // gauge
   const lengths = gaugePublication(documents);
-  const pubMetadata = gatherMetadata(documents, filenames, readingOrder, lengths);
+  // internal metadata
+  const metadata = gatherMetadata(documents, filenames, readingOrder, lengths, conf.root);
 
   const manifest = composeManifest(
     conf,
-    pubMetadata,
+    metadata,
     readingOrder,
-    sumPublication(pubMetadata),
+    sumPublication(metadata),
     revision
   );
 
-  addMetaNavigation(documents, pubMetadata);
+  addMetaNavigation(documents, metadata);
 
   // set language
   i18n.changeLanguage(conf.languageCode);
 
   documents.forEach((doc, index) => {
-    // add nav
+    // check if root exists
 
     //preview
     if (conf.preview.isPreview) addFullTextUrl(doc, conf.preview.fullTextUrl, conf.root);
@@ -88,9 +90,9 @@ export default function map(
 
     // add roles
     addIdentifier(doc, manifest.identifier);
-    addDocRoles(doc, pubMetadata, index);
+    addDocRoles(doc, metadata, index);
     addDefaultBodyClass(doc);
-    addToc(doc, getToc(pubMetadata, conf.tocBase));
+    addToc(doc, getToc(metadata, conf.tocBase));
   });
 
   return { manifest, documents: exportDoms(doms, conf.output) };
@@ -102,7 +104,7 @@ function composeManifest(
   readingOrder: string[],
   totals: PublicationSum,
   revision: Revision
-): Manifest {
+): Manifest | never {
   const id = [
     config.meta.author?.split(' ').pop(),
     config.meta.title,
@@ -162,16 +164,23 @@ function gatherMetadata(
   documents: Document[],
   filenames: string[],
   readingOrder: string[],
-  lengths: PublicationStats
+  lengths: PublicationStats,
+  root: DOMStringLike
 ): DocumentMetadata[] {
   console.log('\nGathering metadata…');
 
   return documents.map((document, index) => {
-    const title = document.querySelector('title')?.textContent;
-    if (!title) throw new Error('Document title later required by interface is missing.');
+    const titleElement = document.querySelector('title');
+    if (!titleElement) throw Error(`Document <title> element missing.`);
+    const title = titleElement.textContent;
+    if (!title) throw Error(`Document <title> content missing.`);
     const file = filenames[index];
     const { words, chars, ideas } = lengths[index];
     const toc = getDocumentToc(document);
+
+    const rootElement = document.querySelector(root);
+    if (!rootElement) throw Error(`Document root "${root}" element missing.`);
+
     const docRoleMeta = document
       .querySelector<MetaDocRoleElement>('meta[name="nb-role"]')
       ?.getAttribute('content');
@@ -198,7 +207,7 @@ function gatherMetadata(
         ? readingOrder[pos + 1]
         : null;
 
-    return {
+    const metadata: DocumentMetadata = {
       title,
       file,
       words,
@@ -210,6 +219,8 @@ function gatherMetadata(
       next,
       toc,
     };
+
+    return metadata;
   });
 }
 
