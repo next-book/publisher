@@ -19,7 +19,14 @@ import {
   addFullTextUrl,
 } from './chapter-navigation';
 import Manifest, { DocRole, PublicationSum, Revision, DocumentMetadata } from '../shared/manifest';
-import { StyleClass, MetaDocRoleElement, MetaIdentifierElement, Id, Rel } from '../shared/dom';
+import {
+  MetaName,
+  StyleClass,
+  MetaDocRoleElement,
+  MetaIdentifierElement,
+  Id,
+  Rel,
+} from '../shared/dom';
 import { assertUnreachable } from './utils/unreachable';
 
 interface MappedPublication {
@@ -245,7 +252,7 @@ function gatherMetadata(
     if (!rootElement) throw Error(`Document root "${root}" element missing.`);
 
     const docRoleMeta = document
-      .querySelector<MetaDocRoleElement>('meta[name="nb-role"]')
+      .querySelector<MetaDocRoleElement>(`meta[name="${MetaName.DocRole}"]`)
       ?.getAttribute('content');
 
     const role =
@@ -299,15 +306,15 @@ function addDocRoles(doc: Document, metadata: DocumentMetadata[], index: number)
   const headElement = doc.querySelector('head');
   if (!headElement) throw new Error('Missing <head> HTML element.');
 
-  headElement.querySelector<MetaDocRoleElement>('meta[name="nb-role"]')?.remove();
+  headElement.querySelector<MetaDocRoleElement>(`meta[name="${MetaName.DocRole}"]`)?.remove();
 
   const role = metadata[index].role;
   const el = doc.createElement('meta') as MetaDocRoleElement;
-  el.setAttribute('name', 'nb-role');
+  el.setAttribute('name', MetaName.DocRole);
   el.setAttribute('content', role);
   headElement.appendChild(el);
 
-  doc.body.classList.add(`nb-role-${role}`);
+  doc.body.classList.add(`${MetaName.DocRole}-${role}`);
 }
 
 function addLanguageCode(doc: Document, code: string): void {
@@ -321,7 +328,7 @@ function addLanguageCode(doc: Document, code: string): void {
 
 function addIdentifier(doc: Document, identifier: string) {
   const el = doc.createElement('meta') as MetaIdentifierElement;
-  el.setAttribute('name', 'nb-identifier');
+  el.setAttribute('name', MetaName.Identifier);
   el.setAttribute('content', identifier);
   const head = doc.querySelector('head');
   if (!head) throw new Error('Missing head element.');
@@ -386,7 +393,7 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
     if (docMeta['order'])
       extra.push({
         tagName: 'meta',
-        name: 'nb-order',
+        name: MetaName.Order,
         content: docMeta['order']?.toString(),
       });
 
