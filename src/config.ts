@@ -236,14 +236,10 @@ function loadConfig(srcDir: PathLike, fullTextUrl?: string): Config | never {
   const config = parseConfig({ ...partialConfig, preview: { ...preview } });
 
   // apply preview options
-  if (preview.isPreview) {
+  if (config.preview.isPreview) {
     console.log('Preparing preview version of the book.');
-    if (config.readingOrder) {
-      config.readingOrder = config.readingOrder?.slice(0, preview.chaptersSlice);
-      (config.preview as PreviewTrue).removeChapters = config.readingOrder.slice(
-        preview.chaptersSlice
-      );
-    }
+    config.preview.removeChapters = config.readingOrder.slice(config.preview.chaptersSlice);
+    config.readingOrder = config.readingOrder.slice(0, config.preview.chaptersSlice);
   }
 
   return config;
