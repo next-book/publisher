@@ -27,6 +27,7 @@ export enum TagClass {
 export enum TocClass {
   Headings = 'headings-toc',
   PlainList = 'plain',
+  Excluded = 'excluded',
 }
 
 export enum NavClass {

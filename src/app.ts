@@ -102,7 +102,7 @@ export default function map(
     addIdentifier(doc, manifest.identifier);
     addDocRoles(doc, metadata, index);
     addDefaultBodyClass(doc);
-    addToc(doc, getToc(metadata, conf.tocBase));
+    addToc(doc, getToc(metadata, conf.preview, conf.tocBase));
   });
 
   return { manifest, documents: exportDoms(doms, conf.output) };
