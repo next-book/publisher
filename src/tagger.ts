@@ -6,60 +6,60 @@ import { Config, Delimiter, Selectors } from './config';
 import produce from './producer';
 import parse from './parser';
 import { DOMStringLike } from './utils/dom';
-
-const IDEA_NAME = 'idea';
-const CHUNK_NAME = 'chunk';
-const SKIP_NAME = 'nb-skip';
-const refNumAttr = 'data-nb-ref-number';
+import { TagClass as Class, Id, TagAttr, classSelector } from '../shared/dom';
 
 /**
  * Recognizes and tags chunks and ideas in a document
  *
  * @param document - DOM document
  * @param options - config options
- * @returns mutates DOM document
-with marked chunks by {@link markElementsToBeTagged}. */
+ * @returns mutates DOM document with marked chunks
+ * by {@link markElementsToBeTagged}. */
 export default function tagDocument(document: Document, options: Config): void {
   markElementsToBeTagged(document, options.root, options.selectors);
   tagIdeas(document, options.delimiter);
 
-  numberEls(document, `.${CHUNK_NAME}`, CHUNK_NAME);
-  numberEls(document, `.${IDEA_NAME}`, IDEA_NAME);
+  numberEls(document, classSelector(Class.Chunk), Class.Chunk);
+  numberEls(document, classSelector(Class.Idea), Id.Idea);
 }
 
 /**
  * Mark DOM Elements to be tagged
  *
  * @remarks
- * Skips nested nodes and nodes with SKIP_NAME class (and their child * nodes).
+ * Skips nested nodes and nodes with {@link TagClass.Skip} enum string (and their child * nodes).
  *
  * @param document - DOM document
  * @param root - Root element
  * @param selectors - Array of selectors or a {@link SelectorFn}
  * @returns Modifies DOM document
  */
-function markElementsToBeTagged(document: Document, root: string, selectors: Selectors): void {
+export function markElementsToBeTagged(
+  document: Document,
+  root: string,
+  selectors: Selectors
+): void {
+  if (Array.isArray(selectors) && selectors.length == 0)
+    throw new Error('Selectors cannot be empty array.');
   const rootElement = root ? document.querySelector(root) : document;
-  if (!rootElement) {
-    console.error(
+  if (!rootElement)
+    throw new Error(
       `No root "${root}" element found in document titled "${
         document?.querySelector('title')?.innerHTML
       }".`
     );
-    return;
-  }
 
   const elements =
     typeof selectors === 'function'
       ? selectors(rootElement)
-      : rootElement.querySelectorAll(selectors.join(', ')); // beware: there was no join in the code before typescript
+      : rootElement.querySelectorAll(selectors.join(', '));
   if (elements)
     elements.forEach(el => {
       if (
-        !(el.closest(`.${SKIP_NAME}`) || el.classList.contains(SKIP_NAME)) &&
+        !(el.closest(`.${Class.Skip}`) || el.classList.contains(Class.Skip)) &&
         !hasAncestorChunk(el, elements)
       ) {
-        el.classList.add(CHUNK_NAME);
+        el.classList.add(Class.Chunk);
       }
     });
 }
@@ -71,7 +71,7 @@ function markElementsToBeTagged(document: Document, root: string, selectors: Sel
  * @param elements - List of elements
  * @returns Returns the boolean value of the assertion
  */
-function hasAncestorChunk(testedEl: Element, elements: NodeListOf<Element>): boolean {
+export function hasAncestorChunk(testedEl: Element, elements: NodeListOf<Node>): boolean {
   return (
     [...elements].filter(el => {
       if (el === testedEl) return false;
@@ -88,8 +88,8 @@ function hasAncestorChunk(testedEl: Element, elements: NodeListOf<Element>): boo
  * @param delimiter - Delimiter of ideas.
  * @returns Modifies the Document
  */
-function tagIdeas(document: Document, delimiter: Delimiter): void {
-  document.querySelectorAll(`.${CHUNK_NAME}`).forEach(chunk => {
+export function tagIdeas(document: Document, delimiter: Delimiter): void {
+  document.querySelectorAll(`.${Class.Chunk}`).forEach(chunk => {
     const tagged = produce(document, parse(chunk, delimiter));
     chunk.parentNode?.replaceChild(tagged, chunk);
   });
@@ -104,12 +104,12 @@ function tagIdeas(document: Document, delimiter: Delimiter): void {
  * @param name - Name used in creating id attributes (<name>#)
  * @returns Modifies DOM document
  */
-function numberEls(document: Document, selector: DOMStringLike, name: string): void {
+export function numberEls(document: Document, selector: DOMStringLike, name: string): void {
   Array.prototype.forEach.call(document.querySelectorAll(selector), (el, index) => {
     const nonZeroId = index + 1;
-    el.setAttribute(refNumAttr, nonZeroId);
+    el.setAttribute(TagAttr.RefNum, nonZeroId);
 
-    if (name === IDEA_NAME) {
+    if (name === Id.Idea) {
       if (el.getAttribute('id')) {
         const wrapper = document.createElement('SPAN');
         wrapper.setAttribute('id', `${name}${nonZeroId}`);

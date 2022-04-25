@@ -5,6 +5,7 @@
  */
 import { ParsedObj, Idea, IdeaPiece } from './structures';
 import { isNode } from './utils/dom';
+import { TagClass } from '../shared/dom';
 
 /**
  * Produces ideas from a parsedObj
@@ -14,6 +15,8 @@ import { isNode } from './utils/dom';
  * @returns HTML node
  */
 export default function produce(document: Document, parsedObj: ParsedObj): Node {
+  if (!document) throw new Error('Expected document undefined.');
+  if (!parsedObj) throw new Error('Expected parsedObj undefined.');
   const fragment = document.createDocumentFragment();
   const { node, ideas, delimiter } = parsedObj;
 
@@ -41,13 +44,14 @@ export default function produce(document: Document, parsedObj: ParsedObj): Node 
 /**
  * Produces HTML span idea from an array of parts.
  *
+ * @remarks Provided idea should be guaranteed to NOT contain ParsedObj by its caller.
  * @param idea - The idea
  * @param document - DOM document
  * @returns HTML Element span
  */
-function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document): HTMLElement {
-  const span = document.createElement('SPAN');
-  span.classList.add('idea');
+export function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document): HTMLElement {
+  const span = document.createElement('span');
+  span.classList.add(TagClass.Idea);
 
   idea.forEach(item => {
     if (typeof item === 'string') {
@@ -66,13 +70,19 @@ function produceHTMLSpanIdea(idea: IdeaPiece[], document: Document): HTMLElement
  * @param idea - The idea
  * @returns True if contains parsed object, False otherwise.
  */
-function containsParsedObj(idea: IdeaPiece[]) {
-  return idea.reduce((acc, item) => acc || item instanceof ParsedObj, false);
+export function containsParsedObj(idea: IdeaPiece[]): boolean {
+  return idea.reduce<boolean>((acc, item) => acc || item instanceof ParsedObj, false);
 }
 
-function anchorObject(idea: Idea, document: Document) {
+/**
+ * Returns document containing the appropriate children for idea.
+ * @remarks Provided idea should be guaranteed to contain ParsedObj by its caller.
+ * @param idea IdeaPiece
+ * @param document
+ * @returns
+ */
+export function anchorObject(idea: IdeaPiece[], document: Document) {
   const fragment = document.createDocumentFragment();
-  if (!Array.isArray(idea)) throw new Error('Idea is not an array.');
 
   idea.forEach(item => {
     if (item instanceof ParsedObj) {

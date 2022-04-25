@@ -3,7 +3,7 @@
  * to update HTML for next-book specific use cases.
  * @module
  */
-import { ParsedObj, Ideas } from './structures';
+import { ParsedObj, Ideas, IdeaPiece } from './structures';
 import { Delimiter } from './config';
 
 export class Separator {}
@@ -17,8 +17,10 @@ export class Separator {}
  * @param delimiter - The delimiter
  * @returns An instance of {@link ParsedObj}
  */
-export default function parse(node: Node | HTMLElement, delimiter: Delimiter): ParsedObj {
-  const pieces: (Node | string | Separator | ParsedObj)[] = [];
+export default function parse(node: Node, delimiter: Delimiter): ParsedObj {
+  if (!node) throw new Error('Expected node undefined.');
+  if (typeof delimiter == 'undefined') throw new Error('Expected delimiter undefined.');
+  const pieces: IdeaPiece[] = [];
   // first create a flat list of strings, HTML Elements, ParsedObjs, and Separators
   node.childNodes.forEach(child => {
     if (child.nodeType === child.TEXT_NODE) {
@@ -43,6 +45,7 @@ export default function parse(node: Node | HTMLElement, delimiter: Delimiter): P
 
   pieces.forEach(piece => {
     if (piece instanceof Separator) ideas.addIdea();
+    // is it anchor or not
     else if (piece instanceof ParsedObj) ideas.addObj(piece);
     else ideas.appendToIdea(piece);
   });

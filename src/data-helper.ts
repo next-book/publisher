@@ -2,40 +2,14 @@ import fs from 'fs';
 import { JSDOM } from 'jsdom';
 import path from 'path';
 import rimraf from 'rimraf';
-import { Manifest } from './app';
 import copy from 'recursive-copy';
-import * as sw from './service-worker/builder';
-import { Config } from './config';
-import { TocBase } from './toc';
-
-type PathLike = string;
+import Manifest from '../shared/manifest';
+import { PathLike } from './utils/fs';
 
 type PrepContent = {
   content: string[];
   filenames: string[];
 };
-
-interface BookConfigMetaData {
-  title?: string;
-  subtitle: string;
-  author: string;
-  published: number;
-  keywords: string[];
-}
-
-interface BookConfig extends Config {
-  meta: BookConfigMetaData;
-  readingOrder: string[];
-  removeChapters: string[];
-  tocBase: TocBase;
-  static: string[];
-}
-
-interface PreviewConfig extends Config {
-  readingOrder: string[];
-  removeChapters: string[];
-  fullTextUrl: string;
-}
 
 type Pair = { from: string; to: string };
 
@@ -61,29 +35,6 @@ export function prepContent(
   content.forEach(file => console.log(`> ${file.name}`));
 
   return { content: content.map(file => file.data), filenames: content.map(file => file.name) };
-}
-
-export function prepConfig(srcDir: PathLike): BookConfig | null {
-  const configPath = path.join(srcDir, '/book.json');
-  console.log(`Looking up a custom book config in "${configPath}/".`);
-
-  const bookConfig: BookConfig = fs.existsSync(configPath)
-    ? JSON.parse(fs.readFileSync(configPath, 'utf8'))
-    : null;
-  console.log(bookConfig ? 'Found custom book config.' : 'Custom book config not found.');
-
-  return bookConfig;
-}
-
-export function prepPreviewConfig(srcDir: PathLike, fullTextUrl: string): PreviewConfig {
-  console.log('Preparing preview version of the book.');
-
-  const config = prepConfig(srcDir);
-  return Object.assign({}, config, {
-    readingOrder: config?.readingOrder?.slice(0, 3),
-    removeChapters: config?.readingOrder?.slice(3),
-    fullTextUrl,
-  });
 }
 
 export function writeOutput(
@@ -132,18 +83,10 @@ export function copyFolder(pairs: Pair[], finalCallback: () => void): void {
    * hence the type assertion below is ok
    */
 
-  const pair = (pairs.shift() as unknown) as Pair;
+  const pair = pairs.shift() as unknown as Pair;
 
   copy(pair.from, pair.to, () => {
     if (pairs.length > 0) copyFolder(pairs, finalCallback);
     else finalCallback();
-  });
-}
-
-export async function buildServiceWorker(dir: PathLike, revision: string): Promise<void> {
-  console.log('Building service worker…');
-
-  await sw.build(dir, revision).then(code => {
-    fs.writeFileSync(path.join(dir, 'service-worker.js'), code, 'utf8');
   });
 }

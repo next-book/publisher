@@ -1,16 +1,8 @@
 /**
- * @module
+ * @module Gauge
  */
 
-/**
- * Names of attributes used to store gauge data.
- */
-const attrNames = {
-  /** Number of characters */
-  chars: 'data-nb-chars',
-  /** Number of words */
-  words: 'data-nb-words',
-};
+import { GaugeAttr, classSelector, TagClass } from '../shared/dom';
 
 /**
  * Sum of values stored in attribute of provided elements.
@@ -18,12 +10,14 @@ const attrNames = {
  * @param attr - The attribute name
  * @returns Sum of values stored in attribute
  */
-const sumAttr = (attr: string) => (ideas: NodeListOf<Element>): number =>
-  Array.from(ideas).reduce((acc, idea: Element) => {
-    const iattr = idea.getAttribute(attr);
-    if (!iattr) return acc;
-    return acc + parseInt(iattr, 10);
-  }, 0);
+const sumAttr =
+  (attr: string) =>
+  (ideas: NodeListOf<Element>): number =>
+    Array.from(ideas).reduce((acc, idea: Element) => {
+      const iattr = idea.getAttribute(attr);
+      if (!iattr) return acc;
+      return acc + parseInt(iattr, 10);
+    }, 0);
 
 /**
  * Sets sum of values stored in atribute to a same-called attribute
@@ -32,9 +26,14 @@ const sumAttr = (attr: string) => (ideas: NodeListOf<Element>): number =>
  * @param attr - The attribute name
  * @returns Mutates DOM. Sets the sum in the provided attribute of the element.
  */
-const setSumAttr = (attr: string) => (el: Element): void => {
-  el.setAttribute(attr, sumAttr(attr)(el.querySelectorAll('.idea')).toString());
-};
+const setSumAttr =
+  (attr: string) =>
+  (el: Element): void => {
+    el.setAttribute(
+      attr,
+      sumAttr(attr)(el.querySelectorAll(classSelector(TagClass.Idea))).toString()
+    );
+  };
 
 /**
  * Counts number of characters of each `.idea` element and stores the value
@@ -44,14 +43,14 @@ const setSumAttr = (attr: string) => (el: Element): void => {
  * @returns Mutates DOM. Sets number of characters in the idea’s attribute.
  */
 function countChars(document: Document): void {
-  Array.prototype.map.call(document.querySelectorAll('.idea'), idea => {
-    idea.setAttribute(attrNames.chars, idea.textContent.length);
+  Array.prototype.map.call(document.querySelectorAll(classSelector(TagClass.Idea)), idea => {
+    idea.setAttribute(GaugeAttr.Chars, idea.textContent.length);
   });
 }
 
 function countWords(document: Document): void {
-  Array.prototype.map.call(document.querySelectorAll('.idea'), idea => {
-    idea.setAttribute(attrNames.words, idea.textContent.split(/\s+/g).length);
+  Array.prototype.map.call(document.querySelectorAll(classSelector(TagClass.Idea)), idea => {
+    idea.setAttribute(GaugeAttr.Words, idea.textContent.split(/\s+/g).length);
   });
 }
 
@@ -68,11 +67,11 @@ function gaugeContent(document: Document, attr: string, gaugeFn: (doc: Document)
  * @returns Modifies DOM document
  */
 export function gaugeDocument(document: Document): void {
-  gaugeContent(document, attrNames.words, countWords);
-  gaugeContent(document, attrNames.chars, countChars);
+  gaugeContent(document, GaugeAttr.Words, countWords);
+  gaugeContent(document, GaugeAttr.Chars, countChars);
 }
 
-export type DocumentStats = {
+type DocumentStats = {
   words: number;
   chars: number;
   ideas: number;
@@ -89,8 +88,8 @@ export type PublicationStats = DocumentStats[];
  */
 export function gaugePublication(documents: Document[]): PublicationStats {
   return documents.map(document => ({
-    words: parseInt(document.body.getAttribute(attrNames.words) as string, 10),
-    chars: parseInt(document.body.getAttribute(attrNames.chars) as string, 10),
-    ideas: document.querySelectorAll('.idea').length,
+    words: parseInt(document.body.getAttribute(GaugeAttr.Words) as string, 10),
+    chars: parseInt(document.body.getAttribute(GaugeAttr.Chars) as string, 10),
+    ideas: document.querySelectorAll(classSelector(TagClass.Idea)).length,
   }));
 }

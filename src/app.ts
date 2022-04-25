@@ -8,57 +8,26 @@ import pretty from 'pretty';
 import slug from 'slug';
 import tagDocument from './tagger';
 import i18n from './i18n';
-import loadConfig, { Config, Metadata as ConfigMetadata } from './config';
+import { Config } from './config';
+import { DOMStringLike } from './utils/dom';
 import { gaugeDocument, gaugePublication, PublicationStats } from './gauge';
-import getDocumentToc, { getToc, Heading } from './toc';
-import * as chapterNav from './chapter-navigation';
-import { Revision } from './revision';
-
-enum DocRole {
-  Break = 'break',
-  Chapter = 'chapter',
-  Cover = 'cover',
-  Colophon = 'colophon',
-  Other = 'other',
-}
-
-interface PublicationSum {
-  all: {
-    words: number;
-    chars: number;
-    ideas: number;
-  };
-  chapters: {
-    words: number;
-    chars: number;
-    ideas: number;
-  };
-}
-
-export interface DocumentMetadata {
-  title: string | null | undefined;
-  file: string;
-  words: number;
-  chars: number;
-  ideas: number;
-  role: DocRole;
-  order: number | null;
-  prev: string | null;
-  next: string | null;
-  toc: Heading[];
-}
-
-export interface Manifest extends ConfigMetadata {
-  identifier: string;
-  revision: Revision;
-  generatedAt: {
-    date: string;
-    unix: number;
-  };
-  documents: DocumentMetadata[];
-  totals: PublicationSum;
-  keywords?: string[] | undefined;
-}
+import getDocumentToc, { getToc } from './toc';
+import {
+  addChapterStartAnchor,
+  addChapterEndAnchor,
+  addChapterInPageNavigation,
+  addFullTextUrl,
+} from './chapter-navigation';
+import Manifest, { DocRole, PublicationSum, Revision, DocumentMetadata } from '../shared/manifest';
+import {
+  MetaName,
+  StyleClass,
+  MetaDocRoleElement,
+  MetaIdentifierElement,
+  Id,
+  Rel,
+} from '../shared/dom';
+import { assertUnreachable } from './utils/unreachable';
 
 interface MappedPublication {
   manifest: Manifest;
@@ -77,12 +46,9 @@ interface MappedPublication {
 export default function map(
   content: string[],
   filenames: string[],
-  options: Config,
+  conf: Config,
   revision: Revision
 ): MappedPublication {
-  const conf = loadConfig(options);
-  console.log(`\nUsing mapper config:\n${dumpArray(conf)}\n`);
-
   const doms = content.map(doc => new Jsdom(doc));
   const documents = doms.map(dom => dom.window.document);
   const { readingOrder } = conf;
@@ -92,10 +58,11 @@ export default function map(
   const bar = new Progress.Bar({}, Progress.Presets.shades_classic);
   bar.start(documents.length, 0);
 
+  validateDocuments(documents, filenames, conf.root);
+
   documents.forEach((document, index) => {
     tagDocument(document, conf);
     gaugeDocument(document);
-
     bar.update(index + 1);
   });
 
@@ -103,57 +70,130 @@ export default function map(
 
   // gauge
   const lengths = gaugePublication(documents);
-  if (!readingOrder) throw new Error('Reading order not defined in config.');
-  const pubMetadata = gatherMetadata(documents, filenames, readingOrder, lengths);
+  // internal metadata
+  const metadata = gatherMetadata(documents, filenames, readingOrder, lengths, conf.root);
 
-  if (!conf.meta) throw new Error('Metadata not defined in config.');
   const manifest = composeManifest(
-    conf.meta,
-    pubMetadata,
+    conf,
+    metadata,
     readingOrder,
-    sumPublication(pubMetadata),
+    sumPublication(metadata),
     revision
   );
 
-  //preview
-  if (conf.fullTextUrl) chapterNav.addFullTextUrl(documents, conf.fullTextUrl, conf.root);
+  addMetaNavigation(documents, metadata);
 
-  // set language and add code to html
+  // set language
   i18n.changeLanguage(conf.languageCode);
-  addLanguageCode(documents, conf.languageCode);
 
-  // add nav
-  addMetaNavigation(documents, pubMetadata);
-  chapterNav.addChapterStartAnchor(documents, conf.root);
-  chapterNav.addChapterEndAnchor(documents, conf.root);
-  chapterNav.addChapterInPageNavigation(documents, conf.root);
+  documents.forEach((doc, index) => {
+    // check if root exists
 
-  // add roles
-  addIdentifier(documents, manifest.identifier);
-  addDocRoles(documents, pubMetadata);
-  addDefaultBodyClasses(documents);
-  addToc(documents, getToc(pubMetadata, conf.tocBase));
+    //preview
+    if (conf.preview.isPreview) addFullTextUrl(doc, conf.preview.fullTextUrl, conf.root);
+
+    addLanguageCode(doc, conf.languageCode);
+
+    addChapterStartAnchor(doc, conf.root);
+    addChapterEndAnchor(doc, conf.root);
+    addChapterInPageNavigation(doc, conf.root);
+
+    // add roles
+    addIdentifier(doc, manifest.identifier);
+    addDocRoles(doc, metadata, index);
+    addDefaultBodyClass(doc);
+    addToc(doc, getToc(metadata, conf.preview, conf.tocBase));
+  });
 
   return { manifest, documents: exportDoms(doms, conf.output) };
 }
 
-function composeManifest(
-  meta: ConfigMetadata,
+enum MetadataError {
+  HtmlMissing,
+  HeadMissing,
+  RootMissing,
+  TitleMissing,
+  TitleTextMissing,
+}
+
+type ValidationError = { file: string; errors: MetadataError[] };
+
+function validateDocuments(documents: Document[], filenames: string[], root: DOMStringLike) {
+  const docErrors: ValidationError[] = [];
+  documents.forEach((doc, index) => {
+    const errors: MetadataError[] = [];
+    const rootElement = doc.querySelector(root);
+    if (!rootElement) errors.push(MetadataError.RootMissing);
+    const title = doc.querySelector('title');
+    if (!title) errors.push(MetadataError.TitleMissing);
+    const titleText = title?.textContent;
+    if (!titleText) errors.push(MetadataError.TitleTextMissing);
+    /**
+     * We check for <html> and <head> even though, they are always
+     * found even when not provided in the document source for some reason.
+     */
+    const htmlElement = doc.querySelector('html');
+    if (!htmlElement) errors.push(MetadataError.HtmlMissing);
+    const headElement = doc.querySelector('head');
+    if (!headElement) errors.push(MetadataError.HeadMissing);
+    if (errors.length > 0) docErrors.push({ file: filenames[index], errors });
+  });
+  if (docErrors.length === 0) return;
+  console.error('\nInsufficient document content found in:');
+  docErrors.forEach(doc => {
+    console.error('\n' + doc.file);
+    doc.errors.forEach(code => {
+      switch (code) {
+        case MetadataError.HtmlMissing:
+          console.error(` - <html> element is missing.`);
+          break;
+        case MetadataError.HeadMissing:
+          console.error(` - <head> element is missing.`);
+          break;
+        case MetadataError.RootMissing:
+          console.error(` - Root element "${root}" is missing.`);
+          break;
+        case MetadataError.TitleMissing:
+          console.error(` - <title> element is missing.`);
+          break;
+        case MetadataError.TitleTextMissing:
+          console.error(` - <title> text content is missing.`);
+          break;
+        default:
+          assertUnreachable(code);
+      }
+    });
+  });
+  console.error('\n');
+  throw new Error('Document content not sufficient.');
+}
+
+export function composeManifest(
+  config: Config,
   documents: DocumentMetadata[],
   readingOrder: string[],
   totals: PublicationSum,
   revision: Revision
-): Manifest {
-  const id = [meta?.author?.split(' ').pop(), meta.title, meta.published, revision]
+): Manifest | never {
+  const id = [
+    config.meta.author?.split(' ').pop(),
+    config.meta.title,
+    config.meta.published,
+    revision,
+  ]
     .filter(str => str)
     .join(' ');
 
   const time = new Date();
 
   return {
-    ...meta,
+    preview: { ...config.preview },
+    ...config.meta,
+    languageCode: config.languageCode,
+    root: config.root,
     identifier: slug(id, { lower: true }),
     revision,
+    readingOrder: readingOrder,
     generatedAt: {
       date: String(time),
       unix: time.getTime(),
@@ -194,19 +234,29 @@ function gatherMetadata(
   documents: Document[],
   filenames: string[],
   readingOrder: string[],
-  lengths: PublicationStats
+  lengths: PublicationStats,
+  root: DOMStringLike
 ): DocumentMetadata[] {
   console.log('\nGathering metadata…');
 
   return documents.map((document, index) => {
-    const title = document.querySelector('title')?.textContent;
+    const titleElement = document.querySelector('title');
+    if (!titleElement) throw Error(`Document <title> element missing.`);
+    const title = titleElement.textContent;
+    if (!title) throw Error(`Document <title> content missing.`);
     const file = filenames[index];
     const { words, chars, ideas } = lengths[index];
     const toc = getDocumentToc(document);
-    const docRoleMeta = document.querySelector('meta[name="nb-role"]')?.getAttribute('content');
+
+    const rootElement = document.querySelector(root);
+    if (!rootElement) throw Error(`Document root "${root}" element missing.`);
+
+    const docRoleMeta = document
+      .querySelector<MetaDocRoleElement>(`meta[name="${MetaName.DocRole}"]`)
+      ?.getAttribute('content');
 
     const role =
-      docRoleMeta && Object.values(DocRole).includes(docRoleMeta as DocRole)
+      docRoleMeta && Object.values(DocRole).includes(docRoleMeta)
         ? docRoleMeta
         : file === 'index.html'
         ? DocRole.Cover
@@ -227,7 +277,7 @@ function gatherMetadata(
         ? readingOrder[pos + 1]
         : null;
 
-    return {
+    const metadata: DocumentMetadata = {
       title,
       file,
       words,
@@ -239,64 +289,57 @@ function gatherMetadata(
       next,
       toc,
     };
+
+    return metadata;
   });
 }
 
-function addDefaultBodyClasses(documents: Document[]) {
-  documents.forEach(document => {
-    document.querySelector('body')?.classList.add('nb-custom-style');
-  });
+function addDefaultBodyClass(doc: Document) {
+  doc.querySelector('body')?.classList.add(StyleClass.Custom);
 }
 
-function addToc(documents: Document[], toc: DocumentFragment) {
-  documents.forEach(document => {
-    document.querySelector('body')?.prepend(toc.cloneNode(true));
-  });
+function addToc(doc: Document, toc: DocumentFragment) {
+  doc.querySelector('body')?.prepend(toc.cloneNode(true));
 }
 
-function addDocRoles(documents: Document[], metadata: DocumentMetadata[]) {
-  documents.forEach((document, index) => {
-    const headElement = document.querySelector('head');
-    if (!headElement) throw new Error('Missing <head> HTML element.');
+function addDocRoles(doc: Document, metadata: DocumentMetadata[], index: number) {
+  const headElement = doc.querySelector('head');
+  if (!headElement) throw new Error('Missing <head> HTML element.');
 
-    headElement.querySelector('meta[name="nb-role"]')?.remove();
+  headElement.querySelector<MetaDocRoleElement>(`meta[name="${MetaName.DocRole}"]`)?.remove();
 
-    const role = metadata[index].role;
-    const el = document.createElement('META');
-    el.setAttribute('name', 'nb-role');
-    el.setAttribute('content', role);
-    headElement.appendChild(el);
+  const role = metadata[index].role;
+  const el = doc.createElement('meta') as MetaDocRoleElement;
+  el.setAttribute('name', MetaName.DocRole);
+  el.setAttribute('content', role);
+  headElement.appendChild(el);
 
-    document.body.classList.add(`nb-role-${role}`);
-  });
+  doc.body.classList.add(`${MetaName.DocRole}-${role}`);
 }
 
-function addLanguageCode(documents: Document[], code: string): void {
+function addLanguageCode(doc: Document, code: string): void {
   console.log('\nAdding language code…');
-  if (code)
-    documents.forEach(document => {
-      const htmlElement = document.querySelector('html');
-      if (!htmlElement) throw new Error('Missing <html> HTML element.');
-      htmlElement.setAttribute('lang', code);
-    });
+  if (code) {
+    const htmlElement = doc.querySelector('html');
+    if (!htmlElement) throw new Error('Missing <html> HTML element.');
+    htmlElement.setAttribute('lang', code);
+  }
 }
 
-function addIdentifier(documents: Document[], identifier: string) {
-  documents.forEach(document => {
-    const el = document.createElement('META');
-    el.setAttribute('name', 'nb-identifier');
-    el.setAttribute('content', identifier);
-    const head = document.querySelector('head');
-    if (!head) throw new Error('Missing head element.');
-    head.appendChild(el);
-  });
+function addIdentifier(doc: Document, identifier: string) {
+  const el = doc.createElement('meta') as MetaIdentifierElement;
+  el.setAttribute('name', MetaName.Identifier);
+  el.setAttribute('content', identifier);
+  const head = doc.querySelector('head');
+  if (!head) throw new Error('Missing head element.');
+  head.appendChild(el);
 }
 
 /**
  * Adds meta navigation links e.g. to next/prev, license, manifest, homepage
  * to the <head> of documents.
  *
- * @param documents - A list of DOM Documents to add meta navigation to
+ * @param doc - A list of DOM Documents to add meta navigation to
  * @param metadata - Document metadata used for meta navigation links
  * @returns Mutates documents by adding and appending navigation links
  * to `<head>` HTML element.
@@ -315,13 +358,13 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
   } | null;
 
   const base: NavItem[] = [
-    { tagName: 'link', rel: 'index', href: './index.html' },
-    { tagName: 'link', rel: 'license', href: './license.html' },
+    { tagName: 'link', rel: Rel.Index, href: './index.html' },
+    { tagName: 'link', rel: Rel.License, href: './license.html' },
     {
       tagName: 'link',
-      rel: 'publication',
+      rel: Rel.Publication,
       href: './manifest.json',
-      id: 'manifest',
+      id: Id.Manifest,
     },
   ];
 
@@ -330,8 +373,8 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
     base.push({ tagName: 'link', rel: 'colophon', href: colophon });
   }
 
-  documents.forEach((document, index) => {
-    const headElement = document.querySelector('head');
+  documents.forEach((doc, index) => {
+    const headElement = doc.querySelector('head');
     if (!headElement) throw Error('HTML <head> element missing');
 
     const docMeta = metadata[index];
@@ -339,22 +382,22 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
 
     extra.push({
       tagName: 'link',
-      rel: 'prev',
+      rel: Rel.Prev,
       href: docMeta['prev'] ? `./${docMeta['prev']}` : './index.html',
     });
     extra.push({
       tagName: 'link',
-      rel: 'next',
+      rel: Rel.Next,
       href: docMeta['next'] ? `./${docMeta['next']}` : './index.html',
     });
     if (docMeta['order'])
       extra.push({
         tagName: 'meta',
-        name: 'nb-order',
+        name: MetaName.Order,
         content: docMeta['order']?.toString(),
       });
 
-    const self = [{ tagName: 'link', rel: 'self', href: docMeta.file }];
+    const self = [{ tagName: 'link', rel: Rel.Self, href: docMeta.file }];
 
     base
       .concat(extra)
@@ -362,7 +405,7 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
       .filter(meta => meta !== null)
       .forEach(meta => {
         if (!meta) return;
-        const el = document.createElement(meta.tagName);
+        const el = doc.createElement(meta.tagName);
         Object.keys(meta)
           .filter(key => ['name', 'content', 'rel', 'href', 'id'].includes(key))
           .forEach(key => {
@@ -395,19 +438,6 @@ function exportDoms(doms: Jsdom[], format: 'jsdom' | 'html'): (Jsdom | string)[]
   };
 
   return doms.map(dom => routines[format](dom));
-}
-
-/**
- * Dumps array
- *
- * @param arr - Array to dump
- * @returns
- */
-function dumpArray(arr: unknown) {
-  return JSON.stringify(arr, null, 2)
-    .split('\n')
-    .map(line => `>${line}`)
-    .join('\n');
 }
 
 export { map, addMetaNavigation };

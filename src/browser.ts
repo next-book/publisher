@@ -5,7 +5,7 @@
 /* eslint-env browser */
 import tagDocument from './tagger';
 import { gaugeDocument } from './gauge';
-import loadConfig, { Config } from './config';
+import { parseConfig, Config } from './config';
 
 declare global {
   interface Window {
@@ -23,7 +23,7 @@ declare global {
  * @param options - Config options overrides
  */
 function mapHtml(options: Config): void {
-  tagDocument(document, loadConfig(options));
+  tagDocument(document, parseConfig(options));
   gaugeDocument(document);
 }
 

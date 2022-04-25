@@ -3,7 +3,9 @@
  * @module
  */
 import { JSDOM as Jsdom } from 'jsdom';
-import { DocumentMetadata } from './app';
+import { DocumentMetadata, Heading, HeadingLevel } from '../shared/manifest';
+import { TagClass, TocClass, Role } from '../shared/dom';
+import { Preview } from './config';
 
 export type TocBase = TocBaseItem[];
 
@@ -17,16 +19,6 @@ export type TocBaseItem = {
   listType?: ListType;
 };
 
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-
-export interface Heading {
-  index: number;
-  level: HeadingLevel;
-  name: string | null;
-  id: string | null;
-  children: Heading[];
-}
-
 /**
  * Generates a table of contents tree from headings in a Document.
  *
@@ -35,7 +27,9 @@ export interface Heading {
  */
 export default function getDocumentToc(doc: Document): Heading[] {
   const headings = <HTMLHeadingElement[]>[
-    ...doc.querySelectorAll('h1.chunk, h2.chunk, h3.chunk, h4.chunk, h5.chunk, h6.chunk'),
+    ...doc.querySelectorAll(
+      [...Array(6)].map((v, i) => 'h' + (i + 1) + '.' + TagClass.Chunk + ' ').toString()
+    ),
   ];
   return headings
     .map(fetchHeading)
@@ -95,17 +89,23 @@ function isTheNextHeadingOnSameLevel(heading: Heading, currentRoot: Heading): bo
  * @returns Document fragment to be included on top of every document
  */
 
-export function getToc(meta: DocumentMetadata[], tocBase?: TocBase): DocumentFragment {
-  const root = Jsdom.fragment('<nav role="doc-toc"></nav>');
-  const nav = root.querySelector('nav') as HTMLElement;
+export function getToc(
+  meta: DocumentMetadata[],
+  preview: Preview,
+  tocBase?: TocBase
+): DocumentFragment {
+  const root = Jsdom.fragment('<nav role="' + Role.DocToc + '"></nav>');
+  const nav = root.querySelector('nav');
 
   if (tocBase)
-    tocBase.map(item => renderTocItem(item, meta, true)).forEach(el => el && nav.appendChild(el));
+    tocBase
+      .map(item => renderTocItem(item, meta, preview.isPreview ? preview.removeChapters : [], true))
+      .forEach(el => el && nav?.appendChild(el));
   else {
     const ul = Jsdom.fragment('<ul></ul>');
-    const items = meta.map(renderTocItemFromMeta).forEach(el => el && ul.appendChild(el));
-
-    nav.appendChild(ul);
+    const items = meta.map(renderTocItemFromMeta);
+    items.forEach(el => el && ul.appendChild(el));
+    nav?.appendChild(ul);
   }
 
   return root;
@@ -124,9 +124,10 @@ function renderTocItemFromMeta(meta: DocumentMetadata): DocumentFragment {
 function renderTocItem(
   item: TocBaseItem,
   meta: DocumentMetadata[],
-  topLevel: boolean = false
+  removeChapters: string[],
+  topLevel = false
 ): DocumentFragment {
-  const childrenWrapper = renderChildren(item, meta);
+  const childrenWrapper = renderChildren(item, meta, removeChapters);
   if (item.isSection) return childrenWrapper;
 
   const root = Jsdom.fragment('<li><a href=""></a></li>');
@@ -136,6 +137,7 @@ function renderTocItem(
   if (item.link && item.title) {
     link.setAttribute('href', item.link);
     link.innerHTML = item.title;
+    if (removeChapters.includes(item.link)) li.classList.add(TocClass.Excluded);
   }
 
   const docMeta = meta.find(doc => doc.file === item.link);
@@ -158,12 +160,16 @@ function renderTocItem(
   return root;
 }
 
-function renderChildren(item: TocBaseItem, meta: DocumentMetadata[]): DocumentFragment {
+function renderChildren(
+  item: TocBaseItem,
+  meta: DocumentMetadata[],
+  removeChapters: string[]
+): DocumentFragment {
   const { children, isSection, listType } = item;
 
   const childrenWrapper =
     isSection === true || listType === 'plain'
-      ? Jsdom.fragment(`<ul class="plain"></ul>`)
+      ? Jsdom.fragment('<ul class="' + TocClass.PlainList + '"></ul>')
       : listType === 'numbered'
       ? Jsdom.fragment('<ol></ol>')
       : Jsdom.fragment('<ul></ul>');
@@ -172,7 +178,7 @@ function renderChildren(item: TocBaseItem, meta: DocumentMetadata[]): DocumentFr
     const childrenWrapperEl = childrenWrapper.querySelector('ol, ul') as HTMLElement;
 
     children
-      .map(item => renderTocItem(item, meta))
+      .map(item => renderTocItem(item, meta, removeChapters))
       .forEach(el => el && childrenWrapperEl.appendChild(el));
   }
 
@@ -180,7 +186,7 @@ function renderChildren(item: TocBaseItem, meta: DocumentMetadata[]): DocumentFr
 }
 
 function renderDocumentToc(headings: Heading[], file: string): DocumentFragment {
-  const root = Jsdom.fragment('<ol class="headings-toc"></ol>');
+  const root = Jsdom.fragment('<ol class="' + TocClass.Headings + '"></ol>');
   const ol = root.querySelector('ol') as HTMLElement;
 
   headings.map(h => {
