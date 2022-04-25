@@ -70,15 +70,6 @@
 					<div class="lead">
 						<p>Config module</p>
 					</div>
-					<p>The config is being created in following stages:</p>
-					<ol>
-						<li>First in <a href="data_helper.html#prepConfig">prepConfig</a>, the custom book options in the shape of <a href="config.html#PartialConfig">PartialConfig</a> are loaded.</li>
-						<li>Preview feature settings in shape of <a href="config.html#Preview">Preview</a> are being created by appling loaded custom
-							options onto <a href="config.html#previewDefaults">previewDefaults</a>.
-							The preview feature settings are added to the loaded config, together making the
-						shape of <a href="../interfaces/data_helper.PartialConfigWithPreview.html">PartialConfigWithPreview</a>.</li>
-						<li>Since config is guaranteed to have preview settings, it is then used to override {@link configDefaults}.</li>
-					</ol>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -88,14 +79,17 @@
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/config.Config.html" class="tsd-kind-icon">Config</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/config.ConfigWithDeprecated.html" class="tsd-kind-icon">Config<wbr>With<wbr>Deprecated</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#Config" class="tsd-kind-icon">Config</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#Delimiter" class="tsd-kind-icon">Delimiter</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#Metadata" class="tsd-kind-icon">Metadata</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#PartialConfig" class="tsd-kind-icon">Partial<wbr>Config</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#PartialConfigWithDeprecated" class="tsd-kind-icon">Partial<wbr>Config<wbr>With<wbr>Deprecated</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#Preview" class="tsd-kind-icon">Preview</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#PreviewTrue" class="tsd-kind-icon">Preview<wbr>True</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="config.html#SelectorFn" class="tsd-kind-icon">Selector<wbr>Fn</a></li>
@@ -106,13 +100,16 @@
 						<section class="tsd-index-section ">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="config.html#previewDefaults" class="tsd-kind-icon">preview<wbr>Defaults</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="config.html#configSchema" class="tsd-kind-icon">config<wbr>Schema</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="config.html#metaDataSchema" class="tsd-kind-icon">meta<wbr>Data<wbr>Schema</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="config.html#previewSchema" class="tsd-kind-icon">preview<wbr>Schema</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="config.html#default" class="tsd-kind-icon">default</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="config.html#parseConfig" class="tsd-kind-icon">parse<wbr>Config</a></li>
 							</ul>
 						</section>
 					</div>
@@ -121,22 +118,60 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="Config" class="tsd-anchor"></a>
+					<h3>Config</h3>
+					<div class="tsd-signature tsd-kind-icon">Config<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">z.infer</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><a href="config.html#configSchema" class="tsd-signature-type" data-tsd-kind="Variable">configSchema</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L147">src/config.ts:147</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="Delimiter" class="tsd-anchor"></a>
 					<h3>Delimiter</h3>
 					<div class="tsd-signature tsd-kind-icon">Delimiter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/config.ts#L33">src/config.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L29">src/config.ts:29</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="Metadata" class="tsd-anchor"></a>
+					<h3>Metadata</h3>
+					<div class="tsd-signature tsd-kind-icon">Metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">z.infer</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><a href="config.html#metaDataSchema" class="tsd-signature-type" data-tsd-kind="Variable">metaDataSchema</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L86">src/config.ts:86</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="PartialConfig" class="tsd-anchor"></a>
 					<h3>Partial<wbr>Config</h3>
-					<div class="tsd-signature tsd-kind-icon">Partial<wbr>Config<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Partial<wbr>Config<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="config.html#Config" class="tsd-signature-type" data-tsd-kind="Type alias">Config</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/config.ts#L152">src/config.ts:152</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L169">src/config.ts:169</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><p>Custom book config loaded from file may contain
+								selected (partial) config properties</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="PartialConfigWithDeprecated" class="tsd-anchor"></a>
+					<h3>Partial<wbr>Config<wbr>With<wbr>Deprecated</h3>
+					<div class="tsd-signature tsd-kind-icon">Partial<wbr>Config<wbr>With<wbr>Deprecated<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/config.ConfigWithDeprecated.html" class="tsd-signature-type" data-tsd-kind="Interface">ConfigWithDeprecated</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L163">src/config.ts:163</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -151,38 +186,22 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="Preview" class="tsd-anchor"></a>
 					<h3>Preview</h3>
-					<div class="tsd-signature tsd-kind-icon">Preview<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>chaptersSlice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>fullTextUrl<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>removeChapters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="config.html#PreviewTrue" class="tsd-signature-type" data-tsd-kind="Type alias">PreviewTrue</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PreviewFalse</span></div>
+					<div class="tsd-signature tsd-kind-icon">Preview<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">z.infer</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><a href="config.html#previewSchema" class="tsd-signature-type" data-tsd-kind="Variable">previewSchema</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/config.ts#L46">src/config.ts:46</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L62">src/config.ts:62</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="PreviewTrue" class="tsd-anchor"></a>
 					<h3>Preview<wbr>True</h3>
-					<div class="tsd-signature tsd-kind-icon">Preview<wbr>True<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>fullTextUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> }</span></div>
+					<div class="tsd-signature tsd-kind-icon">Preview<wbr>True<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">z.infer</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">previewTrueSchema</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/config.ts#L35">src/config.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L51">src/config.ts:51</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter">
-								<h5>full<wbr>Text<wbr>Url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<div class="lead">
-										<p>URL used in nav and site links</p>
-									</div>
-								</div>
-							</li>
-							<li class="tsd-parameter">
-								<h5>is<wbr>Preview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span></h5>
-							</li>
-						</ul>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="SelectorFn" class="tsd-anchor"></a>
@@ -190,7 +209,7 @@
 					<div class="tsd-signature tsd-kind-icon">Selector<wbr>Fn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Document</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Element</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/config.ts#L29">src/config.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L25">src/config.ts:25</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -233,7 +252,7 @@
 					<div class="tsd-signature tsd-kind-icon">Selectors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">HTMLElementTagNameMap</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="config.html#SelectorFn" class="tsd-signature-type" data-tsd-kind="Type alias">SelectorFn</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/config.ts#L31">src/config.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L27">src/config.ts:27</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -243,7 +262,7 @@
 					<div class="tsd-signature tsd-kind-icon">Tokenizer<wbr>Fn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Node</span>, text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/config.ts#L20">src/config.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L16">src/config.ts:16</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -280,12 +299,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
-					<a name="previewDefaults" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> preview<wbr>Defaults</h3>
-					<div class="tsd-signature tsd-kind-icon">preview<wbr>Defaults<span class="tsd-signature-symbol">:</span> <a href="config.html#Preview" class="tsd-signature-type" data-tsd-kind="Type alias">Preview</a><span class="tsd-signature-symbol"> = ...</span></div>
+					<a name="configSchema" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> config<wbr>Schema</h3>
+					<div class="tsd-signature tsd-kind-icon">config<wbr>Schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ZodObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>delimiter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>languageCode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>author<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">; </span>edition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>keywords<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;many&quot;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>published<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodNumber</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>publisher<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>subtitle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>title<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;strip&quot;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ZodTypeAny</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>author<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>edition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>keywords<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>published<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>publisher<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>subtitle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>title<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>author<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>edition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>keywords<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>published<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>publisher<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>subtitle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>title<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>output<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodEnum</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;jsdom&quot;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;html&quot;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>preview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodDiscriminatedUnion</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">&quot;isPreview&quot;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Primitive</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ZodObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>chaptersSlice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodNumber</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>fullTextUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">; </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodLiteral</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>removeChapters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;many&quot;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;strip&quot;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ZodTypeAny</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>chaptersSlice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>fullTextUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>removeChapters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>chaptersSlice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>fullTextUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>removeChapters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ZodObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodLiteral</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;strip&quot;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ZodTypeAny</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>readingOrder<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;many&quot;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>selectors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;many&quot;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>static<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;many&quot;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>tocBase<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodType</span><span class="tsd-signature-symbol">&lt;</span><a href="toc.html#TocBaseItem" class="tsd-signature-type" data-tsd-kind="Type alias">TocBaseItem</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ZodTypeDef</span><span class="tsd-signature-symbol">, </span><a href="toc.html#TocBaseItem" class="tsd-signature-type" data-tsd-kind="Type alias">TocBaseItem</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;many&quot;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;strip&quot;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ZodTypeAny</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>delimiter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>languageCode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>output<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>preview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>readingOrder<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>selectors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>static<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tocBase<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>delimiter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>languageCode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>output<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>preview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>readingOrder<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>selectors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>static<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tocBase<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/config.ts#L63">src/config.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L88">src/config.ts:88</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="metaDataSchema" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> meta<wbr>Data<wbr>Schema</h3>
+					<div class="tsd-signature tsd-kind-icon">meta<wbr>Data<wbr>Schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ZodObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>author<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">; </span>edition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>keywords<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;many&quot;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>published<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodNumber</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>publisher<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>subtitle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>title<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;strip&quot;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ZodTypeAny</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>author<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>edition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>keywords<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>published<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>publisher<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>subtitle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>title<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>author<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>edition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>keywords<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>published<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>publisher<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>subtitle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>title<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L76">src/config.ts:76</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="previewSchema" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> preview<wbr>Schema</h3>
+					<div class="tsd-signature tsd-kind-icon">preview<wbr>Schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ZodDiscriminatedUnion</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">&quot;isPreview&quot;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Primitive</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ZodObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>chaptersSlice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodDefault</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodOptional</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodNumber</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>fullTextUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">; </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodLiteral</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>removeChapters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ZodString</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;many&quot;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;strip&quot;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ZodTypeAny</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>chaptersSlice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>fullTextUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>removeChapters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>chaptersSlice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>fullTextUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>removeChapters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ZodObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ZodLiteral</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">&quot;strip&quot;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ZodTypeAny</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">{ </span>isPreview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L57">src/config.ts:57</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -294,24 +333,71 @@
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="default" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> default</h3>
+					<h3>default</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">(</span>overrides<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a></li>
+						<li class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">(</span>srcDir<span class="tsd-signature-symbol">: </span><a href="utils_fs.html#PathLike" class="tsd-signature-type" data-tsd-kind="Type alias">PathLike</a>, fullTextUrl<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="config.html#Config" class="tsd-signature-type" data-tsd-kind="Type alias">Config</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">never</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/config.ts#L154">src/config.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L204">src/config.ts:204</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Loads book config options from file</p>
+								</div>
+								<p>The config is being created in following stages:</p>
+								<ol>
+									<li>First, the custom book options in the shape of <a href="config.html#PartialConfigWithDeprecated">PartialConfigWithDeprecated</a> are loaded.</li>
+									<li>Deprecated options are transformed to their new form and the config gets shape of <a href="config.html#PartialConfig">PartialConfig</a>.</li>
+									<li>Config is acquired by parsing and applying defaults on <a href="config.html#PartialConfig">PartialConfig</a> with <a href="config.html#Preview">Preview</a> options.</li>
+									<li>Since config is guaranteed to have preview settings decided, the preview logic is applied on the config.</li>
+								</ol>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>srcDir: <a href="utils_fs.html#PathLike" class="tsd-signature-type" data-tsd-kind="Type alias">PathLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>directory where book config is located</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> fullTextUrl: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>link to the full book in case of preview feature active</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="config.html#Config" class="tsd-signature-type" data-tsd-kind="Type alias">Config</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">never</span></h4>
+							<p>a config object that is guaranteed to be valid against its predefined schema.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="parseConfig" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> parse<wbr>Config</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">parse<wbr>Config<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>delimiter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>languageCode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>output<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>preview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>readingOrder<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>selectors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>static<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tocBase<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>delimiter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>languageCode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>output<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>preview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>readingOrder<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>selectors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>static<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tocBase<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/config.ts#L171">src/config.ts:171</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>overrides: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>options: <span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>delimiter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>languageCode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>output<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>preview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>readingOrder<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>selectors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>static<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tocBase<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/config.Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>delimiter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>languageCode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>meta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>output<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>preview<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>readingOrder<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>selectors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>static<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tocBase<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></h4>
+							<ul class="tsd-parameters">
+							</ul>
 						</li>
 					</ul>
 				</section>
@@ -372,6 +458,9 @@
 						<a href="toc.html">toc</a>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="utils_debug.html">utils/debug</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="utils_dom.html">utils/dom</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -380,18 +469,30 @@
 					<li class=" tsd-kind-module">
 						<a href="utils_regexp.html">utils/regexp</a>
 					</li>
+					<li class=" tsd-kind-module">
+						<a href="utils_unreachable.html">utils/unreachable</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/config.Config.html" class="tsd-kind-icon">Config</a>
+						<a href="../interfaces/config.ConfigWithDeprecated.html" class="tsd-kind-icon">Config<wbr>With<wbr>Deprecated</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="config.html#Config" class="tsd-kind-icon">Config</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="config.html#Delimiter" class="tsd-kind-icon">Delimiter</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="config.html#Metadata" class="tsd-kind-icon">Metadata</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="config.html#PartialConfig" class="tsd-kind-icon">Partial<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="config.html#PartialConfigWithDeprecated" class="tsd-kind-icon">Partial<wbr>Config<wbr>With<wbr>Deprecated</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="config.html#Preview" class="tsd-kind-icon">Preview</a>
@@ -409,10 +510,19 @@
 						<a href="config.html#TokenizerFn" class="tsd-kind-icon">Tokenizer<wbr>Fn</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="config.html#previewDefaults" class="tsd-kind-icon">preview<wbr>Defaults</a>
+						<a href="config.html#configSchema" class="tsd-kind-icon">config<wbr>Schema</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="config.html#metaDataSchema" class="tsd-kind-icon">meta<wbr>Data<wbr>Schema</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="config.html#previewSchema" class="tsd-kind-icon">preview<wbr>Schema</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="config.html#default" class="tsd-kind-icon">default</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="config.html#parseConfig" class="tsd-kind-icon">parse<wbr>Config</a>
 					</li>
 				</ul>
 			</nav>

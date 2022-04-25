@@ -86,8 +86,8 @@
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="app.html#addMetaNavigation" class="tsd-kind-icon">add<wbr>Meta<wbr>Navigation</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="app.html#composeManifest" class="tsd-kind-icon">compose<wbr>Manifest</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="app.html#default" class="tsd-kind-icon">default</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="app.html#dumpArray" class="tsd-kind-icon">dump<wbr>Array</a></li>
 							</ul>
 						</section>
 					</div>
@@ -107,13 +107,13 @@
 					<a name="addMetaNavigation" class="tsd-anchor"></a>
 					<h3>add<wbr>Meta<wbr>Navigation</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Meta<wbr>Navigation<span class="tsd-signature-symbol">(</span>documents<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Document</span><span class="tsd-signature-symbol">[]</span>, metadata<span class="tsd-signature-symbol">: </span><a href="../interfaces/index.DocumentMetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">DocumentMetadata</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Meta<wbr>Navigation<span class="tsd-signature-symbol">(</span>documents<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Document</span><span class="tsd-signature-symbol">[]</span>, metadata<span class="tsd-signature-symbol">: </span><a href="index.html#DocumentMetadata" class="tsd-signature-type" data-tsd-kind="Type alias">DocumentMetadata</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/app.ts#L279">src/app.ts:279</a></li>
+									<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/app.ts#L347">src/app.ts:347</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -126,12 +126,9 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>documents: <span class="tsd-signature-type">Document</span><span class="tsd-signature-symbol">[]</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>A list of DOM Documents to add meta navigation to</p>
-									</div>
 								</li>
 								<li>
-									<h5>metadata: <a href="../interfaces/index.DocumentMetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">DocumentMetadata</a><span class="tsd-signature-symbol">[]</span></h5>
+									<h5>metadata: <a href="index.html#DocumentMetadata" class="tsd-signature-type" data-tsd-kind="Type alias">DocumentMetadata</a><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Document metadata used for meta navigation links</p>
 									</div>
@@ -144,16 +141,51 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="default" class="tsd-anchor"></a>
-					<h3>default</h3>
+					<a name="composeManifest" class="tsd-anchor"></a>
+					<h3>compose<wbr>Manifest</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">(</span>content<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, filenames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, options<span class="tsd-signature-symbol">: </span><a href="config.html#PartialConfig" class="tsd-signature-type" data-tsd-kind="Type alias">PartialConfig</a>, revision<span class="tsd-signature-symbol">: </span><a href="index.html#Revision" class="tsd-signature-type" data-tsd-kind="Type alias">Revision</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MappedPublication</span></li>
+						<li class="tsd-signature tsd-kind-icon">compose<wbr>Manifest<span class="tsd-signature-symbol">(</span>config<span class="tsd-signature-symbol">: </span><a href="config.html#Config" class="tsd-signature-type" data-tsd-kind="Type alias">Config</a>, documents<span class="tsd-signature-symbol">: </span><a href="index.html#DocumentMetadata" class="tsd-signature-type" data-tsd-kind="Type alias">DocumentMetadata</a><span class="tsd-signature-symbol">[]</span>, readingOrder<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, totals<span class="tsd-signature-symbol">: </span><a href="index.html#PublicationSum" class="tsd-signature-type" data-tsd-kind="Type alias">PublicationSum</a>, revision<span class="tsd-signature-symbol">: </span><a href="index.html#Revision" class="tsd-signature-type" data-tsd-kind="Type alias">Revision</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.html#Manifest" class="tsd-signature-type" data-tsd-kind="Type alias">Manifest</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">never</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/app.ts#L39">src/app.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/app.ts#L171">src/app.ts:171</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>config: <a href="config.html#Config" class="tsd-signature-type" data-tsd-kind="Type alias">Config</a></h5>
+								</li>
+								<li>
+									<h5>documents: <a href="index.html#DocumentMetadata" class="tsd-signature-type" data-tsd-kind="Type alias">DocumentMetadata</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>readingOrder: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>totals: <a href="index.html#PublicationSum" class="tsd-signature-type" data-tsd-kind="Type alias">PublicationSum</a></h5>
+								</li>
+								<li>
+									<h5>revision: <a href="index.html#Revision" class="tsd-signature-type" data-tsd-kind="Type alias">Revision</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="index.html#Manifest" class="tsd-signature-type" data-tsd-kind="Type alias">Manifest</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">never</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="default" class="tsd-anchor"></a>
+					<h3>default</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">(</span>content<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, filenames<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, conf<span class="tsd-signature-symbol">: </span><a href="config.html#Config" class="tsd-signature-type" data-tsd-kind="Type alias">Config</a>, revision<span class="tsd-signature-symbol">: </span><a href="index.html#Revision" class="tsd-signature-type" data-tsd-kind="Type alias">Revision</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MappedPublication</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/next-book/publisher/blob/0d36773/src/app.ts#L46">src/app.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -176,10 +208,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>options: <a href="config.html#PartialConfig" class="tsd-signature-type" data-tsd-kind="Type alias">PartialConfig</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The config options</p>
-									</div>
+									<h5>conf: <a href="config.html#Config" class="tsd-signature-type" data-tsd-kind="Type alias">Config</a></h5>
 								</li>
 								<li>
 									<h5>revision: <a href="index.html#Revision" class="tsd-signature-type" data-tsd-kind="Type alias">Revision</a></h5>
@@ -190,37 +219,6 @@
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">MappedPublication</span></h4>
 							<p>Array of mapped documents in specified format</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="dumpArray" class="tsd-anchor"></a>
-					<h3>dump<wbr>Array</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">dump<wbr>Array<span class="tsd-signature-symbol">(</span>arr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/next-book/publisher/blob/9bfe0ce/src/app.ts#L381">src/app.ts:381</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Dumps array</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>arr: <span class="tsd-signature-type">unknown</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Array to dump</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -281,6 +279,9 @@
 						<a href="toc.html">toc</a>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="utils_debug.html">utils/debug</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="utils_dom.html">utils/dom</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -288,6 +289,9 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="utils_regexp.html">utils/regexp</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="utils_unreachable.html">utils/unreachable</a>
 					</li>
 				</ul>
 			</nav>
@@ -300,10 +304,10 @@
 						<a href="app.html#addMetaNavigation" class="tsd-kind-icon">add<wbr>Meta<wbr>Navigation</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="app.html#default" class="tsd-kind-icon">default</a>
+						<a href="app.html#composeManifest" class="tsd-kind-icon">compose<wbr>Manifest</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="app.html#dumpArray" class="tsd-kind-icon">dump<wbr>Array</a>
+						<a href="app.html#default" class="tsd-kind-icon">default</a>
 					</li>
 				</ul>
 			</nav>
