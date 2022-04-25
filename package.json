@@ -1,6 +1,6 @@
 {
   "name": "@next-book/publisher",
-  "version": "0.3.6-canary",
+  "version": "0.3.7",
   "description": "Publish web books with next-book",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -50,9 +50,6 @@
     "rimraf": "^2.7.1",
     "slug": "^0.9.4",
     "zod": "^3.13.4"
-  },
-  "peerDependencies": {
-    "@next-book/interface": "^0.1.31"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
