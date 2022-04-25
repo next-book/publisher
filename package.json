@@ -51,6 +51,9 @@
     "slug": "^0.9.4",
     "zod": "^3.13.4"
   },
+  "peerDependencies": {
+    "@next-book/interface": "^0.1.31"
+  },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
     "@babel/core": "^7.7.5",
