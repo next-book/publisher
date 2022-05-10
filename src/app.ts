@@ -318,7 +318,7 @@ function addDocRoles(doc: Document, metadata: DocumentMetadata[], index: number)
 }
 
 function addLanguageCode(doc: Document, code: string): void {
-  console.log('\nAdding language code…');
+  console.log(`${doc?.querySelector('title')?.textContent}: Adding language code…`);
   if (code) {
     const htmlElement = doc.querySelector('html');
     if (!htmlElement) throw new Error('Missing <html> HTML element.');
@@ -345,7 +345,7 @@ function addIdentifier(doc: Document, identifier: string) {
  * to `<head>` HTML element.
  */
 function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]): void {
-  console.log('\nAdding meta navigation…');
+  console.log(`Adding meta navigation…`);
 
   type NavItem = {
     tagName: string;
