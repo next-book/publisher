@@ -102,10 +102,12 @@ export function getToc(
       .map(item => renderTocItem(item, meta, preview.isPreview ? preview.removeChapters : [], true))
       .forEach(el => el && nav?.appendChild(el));
   else {
-    const ul = Jsdom.fragment('<ul></ul>');
-    const items = meta.map(renderTocItemFromMeta);
-    items.forEach(el => el && ul.appendChild(el));
-    nav?.appendChild(ul);
+    const fragment = Jsdom.fragment('<ol></ol>');
+    const ol = fragment.querySelector('ol');
+
+    meta.map(renderTocItemFromMeta).forEach(el => el && ol?.appendChild(el));
+
+    nav?.appendChild(fragment);
   }
 
   return root;
@@ -147,14 +149,6 @@ function renderTocItem(
 
   if (item.children && item.children.length) {
     li.appendChild(childrenWrapper);
-  }
-
-  if (topLevel) {
-    const topLevelWrapper = Jsdom.fragment('<ul></ul>');
-    const ul = topLevelWrapper.querySelector('ul') as HTMLElement;
-    ul.appendChild(root);
-
-    return topLevelWrapper;
   }
 
   return root;
