@@ -162,7 +162,9 @@ function renderChildren(
   const { children, isSection, listType } = item;
 
   const childrenWrapper =
-    isSection === true || listType === 'plain'
+    isSection === true
+      ? Jsdom.fragment('<ul class="' + TocClass.PlainList + ' ' + TocClass.Section + '"></ul>')
+      : listType === 'plain'
       ? Jsdom.fragment('<ul class="' + TocClass.PlainList + '"></ul>')
       : listType === 'numbered'
       ? Jsdom.fragment('<ol></ol>')
