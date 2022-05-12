@@ -4140,6 +4140,7 @@ var TocClass;
     TocClass["Headings"] = "headings-toc";
     TocClass["PlainList"] = "plain";
     TocClass["Excluded"] = "excluded";
+    TocClass["Section"] = "section";
 })(TocClass = exports.TocClass || (exports.TocClass = {}));
 var NavClass;
 (function (NavClass) {
