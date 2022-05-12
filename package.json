@@ -1,6 +1,6 @@
 {
   "name": "@next-book/publisher",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "Publish web books with next-book",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
