@@ -236,7 +236,7 @@ const resolvers: Resolvers = {
         ignoreCache: (await idb.get<IdbIgnoreCache>('ignoreCache')) || false,
         cacheExists: await caches.has(CACHE),
       });
-    } catch (e) {
+    } catch (e: any) {
       return error(e.message);
     }
   },
@@ -245,7 +245,7 @@ const resolvers: Resolvers = {
       return success({
         oldCacheDeletedAt: await idb.get<IdbOldCacheDeletedAt>('oldCacheDeletedAt'),
       });
-    } catch (e) {
+    } catch (e: any) {
       return error(e.message);
     }
   },
@@ -254,7 +254,7 @@ const resolvers: Resolvers = {
       return success({
         cacheDeletedAt: await idb.get<IdbCacheDeletedAt>('cacheDeletedAt'),
       });
-    } catch (e) {
+    } catch (e: any) {
       return error(e.message);
     }
   },
@@ -264,7 +264,7 @@ const resolvers: Resolvers = {
       return success({
         ignoreCache: e.payload.value,
       });
-    } catch (e) {
+    } catch (e: any) {
       return error(e.message);
     }
   },
@@ -273,7 +273,7 @@ const resolvers: Resolvers = {
       return success({
         ignoreCache: (await idb.get<IdbIgnoreCache>('ignoreCache')) || false,
       });
-    } catch (e) {
+    } catch (e: any) {
       return error(e.message);
     }
   },
@@ -282,7 +282,7 @@ const resolvers: Resolvers = {
       return success({
         activatedAt: await idb.get<IdbActivatedAt>('activatedAt'),
       });
-    } catch (e) {
+    } catch (e: any) {
       return error(e.message);
     }
   },
@@ -292,7 +292,7 @@ const resolvers: Resolvers = {
       return success({
         oldCacheDeletedAt: await idb.get<IdbOldCacheDeletedAt>('oldCacheDeletedAt'),
       });
-    } catch (e) {
+    } catch (e: any) {
       return error(e.message);
     }
   },
@@ -305,7 +305,7 @@ const resolvers: Resolvers = {
       return success({
         cacheDeletedAt: await idb.get<IdbCacheDeletedAt>('cacheDeletedAt'),
       });
-    } catch (e) {
+    } catch (e: any) {
       return error(e.message);
     }
   },
@@ -319,7 +319,7 @@ const resolvers: Resolvers = {
         cacheDeletedAt: await idb.get<IdbCacheDeletedAt>('cacheDeletedAt'),
         cacheUpdatedAt: await idb.get<IdbCacheUpdatedAt>('cacheUpdatedAt'),
       });
-    } catch (e) {
+    } catch (e: any) {
       return error(e.message);
     }
   },
@@ -328,7 +328,7 @@ const resolvers: Resolvers = {
       return success({
         cacheUpdatedAt: await idb.get<IdbCacheUpdatedAt>('cacheUpdatedAt'),
       });
-    } catch (e) {
+    } catch (e: any) {
       return error(e.message);
     }
   },
@@ -337,7 +337,7 @@ const resolvers: Resolvers = {
       return success({
         cacheExists: await caches.has(CACHE),
       });
-    } catch (e) {
+    } catch (e: any) {
       return error(e.message);
     }
   },
