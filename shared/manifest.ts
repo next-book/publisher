@@ -84,6 +84,8 @@ export type DocumentMetadata = z.infer<typeof documentMetadataSchema>;
 // https://github.com/orgs/next-book/teams/nb-core/discussions/1
 
 export const manifestSchema = z.object({
+  title: z.string(),
+  author: z.string(),
   identifier: z.string(),
   languageCode: z.string(),
   revision: revisionSchema,
@@ -94,7 +96,11 @@ export const manifestSchema = z.object({
   readingOrder: z.string().array(),
   documents: documentMetadataSchema.array(),
   totals: publicationSumSchema,
+  subtitle: z.string().optional(),
+  published: z.number().optional(),
   keywords: z.string().array().optional(),
+  publisher: z.string().optional(),
+  edition: z.string().optional(),
   root: rootSchema,
   preview: previewSchema,
 });
