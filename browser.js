@@ -4218,7 +4218,8 @@ class Ideas {
             pieces.forEach(sep => acc.push(sep));
             return acc;
         }, [])
-            .filter(idea => Array.isArray(idea) && idea.length !== 0);
+            .filter(idea => (Array.isArray(idea) && idea.length !== 0) ||
+            ((typeof idea === 'string' || idea instanceof String) && idea.length > 0));
     }
 }
 exports.default = Ideas;
