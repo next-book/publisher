@@ -1,6 +1,6 @@
 import i18n, { TOptions } from 'i18next';
-import en from '@next-book/interface/src/js/translation/en.json';
-import cs from '@next-book/interface/src/js/translation/cs.json';
+import en from '../shared/translation/en.json';
+import cs from '../shared/translation/cs.json';
 
 export const resources = { cs, en };
 
