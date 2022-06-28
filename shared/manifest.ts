@@ -47,7 +47,7 @@ export enum DocRole {
   Break = 'break',
   Chapter = 'chapter',
   Cover = 'cover',
-  Colophon = 'colophon',
+  About = 'about',
   Other = 'other',
 }
 

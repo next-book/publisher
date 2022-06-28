@@ -44,7 +44,7 @@ export const DocRoleClass: DocRoleClass = {
   break: 'nb-role-break',
   chapter: 'nb-role-chapter',
   cover: 'nb-role-cover',
-  colophon: 'nb-role-colophon',
+  about: 'nb-role-about',
   other: 'nb-role-other',
 };
 
@@ -142,7 +142,7 @@ export enum LinkRel {
   Prev = 'prev',
   Publication = 'publication',
   Next = 'next',
-  Colophon = 'colophon',
+  About = 'about',
   License = 'license',
 }
 

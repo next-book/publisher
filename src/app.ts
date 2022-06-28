@@ -260,8 +260,8 @@ function gatherMetadata(
         ? docRoleMeta
         : file === 'index.html'
         ? DocRole.Cover
-        : file === 'colophon.html'
-        ? DocRole.Colophon
+        : file === 'about.html'
+        ? DocRole.About
         : readingOrder.includes(file)
         ? DocRole.Chapter
         : DocRole.Other;
@@ -368,9 +368,9 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
     },
   ];
 
-  const colophon = getColophon(metadata);
-  if (colophon !== null) {
-    base.push({ tagName: 'link', rel: 'colophon', href: colophon });
+  const about = getAbout(metadata);
+  if (about !== null) {
+    base.push({ tagName: 'link', rel: 'about', href: about });
   }
 
   documents.forEach((doc, index) => {
@@ -417,8 +417,8 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
   });
 }
 
-function getColophon(metadata: DocumentMetadata[]) {
-  const files = metadata.filter(item => item.role === DocRole.Colophon);
+function getAbout(metadata: DocumentMetadata[]) {
+  const files = metadata.filter(item => item.role === DocRole.About);
   return files.length ? files[0].file : null;
 }
 
