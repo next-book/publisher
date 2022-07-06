@@ -19,9 +19,9 @@
     "compileAndTranspile": "tsc && chmod u+x dist/src/bin/cli.js && npm run bundle && npm run transpile && npm run transpileServiceWorker && npm run bundleServiceWorker",
     "build": "npm run compileAndTranspile && npm run updateDocs && npm run updateExample",
     "build:watch": "tsc --watch",
-    "test:production": "node --experimental-vm-modules node_modules/jest/bin/jest.js src/tests/production/",
-    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js src/tests/unit/",
-    "test": "npm run test:unit",
+    "test:production": "npm run test -- src/tests/production/",
+    "test:unit": "npm run test -- src/tests/unit/",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "clearJestCache": "jest --clearCache"
   },
   "repository": {
