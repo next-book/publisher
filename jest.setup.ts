@@ -16,6 +16,18 @@
  */
 
 beforeEach(() => {
+  // partially reset test state
   if (typeof document !== 'undefined')
     document.documentElement.innerHTML = '<head></head><body></body>';
+
+  // hide console.error messages in test dump according to:
+  // https://dev.to/martinemmert/hide-red-console-error-log-wall-while-testing-errors-with-jest-2bfn
+  jest.spyOn(console, 'error');
+  // @ts-ignore jest.spyOn adds this functionallity
+  console.error.mockImplementation(() => null);
+});
+
+afterEach(() => {
+  // @ts-ignore jest.spyOn adds this functionallity
+  console.error.mockRestore();
 });
