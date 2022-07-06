@@ -25,12 +25,12 @@ describe('base input', () => {
     expect(parsed).toStrictEqual(new ParsedObj(main, [], ''));
   });
 
-  it('should return ParsedObj with empty ideas', () => {
+  it('should return ParsedObj with single whitespace ideas', () => {
     document.body.innerHTML = `<main> </main>`;
     const parsed = parse(document.querySelector('main')!, '');
     const main = document.createElement('main');
     main.innerHTML = ' ';
-    expect(parsed).toStrictEqual(new ParsedObj(main, [], ''));
+    expect(parsed).toStrictEqual(new ParsedObj(main, [' '], ''));
   });
 
   it('should return ParsedObj with one idea piece', () => {
@@ -57,15 +57,15 @@ describe('base input', () => {
 });
 
 describe('basic whitespace input', () => {
-  it('should return ParsedObj with whitespace idea', () => {
+  it('should return ParsedObj with whitespace and idea idea', () => {
     document.body.innerHTML = `<main> \ntest     a     </main>`;
     const parsed = parse(document.querySelector('main')!, '\n');
     const main = document.createElement('main');
     main.appendChild(document.createTextNode(' \ntest     a     '));
-    expect(parsed).toStrictEqual(new ParsedObj(main, [['test     a']], '\n'));
+    expect(parsed).toStrictEqual(new ParsedObj(main, [' ', ['test     a'], '     '], '\n'));
   });
 
-  it('should return ParsedObj with whitespace idea', () => {
+  it('should return ParsedObj with whitespace idea and whitespace before it', () => {
     document.body.innerHTML = `<main>   <div></div> </main>`;
     const parsed = parse(document.querySelector('main')!, '\n');
     const main = document.createElement('main');
@@ -73,7 +73,7 @@ describe('basic whitespace input', () => {
     const div = document.createElement('div');
     main.appendChild(div);
     main.appendChild(document.createTextNode(' '));
-    expect(parsed).toStrictEqual(new ParsedObj(main, [[' ', div, ' ']], '\n'));
+    expect(parsed).toStrictEqual(new ParsedObj(main, ['  ', [' ', div, ' ']], '\n'));
   });
 
   it('should return ParsedObj with whitespace idea', () => {
@@ -92,7 +92,7 @@ describe('basic whitespace input', () => {
     main.appendChild(document.createTextNode(' '));
     main.appendChild(document.createTextNode('\n'));
     main.appendChild(document.createTextNode(' content'));
-    expect(parsed).toStrictEqual(new ParsedObj(main, [['content']], '\n'));
+    expect(parsed).toStrictEqual(new ParsedObj(main, ['   ', ' ', ' ', ['content']], '\n'));
   });
 });
 
@@ -125,7 +125,7 @@ describe('simple input', () => {
           [
             new ParsedObj(
               paragraph1,
-              [['p'], ['a'], ['r'], ['a'], ['g'], ['r'], ['a'], ['p'], ['h'], ['1']],
+              [['p'], ['a'], ['r'], ['a'], ['g'], ['r'], ['a'], ['p'], ['h'], ' ', ['1']],
               ''
             ),
           ],
@@ -161,7 +161,9 @@ describe('simple input', () => {
     const paragraph1 = document.createElement('p');
     paragraph1.appendChild(document.createTextNode('paragraph 1'));
 
-    expect(parsed).toStrictEqual(new ParsedObj(expect.any(HTMLElement), [[' ', paragraph1]], '\n'));
+    expect(parsed).toStrictEqual(
+      new ParsedObj(expect.any(HTMLElement), ['   ', [' ', paragraph1], '  '], '\n')
+    );
   });
 
   it('should return ParsedObj with two ideas', () => {
@@ -179,10 +181,7 @@ describe('simple input', () => {
     expect(parsed).toStrictEqual(
       new ParsedObj(
         expect.any(HTMLElement),
-        [
-          [' ', paragraph1],
-          [' ', paragraph2],
-        ],
+        ['   ', [' ', paragraph1], '   ', [' ', paragraph2], '  '],
         '\n'
       )
     );
@@ -210,10 +209,15 @@ describe('simple input', () => {
       new ParsedObj(
         expect.any(HTMLElement),
         [
+          '   ',
           [' ', paragraph1],
+          '   ',
           [' ', paragraph2],
+          '   ',
           [' ', paragraph3],
+          '   ',
           [' ', paragraph4],
+          '  ',
         ],
         '\n'
       )
@@ -366,6 +370,7 @@ describe('complex input', () => {
               paragraph1,
               [
                 [quote1, ' radoval se trochu nuceně,'],
+                ' ',
                 [
                   new ParsedObj(
                     quote2,
@@ -393,6 +398,7 @@ describe('complex input', () => {
                 ],
                 ['Byla to právě ta polovičatost, která se tak neobyčejně vnucovala.'],
                 [quote3, ' uvažoval Bondy neurčitě,'],
+                ' ',
                 [
                   new ParsedObj(
                     quote4,
