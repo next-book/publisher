@@ -81,19 +81,34 @@ describe('base input', () => {
   });
 });
 
+// empty strings and whitespace are no longer dropped while fetching ideas since fix in 3614499
 describe('empty strings and whitespace input', () => {
-  it('should produce Node with no children when provided three whitespace string idea children', () => {
+  it('should produce Node with no child when provided empty string idea child', () => {
     const ideas = new Ideas();
     ideas.addIdea();
     ideas.appendToIdea('');
     const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
 
     const main = document.createElement('main');
+    //main.appendChild(document.createTextNode(''));
 
     expect(produce(document, parsed)).toStrictEqual(main);
   });
 
-  it('should produce Node with no children when provided empty string and whitespace string idea children', () => {
+  it('should produce Node with single whitespace children when provided similar whitespace string idea child', () => {
+    const ideas = new Ideas();
+    ideas.addIdea();
+    ideas.appendToIdea('      ');
+
+    const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
+
+    const main = document.createElement('main');
+    main.appendChild(document.createTextNode('      '));
+
+    expect(produce(document, parsed)).toStrictEqual(main);
+  });
+
+  it('should produce Node with empty text node filtered out', () => {
     const ideas = new Ideas();
     ideas.addIdea();
     ideas.appendToIdea('');
@@ -101,23 +116,12 @@ describe('empty strings and whitespace input', () => {
     const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
 
     const main = document.createElement('main');
+    main.appendChild(document.createTextNode('           '));
 
     expect(produce(document, parsed)).toStrictEqual(main);
   });
 
-  it('should produce Node with no children when provided whitespace string idea child', () => {
-    const ideas = new Ideas();
-    ideas.addIdea();
-    ideas.appendToIdea('      ');
-
-    const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
-
-    const main = document.createElement('main');
-
-    expect(produce(document, parsed)).toStrictEqual(main);
-  });
-
-  it('should produce Node with no children when provided two whitespace string idea children', () => {
+  it('produces whitespaces separated by single idea with two whitespace children', () => {
     const ideas = new Ideas();
     ideas.addIdea();
     ideas.appendToIdea('      ');
@@ -125,16 +129,20 @@ describe('empty strings and whitespace input', () => {
     const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
 
     const main = document.createElement('main');
-    const idea1 = document.createElement('span');
-    idea1.classList.add('idea');
-    idea1.appendChild(document.createTextNode(' '));
-    idea1.appendChild(document.createTextNode(' '));
-    main.appendChild(idea1);
+    main.appendChild(document.createTextNode('     '));
+    main.appendChild(document.createTextNode('\n'));
+    const idea = document.createElement('span');
+    idea.classList.add('idea');
+    idea.appendChild(document.createTextNode(' '));
+    idea.appendChild(document.createTextNode(' '));
+    main.appendChild(idea);
+    main.appendChild(document.createTextNode('\n'));
+    main.appendChild(document.createTextNode('     '));
 
     expect(produce(document, parsed)).toStrictEqual(main);
   });
 
-  it('should produce two html span ideas where multiple whitespace characters get transformed into one', () => {
+  it('produces two html span ideas separated by newlines and whitespace characters', () => {
     const ideas = new Ideas();
     ideas.addIdea();
     ideas.appendToIdea('      ');
@@ -147,6 +155,8 @@ describe('empty strings and whitespace input', () => {
     const parsed = new ParsedObj(document.createElement('main'), ideas.fetch(), '\n');
 
     const main = document.createElement('main');
+    main.appendChild(document.createTextNode('     '));
+    main.appendChild(document.createTextNode('\n'));
 
     const span1 = document.createElement('span');
     span1.classList.add('idea');
@@ -156,6 +166,8 @@ describe('empty strings and whitespace input', () => {
     main.appendChild(span1);
 
     main.appendChild(document.createTextNode('\n'));
+    main.appendChild(document.createTextNode('     '));
+    main.appendChild(document.createTextNode('\n'));
 
     const span2 = document.createElement('span');
     span2.classList.add('idea');
@@ -163,6 +175,9 @@ describe('empty strings and whitespace input', () => {
     span2.appendChild(document.createTextNode('   content   '));
     span2.appendChild(document.createTextNode(' '));
     main.appendChild(span2);
+
+    main.appendChild(document.createTextNode('\n'));
+    main.appendChild(document.createTextNode('     '));
 
     expect(produce(document, parsed)).toStrictEqual(main);
   });
