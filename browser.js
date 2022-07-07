@@ -3509,7 +3509,7 @@ exports.DocRoleClass = {
     break: 'nb-role-break',
     chapter: 'nb-role-chapter',
     cover: 'nb-role-cover',
-    colophon: 'nb-role-colophon',
+    about: 'nb-role-about',
     other: 'nb-role-other',
 };
 var Id;
@@ -3601,7 +3601,7 @@ var LinkRel;
     LinkRel["Prev"] = "prev";
     LinkRel["Publication"] = "publication";
     LinkRel["Next"] = "next";
-    LinkRel["Colophon"] = "colophon";
+    LinkRel["About"] = "about";
     LinkRel["License"] = "license";
 })(LinkRel = exports.LinkRel || (exports.LinkRel = {}));
 const getIdeaId = (n) => TagClass.Idea + n.toString();
