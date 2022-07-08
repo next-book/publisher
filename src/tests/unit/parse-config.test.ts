@@ -16,7 +16,9 @@ it('should throw with validation messages', () => {
   );
   expect(consoleSpy).toHaveBeenCalledWith(`\nThe following config fields are not allowed:`);
   expect(consoleSpy).toHaveBeenCalledWith(`\noutput`);
-  expect(consoleSpy).toHaveBeenCalledWith(` - Invalid enum value. Expected 'jsdom' | 'html'`);
+  expect(consoleSpy).toHaveBeenCalledWith(
+    ` - Invalid enum value. Expected 'jsdom' | 'html', received 'random'`
+  );
   expect(consoleSpy).toHaveBeenCalledWith(`\nroot`);
   expect(consoleSpy).toHaveBeenCalledWith(` - Expected string, received number`);
   expect(consoleSpy).toHaveBeenCalledWith(`\ntocBase`);
