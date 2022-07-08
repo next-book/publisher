@@ -23,7 +23,6 @@ it('should log files with missing titles and main when provided insufficient fil
   } catch (error) {
     const execaError = error as ExecaError;
     expect(execaError.shortMessage).toBe('Command failed with exit code 1: publish-nb');
-    console.log(execaError.stderr);
     expect(execaError.stderr).toContain(expectedMessage);
     expect(execaError.stderr).toContain('Error: Document content not sufficient.\n');
   }

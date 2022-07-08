@@ -7,7 +7,6 @@ it('should throw error when book config file does not exist', async () => {
     });
   } catch (error) {
     const execaError = error as ExecaError;
-    console.log(execaError.stderr);
     expect(execaError.shortMessage).toBe('Command failed with exit code 1: publish-nb');
     expect(execaError.stderr).toContain(
       'Error: Custom book config in "src/book.json" not found.\n'
