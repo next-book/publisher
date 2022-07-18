@@ -81,7 +81,7 @@ export default function map(
     revision
   );
 
-  addMetaNavigation(documents, metadata);
+  addMetaNavigation(documents, metadata, filenames);
 
   // set language
   i18n.changeLanguage(conf.languageCode);
@@ -352,7 +352,11 @@ function addIdentifier(doc: Document, identifier: string) {
  * @returns Mutates documents by adding and appending navigation links
  * to `<head>` HTML element.
  */
-function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]): void {
+function addMetaNavigation(
+  documents: Document[],
+  metadata: DocumentMetadata[],
+  filenames: string[]
+): void {
   console.log(`Adding meta navigation…`);
 
   type NavItem = {
@@ -367,7 +371,6 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
 
   const base: NavItem[] = [
     { tagName: 'link', rel: Rel.Index, href: './index.html' },
-    { tagName: 'link', rel: Rel.License, href: './license.html' },
     {
       tagName: 'link',
       rel: Rel.Publication,
@@ -376,10 +379,11 @@ function addMetaNavigation(documents: Document[], metadata: DocumentMetadata[]):
     },
   ];
 
+  if (filenames.includes('license.html'))
+    base.push({ tagName: 'link', rel: Rel.License, href: './license.html' });
+
   const about = getAbout(metadata);
-  if (about !== null) {
-    base.push({ tagName: 'link', rel: 'about', href: about });
-  }
+  if (about !== null) base.push({ tagName: 'link', rel: 'about', href: about });
 
   documents.forEach((doc, index) => {
     const headElement = doc.querySelector('head');
