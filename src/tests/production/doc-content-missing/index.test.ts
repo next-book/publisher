@@ -16,6 +16,7 @@ sounds.html
  - <title> text content is missing.`;
 
 it('should log files with missing titles and main when provided insufficient files', async () => {
+  expect.assertions(3);
   try {
     await execa('publish-nb', {
       cwd: __dirname,

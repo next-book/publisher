@@ -14,6 +14,7 @@ meta > edition
 `;
 
 it('should throw error when config file contains invalid data', async () => {
+  expect.assertions(3);
   try {
     await execa('publish-nb', {
       cwd: __dirname,

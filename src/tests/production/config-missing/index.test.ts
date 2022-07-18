@@ -1,6 +1,7 @@
 import execa, { ExecaError } from 'execa';
 
 it('should throw error when book config file does not exist', async () => {
+  expect.assertions(2);
   try {
     await execa('publish-nb', {
       cwd: __dirname,
