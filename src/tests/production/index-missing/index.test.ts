@@ -3,24 +3,9 @@ import execa, { ExecaError } from 'execa';
 const expectedMessage = `Insufficient document content found in:
 
 index.html
- - Root element "main" is missing.
- - <title> element is missing.
- - <title> text content is missing.
+ - The file index.html is missing.`;
 
-reading.html
- - Root element "main" is missing.
- - <title> element is missing.
- - <title> text content is missing.
-
-solitude.html
- - <title> element is missing.
- - <title> text content is missing.
-
-sounds.html
- - <title> element is missing.
- - <title> text content is missing.`;
-
-it('should log files with missing titles and main when provided insufficient files', async () => {
+it('should throw error when index file is missing', async () => {
   expect.assertions(3);
   try {
     await execa('publish-nb', {

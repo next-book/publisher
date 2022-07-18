@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "title": "Example",
+    "author": "John Doe",
+    "subtitle": "Lorem ipsum",
+    "published": 2004,
+    "keywords": ["copyright law", "intellectual property", "public domain", "web"]
+  },
+  "readingOrder": ["1-introduction.html", "2-how-to-read-a-book.html"],
+  "static": ["style", "scripts", "images"]
+}

@@ -108,34 +108,39 @@ export default function map(
   return { manifest, documents: exportDoms(doms, conf.output) };
 }
 
-enum MetadataError {
+enum ErrorMessage {
   HtmlMissing,
   HeadMissing,
   RootMissing,
   TitleMissing,
   TitleTextMissing,
+  FileMissing,
 }
 
-type ValidationError = { file: string; errors: MetadataError[] };
+type ValidationError = { file: string; errors: ErrorMessage[] };
 
 function validateDocuments(documents: Document[], filenames: string[], root: DOMStringLike) {
   const docErrors: ValidationError[] = [];
+  if (!filenames.includes('index.html')) {
+    console.error('\n The file index.html is missing.');
+    docErrors.push({ file: 'index.html', errors: [ErrorMessage.FileMissing] });
+  }
   documents.forEach((doc, index) => {
-    const errors: MetadataError[] = [];
+    const errors: ErrorMessage[] = [];
     const rootElement = doc.querySelector(root);
-    if (!rootElement) errors.push(MetadataError.RootMissing);
+    if (!rootElement) errors.push(ErrorMessage.RootMissing);
     const title = doc.querySelector('title');
-    if (!title) errors.push(MetadataError.TitleMissing);
+    if (!title) errors.push(ErrorMessage.TitleMissing);
     const titleText = title?.textContent;
-    if (!titleText) errors.push(MetadataError.TitleTextMissing);
+    if (!titleText) errors.push(ErrorMessage.TitleTextMissing);
     /**
      * We check for <html> and <head> even though, they are always
      * found even when not provided in the document source for some reason.
      */
     const htmlElement = doc.querySelector('html');
-    if (!htmlElement) errors.push(MetadataError.HtmlMissing);
+    if (!htmlElement) errors.push(ErrorMessage.HtmlMissing);
     const headElement = doc.querySelector('head');
-    if (!headElement) errors.push(MetadataError.HeadMissing);
+    if (!headElement) errors.push(ErrorMessage.HeadMissing);
     if (errors.length > 0) docErrors.push({ file: filenames[index], errors });
   });
   if (docErrors.length === 0) return;
@@ -144,20 +149,23 @@ function validateDocuments(documents: Document[], filenames: string[], root: DOM
     console.error('\n' + doc.file);
     doc.errors.forEach(code => {
       switch (code) {
-        case MetadataError.HtmlMissing:
+        case ErrorMessage.HtmlMissing:
           console.error(` - <html> element is missing.`);
           break;
-        case MetadataError.HeadMissing:
+        case ErrorMessage.HeadMissing:
           console.error(` - <head> element is missing.`);
           break;
-        case MetadataError.RootMissing:
+        case ErrorMessage.RootMissing:
           console.error(` - Root element "${root}" is missing.`);
           break;
-        case MetadataError.TitleMissing:
+        case ErrorMessage.TitleMissing:
           console.error(` - <title> element is missing.`);
           break;
-        case MetadataError.TitleTextMissing:
+        case ErrorMessage.TitleTextMissing:
           console.error(` - <title> text content is missing.`);
+          break;
+        case ErrorMessage.FileMissing:
+          console.error(` - The file ${doc.file} is missing.`);
           break;
         default:
           assertUnreachable(code);
@@ -165,7 +173,7 @@ function validateDocuments(documents: Document[], filenames: string[], root: DOM
     });
   });
   console.error('\n');
-  throw new Error('Document content not sufficient.');
+  throw new Error('Book documents are not sufficient.');
 }
 
 export function composeManifest(
